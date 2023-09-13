@@ -1,0 +1,3 @@
+rootProject.name = 'Java9-Team2-HRMS'
+include 'auth-service'
+
