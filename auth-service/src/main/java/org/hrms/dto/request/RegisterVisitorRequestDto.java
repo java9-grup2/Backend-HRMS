@@ -26,6 +26,6 @@ public class RegisterVisitorRequestDto {
 
     @NotBlank(message = "email is a must")
     @Email(message = "this section must be in email format")
-    private String email;
+    private String personalEmail;
 
 }
