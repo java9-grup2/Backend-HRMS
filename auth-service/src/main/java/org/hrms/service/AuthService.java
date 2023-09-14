@@ -9,34 +9,36 @@ import org.hrms.dto.response.MessageResponseDto;
 import org.hrms.exception.AuthManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.mapper.IAuthMapper;
+import org.hrms.rabbitmq.producer.ActivationMailProducer;
 import org.hrms.rabbitmq.producer.RegisterManagerProducer;
 import org.hrms.rabbitmq.producer.RegisterVisitorProducer;
 import org.hrms.repository.IAuthRepository;
 import org.hrms.repository.entity.Auth;
 import org.hrms.repository.enums.EStatus;
 import org.hrms.repository.enums.EUserType;
-import org.hrms.utility.CodeGenerator;
 import org.hrms.utility.JwtTokenManager;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 
 @Service
 public class AuthService extends ServiceManager<Auth,Long> {
 
-
     private final IAuthRepository repository;
     private final RegisterVisitorProducer registerVisitorProducer;
     private final RegisterManagerProducer registerManagerProducer;
     private final JwtTokenManager jwtTokenManager;
+    private final ActivationMailProducer activationMailProducer;
 
-    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager) {
+    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer) {
         super(repository);
         this.repository = repository;
         this.registerVisitorProducer = registerVisitorProducer;
         this.registerManagerProducer = registerManagerProducer;
         this.jwtTokenManager = jwtTokenManager;
+        this.activationMailProducer = activationMailProducer;
     }
 
     public TokenResponseDto registerVisitor(RegisterVisitorRequestDto dto) {
@@ -52,17 +54,16 @@ public class AuthService extends ServiceManager<Auth,Long> {
         }
 
         Auth auth = IAuthMapper.INSTANCE.toAuth(dto);
-
-        registerVisitorProducer.registerVisitor(IAuthMapper.INSTANCE.toRegisterVisitorModel(auth));
-
-        auth.setActivationCode(CodeGenerator.generateCode());
         save(auth);
 
+        registerVisitorProducer.registerVisitor(IAuthMapper.INSTANCE.toRegisterVisitorModel(auth));
         Optional<String> optionalToken = jwtTokenManager.createToken(auth.getId());
         if (optionalToken.isEmpty()) {
             throw new AuthManagerException(ErrorType.TOKEN_NOT_CREATED);
         }
-
+        auth.setActivationCode(optionalToken.get());
+        update(auth);
+        activationMailProducer.sendActivationMail(IAuthMapper.INSTANCE.toActivationMailModel(auth));
         return new TokenResponseDto(optionalToken.get());
     }
 
@@ -115,12 +116,13 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
 
 
-    public MessageResponseDto activateStatus(ActivationRequestDto dto) {
-        Optional<Long> optionalId = jwtTokenManager.getIdFromToken(dto.getToken());
+    public MessageResponseDto activateStatus(String token) {
+        Optional<Long> optionalId = jwtTokenManager.getIdFromToken(token);
 
         if (optionalId.isEmpty()) {
             throw new AuthManagerException(ErrorType.INVALID_TOKEN);
         }
+
 
         Optional<Auth> optionalAuth = findById(optionalId.get());
 
@@ -132,6 +134,19 @@ public class AuthService extends ServiceManager<Auth,Long> {
         update(optionalAuth.get());
 
         return new MessageResponseDto("Hesabiniz aktif edilmistir.");
+    }
 
+
+   // @PostConstruct
+    public void defaultAdmin() {
+        System.out.println("Bu metod her turlu calisir pasa");
+        Auth auth= Auth.builder()
+                .email("abc@gmail.com")
+                .companyName("abab")
+                .password("abab")
+                .status(EStatus.ACTIVE)
+                .userType(EUserType.ADMIN)
+                .build();
+        save(auth);
     }
 }
