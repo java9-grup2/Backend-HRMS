@@ -14,10 +14,18 @@ public class RabbitConfig {
     @Value("${rabbitmq.activation-mail-queue}")
     private String activationMailQueue;
 
+    @Value("${rabbitmq.register-employee-mail-queue}")
+    private String registerEmployeeMailQueue;
+
 
     @Bean
     Queue activationMailQueue() {
         return new Queue(activationMailQueue);
+    }
+
+    @Bean
+    Queue registerEmployeeMailQueue(){
+        return new Queue(registerEmployeeMailQueue);
     }
 
 }

@@ -32,3 +32,5 @@ rabbitmq:
   register-manager-bindingKey: registerManagerBindingKey
   activation-mail-queue: activationMailQueue
   activation-mail-bindingKey: activationMailBindingKey
+  register-employee-mail-queue: registerEmployeeMailQueue
+  register-employee-bindingKey: registerEmployeeBindingKey

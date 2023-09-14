@@ -25,7 +25,7 @@ public class RegisterManagerRequestDto {
 
     @NotBlank(message = "email is a must")
     @Email(message = "this section must be in email format")
-    private String email;
+    private String personalEmail;
 
     @NotBlank(message = "TaxNo is a must")
     private String taxNo;

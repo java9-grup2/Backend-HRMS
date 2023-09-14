@@ -78,6 +78,27 @@ public class JwtTokenManager {
         return Optional.ofNullable(token);
     }
 
+    public Optional<String> createToken(Long id, EUserType userType,String companyName) {
+        String token = null;
+        Date date = new Date(System.currentTimeMillis()+(1000*60*5));
+        try {
+            token = JWT.create()
+                    .withAudience(audience)
+                    .withIssuer(issuer)
+                    .withClaim("id", id)
+                    .withClaim("role",userType.toString())
+                    .withClaim("companyName",companyName)
+                    .withIssuedAt(new Date())
+                    .withExpiresAt(date)
+                    .sign(Algorithm.HMAC512(secretKey));
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return Optional.ofNullable(token);
+    }
+
+
 
     public Optional<Long> getIdFromToken(String token) {
 
@@ -106,6 +127,23 @@ public class JwtTokenManager {
                 throw new AuthManagerException(ErrorType.INVALID_TOKEN);
             }
             String role = decodedJWT.getClaim("role").asString();
+            return Optional.of(role);
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+        }
+    }
+
+    public Optional<String> getCompanyNameFromToken(String token) {
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT == null) {
+                throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+            }
+            String role = decodedJWT.getClaim("companyName").asString();
             return Optional.of(role);
         } catch (Exception e) {
             System.out.println(e);

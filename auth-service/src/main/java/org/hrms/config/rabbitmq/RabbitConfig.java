@@ -37,11 +37,28 @@ public class RabbitConfig {
     private String activationMailBindingKey;
 
 
+    @Value("${rabbitmq.register-employee-mail-queue}")
+    private String registerEmployeeMailQueue;
+
+    @Value("${rabbitmq.register-employee-bindingKey}")
+    private String registerEmployeeBindingKey;
+
     @Bean
     DirectExchange exchangeAuth() {
         return new DirectExchange(authExchange);
     }
 
+
+
+    @Bean
+    Queue registerEmployeeMailQueue(){
+        return new Queue(registerEmployeeMailQueue);
+    }
+
+    @Bean
+    public Binding registerEmployeeMailBinding(final DirectExchange exchangeAuth, final Queue registerEmployeeMailQueue) {
+        return BindingBuilder.bind(registerEmployeeMailQueue).to(exchangeAuth).with(registerEmployeeBindingKey);
+    }
 
     @Bean
     Queue activationMailQueue() {

@@ -10,9 +10,12 @@ import java.util.Optional;
 public interface IAuthRepository extends JpaRepository<Auth,Long> {
 
 
-    boolean existsByEmail(String email);
+    boolean existsByPersonalEmail(String personalEmail);
 
     boolean existsByUsername(String username);
 
-    Optional<Auth> findByEmailAndPassword(String email, String password);
+    Optional<Auth> findByPersonalEmailAndPassword(String email, String password);
+    Optional<Auth> findByCompanyEmailEmailAndPassword(String companyEmail, String password);
+
+    boolean existsByCompanyEmail(String companyEmail);
 }

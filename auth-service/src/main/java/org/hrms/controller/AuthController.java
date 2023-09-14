@@ -1,10 +1,7 @@
 package org.hrms.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.hrms.dto.request.ActivationRequestDto;
-import org.hrms.dto.request.LoginRequestDto;
-import org.hrms.dto.request.RegisterManagerRequestDto;
-import org.hrms.dto.request.RegisterVisitorRequestDto;
+import org.hrms.dto.request.*;
 import org.hrms.dto.response.TokenResponseDto;
 import org.hrms.dto.response.MessageResponseDto;
 import org.hrms.service.AuthService;
@@ -33,7 +30,14 @@ public class AuthController {
     }
 
 
-//    buraya bi registerPersonel yap registerManager uzerinden personeller kayit olsun diye.
+
+    @PostMapping(REGISTEREMPLOYEE)
+    public ResponseEntity<Boolean> registerEmployee(@Valid @RequestBody RegisterEmployeeRequestDto dto) {
+        return ResponseEntity.ok(service.registerEmployee(dto));
+    }
+
+
+
 
     @PostMapping(LOGIN)
     public ResponseEntity<TokenResponseDto> login(@RequestBody LoginRequestDto dto) {
