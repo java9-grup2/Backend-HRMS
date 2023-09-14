@@ -1,0 +1,25 @@
+server:
+  port: 7075
+
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: user
+  mail:
+    host: smtp.gmail.com
+    port: 587  #default portu bu smtp'nin
+    username: ${java9mail}
+    password: ${java9mailpassword}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+
+
+rabbitmq:
+  activation-mail-queue: activationMailQueue

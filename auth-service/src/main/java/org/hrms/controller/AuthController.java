@@ -9,10 +9,7 @@ import org.hrms.dto.response.TokenResponseDto;
 import org.hrms.dto.response.MessageResponseDto;
 import org.hrms.service.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -36,13 +33,15 @@ public class AuthController {
     }
 
 
+//    buraya bi registerPersonel yap registerManager uzerinden personeller kayit olsun diye.
+
     @PostMapping(LOGIN)
     public ResponseEntity<TokenResponseDto> login(@RequestBody LoginRequestDto dto) {
         return ResponseEntity.ok(service.login(dto));
     }
 
-    @PostMapping(ACTIVATION)
-    public ResponseEntity<MessageResponseDto> activateStatus(@Valid @RequestBody ActivationRequestDto dto) {
-        return ResponseEntity.ok(service.activateStatus(dto));
+    @GetMapping(ACTIVATION)
+    public ResponseEntity<MessageResponseDto> activateStatus(String token) {
+        return ResponseEntity.ok(service.activateStatus(token));
     }
 }

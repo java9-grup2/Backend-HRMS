@@ -59,6 +59,25 @@ public class JwtTokenManager {
         }
         return Optional.ofNullable(token);
     }
+    public Optional<String> createToken(Long id,String activationCode) {
+        String token = null;
+        Date date = new Date(System.currentTimeMillis()+(1000*60*5));
+        try {
+            token = JWT.create()
+                    .withAudience(audience)
+                    .withIssuer(issuer)
+                    .withClaim("id", id)
+                    .withClaim("activationCode", activationCode)
+                    .withIssuedAt(new Date())
+                    .withExpiresAt(date)
+                    .sign(Algorithm.HMAC512(secretKey));
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return Optional.ofNullable(token);
+    }
+
 
     public Optional<Long> getIdFromToken(String token) {
 
@@ -72,7 +91,7 @@ public class JwtTokenManager {
             Long id = decodedJWT.getClaim("id").asLong();
             return Optional.of(id);
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e);
             throw new AuthManagerException(ErrorType.INVALID_TOKEN);
         }
     }
@@ -89,7 +108,25 @@ public class JwtTokenManager {
             String role = decodedJWT.getClaim("role").asString();
             return Optional.of(role);
         } catch (Exception e) {
-            System.out.println(e.toString());
+            System.out.println(e);
+            throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+        }
+    }
+
+
+    public Optional<String> getActivationCodeFromToken(String token) {
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT == null) {
+                throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+            }
+            String activationCode = decodedJWT.getClaim("activationCode").asString();
+            return Optional.of(activationCode);
+        } catch (Exception e) {
+            System.out.println(e);
             throw new AuthManagerException(ErrorType.INVALID_TOKEN);
         }
     }

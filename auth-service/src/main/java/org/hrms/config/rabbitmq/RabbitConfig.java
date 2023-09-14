@@ -1,5 +1,6 @@
 package org.hrms.config.rabbitmq;
 
+import com.rabbitmq.client.AMQP;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -28,10 +29,30 @@ public class RabbitConfig {
     private String registerManagerBindingKey;
 
 
+
+    @Value("${rabbitmq.activation-mail-queue}")
+    private String activationMailQueue;
+
+    @Value("${rabbitmq.activation-mail-bindingKey}")
+    private String activationMailBindingKey;
+
+
     @Bean
     DirectExchange exchangeAuth() {
         return new DirectExchange(authExchange);
     }
+
+
+    @Bean
+    Queue activationMailQueue() {
+        return new Queue(activationMailQueue);
+    }
+
+    @Bean
+    public Binding activationMailBinding(final DirectExchange exchangeAuth, final Queue activationMailQueue) {
+        return BindingBuilder.bind(activationMailQueue).to(exchangeAuth).with(activationMailBindingKey);
+    }
+
 
     @Bean
     Queue registerManagerQueue() {
