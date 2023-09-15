@@ -5,7 +5,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: ${postgre}
+    password: root
     url: jdbc:postgresql://localhost:5432/hrms_authservice
   jpa:
     hibernate:
@@ -14,8 +14,8 @@ spring:
   rabbitmq:
     host: localhost
     port: 5672
-    username: user
-    password: user
+    username: root
+    password: root
 
 
 jwt:
