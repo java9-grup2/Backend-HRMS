@@ -29,15 +29,10 @@ public class AuthController {
         return ResponseEntity.ok(service.registerManager(dto));
     }
 
-
-
     @PostMapping(REGISTEREMPLOYEE)
     public ResponseEntity<Boolean> registerEmployee(@Valid @RequestBody RegisterEmployeeRequestDto dto) {
         return ResponseEntity.ok(service.registerEmployee(dto));
     }
-
-
-
 
     @PostMapping(LOGIN)
     public ResponseEntity<TokenResponseDto> login(@RequestBody LoginRequestDto dto) {
@@ -47,5 +42,10 @@ public class AuthController {
     @GetMapping(ACTIVATION)
     public ResponseEntity<MessageResponseDto> activateStatus(String token) {
         return ResponseEntity.ok(service.activateStatus(token));
+    }
+
+    @GetMapping("message")
+    public ResponseEntity<String> activateStatus( ) {
+        return ResponseEntity.ok("sa");
     }
 }

@@ -15,7 +15,7 @@ public class RegisterVisitorConsumer {
     private final UserService userService;
 
     @RabbitListener(queues = "${rabbitmq.register-visitor-queue}")
-    public void saveRegisterVisitorModel(RegisterVisitorModel model) throws MessagingException {
+    public void saveRegisterVisitorModel(RegisterVisitorModel model) {
         userService.saveVisitorUser(model);
     }
 }

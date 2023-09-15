@@ -7,7 +7,8 @@ public class EndPoints {
 
     //genel
     public static final String DELETEBYID ="/deletebyid/{id}";
-    public static final String SAVE ="/save";
+    public static final String SAVEVISITOR ="/savevisitor";
+    public static final String SAVEMANAGER ="/savemanager";
     public static final String UPDATE ="/update";
     public static final String FINDALL ="/findall";
 

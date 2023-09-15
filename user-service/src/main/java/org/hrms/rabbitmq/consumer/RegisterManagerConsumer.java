@@ -16,7 +16,7 @@ public class RegisterManagerConsumer {
 
 
     @RabbitListener(queues = "${rabbitmq.register-manager-queue}")
-    public void saveRegisterManagerModel(RegisterManagerModel model) throws MessagingException {
+    public void saveRegisterManagerModel(RegisterManagerModel model) {
         userService.saveManagerUser(model);
     }
 }
