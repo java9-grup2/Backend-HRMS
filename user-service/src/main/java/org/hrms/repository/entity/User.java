@@ -21,7 +21,10 @@ public class User extends BaseEntity{
     private Long authid;
     private String username;
     private String password;
-    private String email;
+    @Column(unique = true)
+    private String personalEmail;
+    @Column(unique = true)
+    private String companyEmail;
     private String activationCode;
 
     @Builder.Default
