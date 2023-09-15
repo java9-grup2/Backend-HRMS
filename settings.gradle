@@ -2,5 +2,6 @@ rootProject.name = 'Java9-Team2-HRMS'
 include 'auth-service'
 include 'mail-service'
 include 'config-server'
+include 'user-service'
 include 'api-gateway-service'
 
