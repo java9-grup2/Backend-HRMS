@@ -49,13 +49,16 @@ public class AuthService extends ServiceManager<Auth,Long> {
         Auth auth = IAuthMapper.INSTANCE.toAuth(dto);
         save(auth);
 
+        System.out.println("userregister kuyruga yollamadan once");
         registerVisitorProducer.registerVisitor(IAuthMapper.INSTANCE.toRegisterVisitorModel(auth));
+        System.out.println("userregister kuyruga yollamadan sonra");
         Optional<String> optionalToken = jwtTokenManager.createToken(auth.getId());
         if (optionalToken.isEmpty()) {
             throw new AuthManagerException(ErrorType.TOKEN_NOT_CREATED);
         }
         auth.setActivationCode(optionalToken.get());
         update(auth);
+        System.out.println("activasyon maili yollamdan once");
         activationMailProducer.sendActivationMail(IAuthMapper.INSTANCE.toActivationMailModel(auth));
         return new TokenResponseDto(optionalToken.get());
     }

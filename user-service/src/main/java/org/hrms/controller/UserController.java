@@ -2,6 +2,8 @@ package org.hrms.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.RegisterVisitorRequestDto;
+import org.hrms.rabbitmq.model.RegisterManagerModel;
+import org.hrms.rabbitmq.model.RegisterVisitorModel;
 import org.hrms.repository.entity.User;
 import org.hrms.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +18,16 @@ public class UserController {
 
     private final UserService service;
 
-    @PostMapping(SAVE)
-    public ResponseEntity<User> registerVisitor(@Valid @RequestBody RegisterVisitorRequestDto dto) {
-        return ResponseEntity.ok(service.saveUser(dto));
+    @PostMapping(SAVEVISITOR)
+    public ResponseEntity<User> registerVisitor(@RequestBody RegisterVisitorModel model) {
+        return ResponseEntity.ok(service.saveVisitorUser(model));
     }
 
+
+    @PostMapping(SAVEMANAGER)
+    public ResponseEntity<User> registerManager(@RequestBody RegisterManagerModel model) {
+        return ResponseEntity.ok(service.saveManagerUser(model));
+    }
 }
 
 

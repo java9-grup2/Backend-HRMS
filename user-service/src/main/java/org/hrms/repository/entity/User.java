@@ -14,6 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "tbl_user")
 public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,5 +35,8 @@ public class User extends BaseEntity{
     @Enumerated(EnumType.STRING)
     @Builder.Default
     EStatus status = EStatus.PENDING;
+
+    String taxNo;
+    String companyName;
 
 }

@@ -17,4 +17,8 @@ public class FallbackController {
         return  ResponseEntity.ok("Auth sevice suanda hizmet verememektedir!!!");
     }
 
+    @GetMapping("/userservice")
+    public ResponseEntity<String> userServiceFallback(){
+        return  ResponseEntity.ok("User sevice suanda hizmet verememektedir!!!");
+    }
 }

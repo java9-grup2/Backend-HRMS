@@ -48,5 +48,4 @@ ext {
             graphiql                 : "com.graphql-java-kickstart:graphiql-spring-boot-starter:$versions.graphiql"
 
     ]
-
 }

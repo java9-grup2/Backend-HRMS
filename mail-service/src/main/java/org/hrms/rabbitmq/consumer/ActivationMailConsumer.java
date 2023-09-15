@@ -16,7 +16,7 @@ public class ActivationMailConsumer {
     private final MailService mailService;
 
     @RabbitListener(queues = "${rabbitmq.activation-mail-queue}")
-    public void sendActivationMail(ActivationMailModel model) throws MessagingException {
+    public void sendActivationMail(ActivationMailModel model)    throws MessagingException {
         mailService.sendActivationMail(model);
     }
 }
