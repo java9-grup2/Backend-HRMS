@@ -31,7 +31,6 @@ subprojects {
     }
 }
 
-
 allprojects {
     repositories {
         mavenCentral()
@@ -56,8 +55,6 @@ allprojects {
     }
 
 }
-
-
 
 configurations {
     compileOnly{
