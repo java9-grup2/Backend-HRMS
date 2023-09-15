@@ -25,12 +25,5 @@ jwt:
 
 
 rabbitmq:
-  authExchange: authExchange
   register-visitor-queue: registerVisitorQueue
-  register-visitor-bindingKey: registerVisitorBindingKey
   register-manager-queue: registerManagerQueue
-  register-manager-bindingKey: registerManagerBindingKey
-  activation-mail-queue: activationMailQueue
-  activation-mail-bindingKey: activationMailBindingKey
-  register-employee-mail-queue: registerEmployeeMailQueue
-  register-employee-bindingKey: registerEmployeeBindingKey
