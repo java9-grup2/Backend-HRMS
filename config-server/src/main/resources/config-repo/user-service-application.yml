@@ -1,0 +1,36 @@
+server:
+  port: 9091
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: ${postgre}
+    url: jdbc:postgresql://localhost:5432/hrms_userservice
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: user
+
+
+jwt:
+  secretKey: ${java9secretkey}
+  issuer: ${java9issuer}
+  audience: ${java9audience}
+
+
+rabbitmq:
+  authExchange: authExchange
+  register-visitor-queue: registerVisitorQueue
+  register-visitor-bindingKey: registerVisitorBindingKey
+  register-manager-queue: registerManagerQueue
+  register-manager-bindingKey: registerManagerBindingKey
+  activation-mail-queue: activationMailQueue
+  activation-mail-bindingKey: activationMailBindingKey
+  register-employee-mail-queue: registerEmployeeMailQueue
+  register-employee-bindingKey: registerEmployeeBindingKey
