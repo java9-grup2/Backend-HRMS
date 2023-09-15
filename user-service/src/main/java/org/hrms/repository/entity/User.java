@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.hrms.repository.enums.EStatus;
 import org.hrms.repository.enums.EUserType;
-
 import javax.persistence.*;
 
 @SuperBuilder
@@ -15,21 +14,14 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Auth extends BaseEntity{
-
+public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(unique = true)
+    private Long authid;
     private String username;
     private String password;
-
-    @Column(unique = true)
-    private String personalEmail;
-    @Column(unique = true)
-    private String companyEmail;
-
+    private String email;
     private String activationCode;
 
     @Builder.Default
@@ -40,6 +32,4 @@ public class Auth extends BaseEntity{
     @Builder.Default
     EStatus status = EStatus.PENDING;
 
-    String taxNo;
-    String companyName;
 }

@@ -14,6 +14,7 @@ public class EndPoints {
     //Auth
     public static final String REGISTERVISITOR ="/registervisitor";
     public static final String REGISTERMANAGER ="/registermanager";
+    public static final String REGISTEREMPLOYEE ="/registeremployee";
     public static final String LOGIN ="/login";
     public static final String ACTIVATION ="/activation";
 }

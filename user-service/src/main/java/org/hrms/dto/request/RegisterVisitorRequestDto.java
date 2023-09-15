@@ -15,17 +15,17 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class RegisterVisitorRequestDto {
 
-
-
     @NotBlank(message = "username is a must")
     @Size(min = 4,max = 16,message = "Username must be between 4 to 16 character")
     private String username;
     @NotBlank(message = "password is a must")
     @Size(min = 5,max = 32,message = "Password must be between 5 to 32 character")
     private String password;
+    private String repassword;
 
     @NotBlank(message = "email is a must")
     @Email(message = "this section must be in email format")
     private String personalEmail;
+
 
 }

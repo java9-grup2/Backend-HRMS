@@ -3,6 +3,7 @@ package org.hrms.mapper;
 import org.hrms.dto.request.RegisterManagerRequestDto;
 import org.hrms.dto.request.RegisterVisitorRequestDto;
 import org.hrms.rabbitmq.model.ActivationMailModel;
+import org.hrms.rabbitmq.model.RegisterEmployeeModel;
 import org.hrms.rabbitmq.model.RegisterManagerModel;
 import org.hrms.rabbitmq.model.RegisterVisitorModel;
 import org.hrms.repository.entity.Auth;
@@ -24,4 +25,6 @@ public interface IAuthMapper {
     RegisterManagerModel toRegisterManagerModel(final Auth auth);
 
     ActivationMailModel toActivationMailModel(final Auth auth);
+
+    RegisterEmployeeModel toRegisterEmployeeModel(final Auth auth);
 }

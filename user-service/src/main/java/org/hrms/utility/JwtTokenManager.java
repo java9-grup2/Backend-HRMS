@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.hrms.exception.AuthManagerException;
+import org.hrms.exception.UserManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.repository.enums.EUserType;
 import org.springframework.beans.factory.annotation.Value;
@@ -107,13 +107,13 @@ public class JwtTokenManager {
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
             DecodedJWT decodedJWT = verifier.verify(token);
             if (decodedJWT == null) {
-                throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+                throw new UserManagerException(ErrorType.INVALID_TOKEN);
             }
             Long id = decodedJWT.getClaim("id").asLong();
             return Optional.of(id);
         } catch (Exception e) {
             System.out.println(e);
-            throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+            throw new UserManagerException(ErrorType.INVALID_TOKEN);
         }
     }
 
@@ -124,13 +124,13 @@ public class JwtTokenManager {
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
             DecodedJWT decodedJWT = verifier.verify(token);
             if (decodedJWT == null) {
-                throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+                throw new UserManagerException(ErrorType.INVALID_TOKEN);
             }
             String role = decodedJWT.getClaim("role").asString();
             return Optional.of(role);
         } catch (Exception e) {
             System.out.println(e);
-            throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+            throw new UserManagerException(ErrorType.INVALID_TOKEN);
         }
     }
 
@@ -141,13 +141,13 @@ public class JwtTokenManager {
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
             DecodedJWT decodedJWT = verifier.verify(token);
             if (decodedJWT == null) {
-                throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+                throw new UserManagerException(ErrorType.INVALID_TOKEN);
             }
             String role = decodedJWT.getClaim("companyName").asString();
             return Optional.of(role);
         } catch (Exception e) {
             System.out.println(e);
-            throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+            throw new UserManagerException(ErrorType.INVALID_TOKEN);
         }
     }
 
@@ -159,13 +159,13 @@ public class JwtTokenManager {
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
             DecodedJWT decodedJWT = verifier.verify(token);
             if (decodedJWT == null) {
-                throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+                throw new UserManagerException(ErrorType.INVALID_TOKEN);
             }
             String activationCode = decodedJWT.getClaim("activationCode").asString();
             return Optional.of(activationCode);
         } catch (Exception e) {
             System.out.println(e);
-            throw new AuthManagerException(ErrorType.INVALID_TOKEN);
+            throw new UserManagerException(ErrorType.INVALID_TOKEN);
         }
     }
 }
