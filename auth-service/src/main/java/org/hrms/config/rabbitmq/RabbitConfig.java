@@ -43,12 +43,53 @@ public class RabbitConfig {
     @Value("${rabbitmq.register-employee-bindingKey}")
     private String registerEmployeeBindingKey;
 
+    @Value("${rabbitmq.save-employee-queue}")
+    private String saveEmployeeQueue;
+
+    @Value("${rabbitmq.save-employee-bindingKey}")
+    private String saveEmployeeBindingKey;
+
+    @Value("${rabbitmq.activate-status-queue}")
+    private String activateStatusQueue;
+
+    @Value("${rabbitmq.activate-status-bindingKey}")
+    private String activateStatusBindingKey;
+
+    @Value("${rabbitmq.update-user-queue}")
+    private String updateUserQueue;
+
+
+
     @Bean
     DirectExchange exchangeAuth() {
         return new DirectExchange(authExchange);
     }
 
 
+    @Bean
+    Queue updateUserQueue() {
+        return new Queue(updateUserQueue);
+    }
+
+    @Bean
+    Queue activateStatusQueue() {
+        return new Queue(activateStatusQueue);
+    }
+
+    @Bean
+    public Binding activateStatusBinding(final DirectExchange exchangeAuth, final Queue activateStatusQueue) {
+        return BindingBuilder.bind(activateStatusQueue).to(exchangeAuth).with(activateStatusBindingKey);
+    }
+
+    @Bean
+    Queue saveEmployeeQueue() {
+        return new Queue(saveEmployeeQueue);
+    }
+
+    @Bean
+    public Binding saveEmployeeBinding(final DirectExchange exchangeAuth, final Queue saveEmployeeQueue) {
+        return BindingBuilder.bind(saveEmployeeQueue).to(exchangeAuth).with(saveEmployeeBindingKey);
+    }
 
     @Bean
     Queue registerEmployeeMailQueue(){

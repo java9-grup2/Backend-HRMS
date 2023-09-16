@@ -1,10 +1,11 @@
 package org.hrms.rabbitmq.model;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hrms.repository.enums.EStatus;
+import org.hrms.repository.enums.EUserType;
 
 import java.io.Serializable;
 
@@ -12,12 +13,14 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterEmployeeModel implements Serializable {
+public class SaveEmployeeModel implements Serializable {
 
+    private Long authid;
+    private String username;
     private String personalEmail;
     private String companyEmail;
     private String password;
     private String companyName;
-    private String name;
-    private String surname;
+    private EUserType userType;
+    private EStatus status;
 }

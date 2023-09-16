@@ -19,7 +19,7 @@ public enum ErrorType {
     ACCOUNT_NOT_ACTIVE(4115,"Aktive Edilmemis hesap. Lutfen hesabinizi aktif hale getirin" ,HttpStatus.FORBIDDEN),
     INVALID_TOKEN(4116,"Gecersiz token" ,HttpStatus.BAD_REQUEST),
     TOKEN_NOT_CREATED(4117,"Token olusturulamadi" ,HttpStatus.BAD_REQUEST),
-    EMAIL_TAKEN(4118,"Bu email sistemde kayitli" ,HttpStatus.BAD_REQUEST),
+    PERSONAL_EMAIL_IS_TAKEN(4118,"Bu email sistemde kayitli" ,HttpStatus.BAD_REQUEST),
     INSUFFICIENT_PERMISSION(4119, "Bu islemi yapmaya yetkiniz yok", HttpStatus.BAD_REQUEST);
 
     private int code;

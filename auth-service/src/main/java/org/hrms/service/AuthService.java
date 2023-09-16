@@ -6,11 +6,9 @@ import org.hrms.dto.response.MessageResponseDto;
 import org.hrms.exception.AuthManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.mapper.IAuthMapper;
-import org.hrms.rabbitmq.model.RegisterEmployeeModel;
-import org.hrms.rabbitmq.producer.ActivationMailProducer;
-import org.hrms.rabbitmq.producer.RegisterEmployeeMailProducer;
-import org.hrms.rabbitmq.producer.RegisterManagerProducer;
-import org.hrms.rabbitmq.producer.RegisterVisitorProducer;
+import org.hrms.rabbitmq.model.RegisterEmployeeMailModel;
+import org.hrms.rabbitmq.model.UpdateUserModel;
+import org.hrms.rabbitmq.producer.*;
 import org.hrms.repository.IAuthRepository;
 import org.hrms.repository.entity.Auth;
 import org.hrms.repository.enums.EStatus;
@@ -31,8 +29,11 @@ public class AuthService extends ServiceManager<Auth,Long> {
     private final JwtTokenManager jwtTokenManager;
     private final ActivationMailProducer activationMailProducer;
     private final RegisterEmployeeMailProducer registerEmployeeMailProducer;
+    private final SaveEmployeeProducer saveEmployeeProducer;
 
-    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer) {
+    private final ActivateStatusProducer activateStatusProducer;
+
+    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer) {
         super(repository);
         this.repository = repository;
         this.registerVisitorProducer = registerVisitorProducer;
@@ -40,6 +41,8 @@ public class AuthService extends ServiceManager<Auth,Long> {
         this.jwtTokenManager = jwtTokenManager;
         this.activationMailProducer = activationMailProducer;
         this.registerEmployeeMailProducer = registerEmployeeMailProducer;
+        this.saveEmployeeProducer = saveEmployeeProducer;
+        this.activateStatusProducer = activateStatusProducer;
     }
 
     public TokenResponseDto registerVisitor(RegisterVisitorRequestDto dto) {
@@ -92,7 +95,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         boolean existsByUsername = repository.existsByUsername(username);
 
         if (existsByEmail) {
-            throw new AuthManagerException(ErrorType.EMAIL_TAKEN);
+            throw new AuthManagerException(ErrorType.PERSONAL_EMAIL_IS_TAKEN);
         }
 
         if (existsByUsername) {
@@ -113,7 +116,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
             throw new AuthManagerException(ErrorType.ACCOUNT_NOT_ACTIVE);
         }
 
-        Optional<String> token = jwtTokenManager.createToken(optionalAuth.get().getId());
+        Optional<String> token = jwtTokenManager.createToken(optionalAuth.get().getId(),optionalAuth.get().getUserType());
         if (token.isEmpty()) {
             throw new AuthManagerException(ErrorType.TOKEN_NOT_CREATED);
         }
@@ -140,11 +143,13 @@ public class AuthService extends ServiceManager<Auth,Long> {
         optionalAuth.get().setStatus(EStatus.ACTIVE);
         update(optionalAuth.get());
 
+        activateStatusProducer.activateStatus(IAuthMapper.INSTANCE.toActivateStatusModel(optionalAuth.get()));
+
         return new MessageResponseDto("Hesabiniz aktif edilmistir.");
     }
 
 
-   // @PostConstruct
+    // @PostConstruct
     public void defaultAdmin() {
         System.out.println("Bu metod her turlu calisir pasa");
         Auth auth= Auth.builder()
@@ -154,7 +159,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
                 .status(EStatus.ACTIVE)
                 .userType(EUserType.ADMIN)
                 .build();
-                save(auth);
+        save(auth);
     }
 
     public Boolean registerEmployee(RegisterEmployeeRequestDto dto) {
@@ -175,7 +180,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
         boolean existsByPersonalEmail = repository.existsByPersonalEmail(dto.getPersonalEmail());
         if (existsByPersonalEmail) {
-            throw new AuthManagerException(ErrorType.EMAIL_TAKEN);
+            throw new AuthManagerException(ErrorType.PERSONAL_EMAIL_IS_TAKEN);
         }
 
         Auth auth = Auth.builder()
@@ -187,9 +192,13 @@ public class AuthService extends ServiceManager<Auth,Long> {
                 .companyName(companyNameFromToken.get())
                 .build();
 
+        auth.setUsername(usernameSetter(auth.getCompanyEmail()));
+
         save(auth);
 
-        RegisterEmployeeModel registerEmployeeModel = IAuthMapper.INSTANCE.toRegisterEmployeeModel(auth);
+        saveEmployeeProducer.saveEmployee(IAuthMapper.INSTANCE.toSaveEmployeeModel(auth));
+
+        RegisterEmployeeMailModel registerEmployeeModel = IAuthMapper.INSTANCE.toRegisterEmployeeModel(auth);
         registerEmployeeModel.setName(dto.getName());
         registerEmployeeModel.setSurname(dto.getSurname());
         registerEmployeeMailProducer.sendEmployeeDetails(registerEmployeeModel);
@@ -217,5 +226,69 @@ public class AuthService extends ServiceManager<Auth,Long> {
             newEmail= name+"."+surname+CodeGenerator.generateCode()+"@"+companyName.toLowerCase()+".com";
         }
         return newEmail;
+    }
+
+    /**
+     * Calisan icin sirket emailine gore username atar. Eger ayni email mevcutsa farkli bir email atama islemi yapar.
+     * @param companyEmail
+     * @return
+     */
+    public String usernameSetter(String companyEmail) {
+        int i = companyEmail.indexOf("@");
+        String username = companyEmail.substring(0, i);
+
+        while (repository.existsByUsername(username)) {
+            username = companyEmail.substring(0, i) + CodeGenerator.generateCode();
+        }
+        return username;
+    }
+
+    public Boolean updateAuth(UpdateUserModel model) {
+        boolean existsByUsername = repository.existsByUsername(model.getUsername());
+        boolean existsByPersonalEmail = repository.existsByPersonalEmail(model.getPersonalEmail());
+
+        Optional<Auth> optionalAuth = repository.findById(model.getId());
+        if (optionalAuth.isEmpty()) {
+            throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
+        }
+        if (existsByUsername && !optionalAuth.get().getUsername().equals(model.getUsername())) {
+            throw new AuthManagerException(ErrorType.USERNAME_EXIST);
+        }
+
+        if (existsByPersonalEmail && !optionalAuth.get().getPersonalEmail().equals(model.getPersonalEmail())) {
+            throw new AuthManagerException(ErrorType.PERSONAL_EMAIL_IS_TAKEN);
+        }
+
+        setAuthUpdateSettings(optionalAuth.get(),model);
+        return true;
+
+    }
+
+    /**
+     * Rabbitmq ile user-serviceden gelen modelin tipine gore guncelleme yapar.
+     * @param auth
+     * @param model
+     */
+    public void setAuthUpdateSettings(Auth auth, UpdateUserModel model) {
+
+        switch (auth.getUserType()) {
+            case MANAGER,ADMIN -> {
+                auth.setUsername(model.getUsername());
+                auth.setPassword(model.getPassword());
+                auth.setPersonalEmail(model.getPersonalEmail());
+                auth.setTaxNo(model.getTaxNo());
+                auth.setCompanyName(model.getCompanyName());
+                update(auth);
+            }
+            case VISITOR,EMPLOYEE -> {
+                auth.setUsername(model.getUsername());
+                auth.setPassword(model.getPassword());
+                auth.setPersonalEmail(model.getPersonalEmail());
+                update(auth);
+            }
+            default -> {
+                throw new AuthManagerException(ErrorType.BAD_REQUEST);
+            }
+        }
     }
 }

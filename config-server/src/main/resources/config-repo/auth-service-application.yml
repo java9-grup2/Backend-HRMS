@@ -34,3 +34,8 @@ rabbitmq:
   activation-mail-bindingKey: activationMailBindingKey
   register-employee-mail-queue: registerEmployeeMailQueue
   register-employee-bindingKey: registerEmployeeBindingKey
+  save-employee-queue: saveEmployeeQueue
+  save-employee-bindingKey: saveEmployeeBindingKey
+  activate-status-queue: activateStatusQueue
+  activate-status-bindingKey: activateStatusBindingKey
+  update-user-queue: updateUserQueue

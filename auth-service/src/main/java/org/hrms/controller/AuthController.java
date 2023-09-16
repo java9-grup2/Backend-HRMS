@@ -2,8 +2,9 @@ package org.hrms.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.*;
-import org.hrms.dto.response.TokenResponseDto;
 import org.hrms.dto.response.MessageResponseDto;
+import org.hrms.dto.response.TokenResponseDto;
+import org.hrms.rabbitmq.model.UpdateUserModel;
 import org.hrms.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +45,8 @@ public class AuthController {
         return ResponseEntity.ok(service.activateStatus(token));
     }
 
-    @GetMapping("message")
-    public ResponseEntity<String> activateStatus( ) {
-        return ResponseEntity.ok("sa");
+    @PutMapping(UPDATE)
+    public ResponseEntity<Boolean> updateAuth(@RequestBody UpdateUserModel model) {
+        return ResponseEntity.ok(service.updateAuth(model));
     }
 }

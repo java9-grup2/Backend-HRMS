@@ -19,9 +19,10 @@ public enum ErrorType {
     ACCOUNT_NOT_ACTIVE(4115,"Aktive Edilmemis hesap. Lutfen hesabinizi aktif hale getirin" ,HttpStatus.FORBIDDEN),
     INVALID_TOKEN(4116,"Gecersiz token" ,HttpStatus.BAD_REQUEST),
     TOKEN_NOT_CREATED(4117,"Token olusturulamadi" ,HttpStatus.BAD_REQUEST),
-    EMAIL_TAKEN(4118,"Bu email sistemde kayitli" ,HttpStatus.BAD_REQUEST),
+    PERSONAL_EMAIL_IS_TAKEN(4118,"Bu sahsi email sistemde kayitli, lutfen baska bir mail deneyiniz" ,HttpStatus.BAD_REQUEST),
     INSUFFICIENT_PERMISSION(4119, "Bu islemi yapmaya yetkiniz yok", HttpStatus.BAD_REQUEST),
-    USERNAME_OR_MAIL_EXIST(1111,"Kullanici adi veya mail zaten mevcut",HttpStatus.BAD_REQUEST);
+    USERNAME_OR_MAIL_EXIST(4120,"Kullanici adi veya mail zaten mevcut",HttpStatus.BAD_REQUEST),
+    COMPANY_EMAIL_IS_TAKEN(4121,"Bu sirket maili baskasina tanimlanmistir.",HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;

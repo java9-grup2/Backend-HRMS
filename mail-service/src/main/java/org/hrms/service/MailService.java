@@ -2,9 +2,7 @@ package org.hrms.service;
 
 import lombok.RequiredArgsConstructor;
 import org.hrms.rabbitmq.model.ActivationMailModel;
-import org.hrms.rabbitmq.model.RegisterEmployeeModel;
-import org.springframework.context.annotation.Bean;
-import org.springframework.mail.SimpleMailMessage;
+import org.hrms.rabbitmq.model.RegisterEmployeeMailModel;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -24,7 +22,7 @@ public class MailService {
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
         helper.setFrom("${java9mail}");
-        helper.setTo(model.getEmail());
+        helper.setTo(model.getPersonalEmail());
         helper.setSubject("Linke tiklayarak hesabinizi aktif ediniz");
 
         String htmlContent = "<div style=\"background-color: #007bff; color: white; text-align: center; padding: 10px; border-radius: 15px\">" +
@@ -39,7 +37,7 @@ public class MailService {
         javaMailSender.send(mimeMessage);
     }
 
-    public void sendRegisterEmployeeMail(RegisterEmployeeModel model) throws MessagingException {
+    public void sendRegisterEmployeeMail(RegisterEmployeeMailModel model) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
