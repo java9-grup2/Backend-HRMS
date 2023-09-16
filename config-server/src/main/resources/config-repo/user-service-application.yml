@@ -25,5 +25,10 @@ jwt:
 
 
 rabbitmq:
+  userExchange: userExchange
   register-visitor-queue: registerVisitorQueue
   register-manager-queue: registerManagerQueue
+  save-employee-queue: saveEmployeeQueue
+  activate-status-queue: activateStatusQueue
+  update-user-queue: updateUserQueue
+  update-user-bindingKey: updateUserBindingKey

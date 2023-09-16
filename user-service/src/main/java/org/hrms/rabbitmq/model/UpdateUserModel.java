@@ -7,15 +7,16 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterVisitorModel implements Serializable {
+public class UpdateUserModel implements Serializable {
 
-    private Long authid;
+    private Long id;
     private String username;
     private String password;
     private String personalEmail;
+    private String taxNo;
+    private String companyName;
 }

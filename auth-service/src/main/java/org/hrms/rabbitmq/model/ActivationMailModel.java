@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ActivationMailModel implements Serializable {
 
-    private String email;
+    private String personalEmail;
     private String activationCode;
 
 }
