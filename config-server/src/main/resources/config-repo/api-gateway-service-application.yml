@@ -33,7 +33,7 @@ spring:
 
         - id: user-service
           predicates:
-            #- Path=/api/v1/auth/**          #localhost/api/v1/auth/findall
+            #- Path=/api/v1/user/**          #localhost/api/v1/user/findall
             - Path=/user/**
           uri: http://localhost:9091
           filters:
@@ -42,6 +42,18 @@ spring:
               args:
                 enabled: true
                 fallbackUri: forward:/fallback/userservice
+
+        - id: company-service
+          predicates:
+            #- Path=/api/v1/company/**          #localhost/api/v1/company/findall
+            - Path=/company/**
+          uri: http://localhost:9092
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - name: CircuitBreaker
+              args:
+                enabled: true
+                fallbackUri: forward:/fallback/companyservice
 
       default-filters:
         - RewritePath= /(?<segment>.*),/api/v1/$\{segment}

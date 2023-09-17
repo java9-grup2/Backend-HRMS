@@ -35,6 +35,7 @@ public class UserController {
     public ResponseEntity<Boolean> registerEmployee(@RequestBody SaveEmployeeModel model) {
         return ResponseEntity.ok(service.saveEmployee(model));
     }
+
     @PostMapping(ACTIVATESTATUS)
     public ResponseEntity<Boolean> activateStatus(@RequestBody Long authid) {
         return ResponseEntity.ok(service.activateStatus(authid));
@@ -44,6 +45,12 @@ public class UserController {
     public ResponseEntity<Boolean> updateUser(@RequestBody UpdateRequestDto dto) {
         return ResponseEntity.ok(service.updateUser(dto));
     }
+
+    @DeleteMapping(DELETEBYAUTHID)
+    public ResponseEntity<Boolean> deleteUserByAuthId(@PathVariable Long authid) {
+        return ResponseEntity.ok(service.deleteUserByAuthId(authid));
+    }
+
 }
 
 

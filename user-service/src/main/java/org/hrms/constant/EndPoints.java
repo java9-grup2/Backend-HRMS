@@ -6,7 +6,7 @@ public class EndPoints {
     public static final String USER =VERSION +"/user";
 
     //genel
-    public static final String DELETEBYID ="/deletebyid/{id}";
+    public static final String DELETEBYAUTHID ="/deletebyauthid/{authid}";
     public static final String SAVEVISITOR ="/savevisitor";
     public static final String SAVEMANAGER ="/savemanager";
     public static final String SAVEEMPLOYEE ="/saveemployee";

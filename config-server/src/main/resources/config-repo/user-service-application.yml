@@ -32,3 +32,6 @@ rabbitmq:
   activate-status-queue: activateStatusQueue
   update-user-queue: updateUserQueue
   update-user-bindingKey: updateUserBindingKey
+  delete-user-by-authid-bindingKey: deleteUserByAuthidBindingKey
+  delete-user-by-authid-queue: deleteUserByAuthidQueue
+  delete-auth-by-id-queue: deleteAuthByIdQueue

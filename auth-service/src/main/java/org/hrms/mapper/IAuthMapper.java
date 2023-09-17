@@ -33,4 +33,7 @@ public interface IAuthMapper {
 
     @Mapping(target = "authid",source = "id")
     ActivateStatusModel toActivateStatusModel(final Auth auth);
+
+    @Mapping(source = "id",target = "managerId")
+    CreateCompanyModel toCreateCompanyModel(final Auth auth);
 }

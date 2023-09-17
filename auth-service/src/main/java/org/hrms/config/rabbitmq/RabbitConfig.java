@@ -58,6 +58,15 @@ public class RabbitConfig {
     @Value("${rabbitmq.update-user-queue}")
     private String updateUserQueue;
 
+    @Value("${rabbitmq.delete-user-by-authid-queue}")
+    private String deleteUserByAuthidQueue;
+
+
+    @Value("${rabbitmq.create-company-queue}")
+    private String createCompanyQueue;
+
+    @Value("${rabbitmq.create-company-bindingKey}")
+    private String createCompanyBindingKey;
 
 
     @Bean
@@ -65,6 +74,21 @@ public class RabbitConfig {
         return new DirectExchange(authExchange);
     }
 
+
+    @Bean
+    Queue createCompanyQueue() {
+        return new Queue(createCompanyQueue);
+    }
+
+    @Bean
+    public Binding createCompanyBinding(final DirectExchange exchangeAuth,final Queue createCompanyQueue) {
+        return BindingBuilder.bind(createCompanyQueue).to(exchangeAuth).with(createCompanyBindingKey);
+    }
+
+    @Bean
+    Queue deleteUserByAuthidQueue() {
+        return new Queue(deleteUserByAuthidQueue);
+    }
 
     @Bean
     Queue updateUserQueue() {

@@ -49,4 +49,9 @@ public class AuthController {
     public ResponseEntity<Boolean> updateAuth(@RequestBody UpdateUserModel model) {
         return ResponseEntity.ok(service.updateAuth(model));
     }
+
+    @DeleteMapping(DELETEBYID)
+    public ResponseEntity<Boolean> deleteAuthById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.deleteAuthById(id));
+    }
 }
