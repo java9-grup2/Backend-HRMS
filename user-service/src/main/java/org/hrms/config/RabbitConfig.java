@@ -34,9 +34,33 @@ public class RabbitConfig {
     @Value("${rabbitmq.update-user-bindingKey}")
     private String updateUserBindingKey;
 
+    @Value("${rabbitmq.delete-user-by-authid-queue}")
+    private String deleteUserByAuthidQueue;
+
+    @Value("${rabbitmq.delete-user-by-authid-bindingKey}")
+    private String deleteUserByAuthidBindingKey;
+
+    @Value("${rabbitmq.delete-auth-by-id-queue}")
+    private String deleteAuthByIdQueue;
+
     @Bean
     DirectExchange exchangeUser() {
         return new DirectExchange(exchangeUser);
+    }
+
+
+    @Bean
+    Queue deleteAuthByIdQueue() {
+        return new Queue(deleteAuthByIdQueue);
+    }
+    @Bean
+    Queue deleteUserByAuthidQueue() {
+        return new Queue(deleteUserByAuthidQueue);
+    }
+
+    @Bean
+    public Binding deleteUserByAuthidBinding(final DirectExchange exchangeUser, final Queue deleteUserByAuthidQueue) {
+        return BindingBuilder.bind(deleteUserByAuthidQueue).to(exchangeUser).with(deleteUserByAuthidBindingKey);
     }
 
     @Bean

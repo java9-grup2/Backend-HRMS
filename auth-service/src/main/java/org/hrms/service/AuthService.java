@@ -17,6 +17,7 @@ import org.hrms.utility.CodeGenerator;
 import org.hrms.utility.JwtTokenManager;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -33,7 +34,9 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
     private final ActivateStatusProducer activateStatusProducer;
 
-    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer) {
+    private final CreateCompanyProducer createCompanyProducer;
+
+    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer, CreateCompanyProducer createCompanyProducer) {
         super(repository);
         this.repository = repository;
         this.registerVisitorProducer = registerVisitorProducer;
@@ -43,6 +46,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         this.registerEmployeeMailProducer = registerEmployeeMailProducer;
         this.saveEmployeeProducer = saveEmployeeProducer;
         this.activateStatusProducer = activateStatusProducer;
+        this.createCompanyProducer = createCompanyProducer;
     }
 
     public TokenResponseDto registerVisitor(RegisterVisitorRequestDto dto) {
@@ -66,6 +70,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         return new TokenResponseDto(optionalToken.get());
     }
 
+
     public TokenResponseDto registerManager(RegisterManagerRequestDto dto) {
         existByPersonalEmailAndUsernameControl(dto.getPersonalEmail(), dto.getUsername());
 
@@ -74,6 +79,8 @@ public class AuthService extends ServiceManager<Auth,Long> {
         save(auth);
 
         registerManagerProducer.registerManager(IAuthMapper.INSTANCE.toRegisterManagerModel(auth));
+
+        createCompanyProducer.createCompany(IAuthMapper.INSTANCE.toCreateCompanyModel(auth));
 
         Optional<String> optionalToken = jwtTokenManager.createToken(auth.getId(),auth.getUserType(),auth.getCompanyName());
 
@@ -290,5 +297,14 @@ public class AuthService extends ServiceManager<Auth,Long> {
                 throw new AuthManagerException(ErrorType.BAD_REQUEST);
             }
         }
+    }
+
+    public Boolean deleteAuthById(Long id) {
+        Optional<Auth> optionalAuth = findById(id);
+        if (optionalAuth.isEmpty()) {
+            throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
+        }
+        deleteById(id);
+        return true;
     }
 }

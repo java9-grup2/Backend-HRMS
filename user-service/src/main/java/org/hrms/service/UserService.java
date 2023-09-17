@@ -1,6 +1,5 @@
 package org.hrms.service;
 
-import org.hrms.dto.request.RegisterVisitorRequestDto;
 import org.hrms.dto.request.UpdateRequestDto;
 import org.hrms.exception.UserManagerException;
 import org.hrms.exception.ErrorType;
@@ -8,11 +7,11 @@ import org.hrms.mapper.IUserMapper;
 import org.hrms.rabbitmq.model.RegisterManagerModel;
 import org.hrms.rabbitmq.model.RegisterVisitorModel;
 import org.hrms.rabbitmq.model.SaveEmployeeModel;
+import org.hrms.rabbitmq.producer.DeleteUserByAuthIdProducer;
 import org.hrms.rabbitmq.producer.UpdateUserProducer;
 import org.hrms.repository.IUserRepository;
 import org.hrms.repository.entity.User;
 import org.hrms.repository.enums.EStatus;
-import org.hrms.repository.enums.EUserType;
 import org.hrms.utility.JwtTokenManager;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
@@ -26,12 +25,14 @@ public class UserService extends ServiceManager<User,Long> {
     private final JwtTokenManager jwtTokenManager;
 
     private final UpdateUserProducer updateUserProducer;
+    private final DeleteUserByAuthIdProducer deleteUserByAuthIdProducer;
 
-    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer) {
+    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer, DeleteUserByAuthIdProducer deleteUserByAuthIdProducer) {
         super(repository);
         this.repository = repository;
         this.jwtTokenManager = jwtTokenManager;
         this.updateUserProducer = updateUserProducer;
+        this.deleteUserByAuthIdProducer = deleteUserByAuthIdProducer;
     }
 
     /**
@@ -165,4 +166,15 @@ public class UserService extends ServiceManager<User,Long> {
         }
     }
 
+    public Boolean deleteUserByAuthId(Long authid) {
+        Optional<User> optionalUser = repository.findByAuthid(authid);
+        if (optionalUser.isEmpty()) {
+            throw new UserManagerException(ErrorType.USER_NOT_FOUND);
+        }
+
+        Long authid1 = optionalUser.get().getAuthid();
+        deleteById(optionalUser.get().getId());
+        deleteUserByAuthIdProducer.deleteUserByAuthid(authid1);
+        return true;
+    }
 }

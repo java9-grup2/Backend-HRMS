@@ -16,7 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class RegisterManagerModel implements Serializable {
 
-    private String authid;
+    private Long authid;
     private String username;
     private String password;
     private String personalEmail;

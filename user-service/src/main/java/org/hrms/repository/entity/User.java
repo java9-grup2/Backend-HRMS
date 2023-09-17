@@ -26,7 +26,6 @@ public class User extends BaseEntity{
     private String personalEmail;
     @Column(unique = true)
     private String companyEmail;
-    private String activationCode;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)

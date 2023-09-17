@@ -1,0 +1,31 @@
+server:
+  port: 9092
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: ${postgre}
+    url: jdbc:postgresql://localhost:5432/hrms_companyservice
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: user
+    password: user
+
+
+jwt:
+  secretKey: ${java9secretkey}
+  issuer: ${java9issuer}
+  audience: ${java9audience}
+
+
+rabbitmq:
+  exchangeCompany: exchangeCompany
+  create-company-queue: createCompanyQueue
+  delete-auth-by-id-queue: deleteAuthByIdQueue
+  delete-auth-by-id-bindingKey: deleteAuthByIdBindingKey
