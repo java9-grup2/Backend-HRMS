@@ -5,6 +5,7 @@ import org.hrms.dto.response.TokenResponseDto;
 import org.hrms.dto.response.MessageResponseDto;
 import org.hrms.exception.AuthManagerException;
 import org.hrms.exception.ErrorType;
+import org.hrms.manager.ICompanyManager;
 import org.hrms.mapper.IAuthMapper;
 import org.hrms.rabbitmq.model.RegisterEmployeeMailModel;
 import org.hrms.rabbitmq.model.UpdateUserModel;
@@ -17,9 +18,10 @@ import org.hrms.utility.CodeGenerator;
 import org.hrms.utility.JwtTokenManager;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class AuthService extends ServiceManager<Auth,Long> {
@@ -35,8 +37,9 @@ public class AuthService extends ServiceManager<Auth,Long> {
     private final ActivateStatusProducer activateStatusProducer;
 
     private final CreateCompanyProducer createCompanyProducer;
+    private final ICompanyManager companyManager;
 
-    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer, CreateCompanyProducer createCompanyProducer) {
+    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer, CreateCompanyProducer createCompanyProducer, ICompanyManager companyManager) {
         super(repository);
         this.repository = repository;
         this.registerVisitorProducer = registerVisitorProducer;
@@ -47,6 +50,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         this.saveEmployeeProducer = saveEmployeeProducer;
         this.activateStatusProducer = activateStatusProducer;
         this.createCompanyProducer = createCompanyProducer;
+        this.companyManager = companyManager;
     }
 
     public TokenResponseDto registerVisitor(RegisterVisitorRequestDto dto) {
@@ -113,7 +117,27 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
 
     public TokenResponseDto login(LoginRequestDto dto) {
-        Optional<Auth> optionalAuth = repository.findByPersonalEmailAndPassword(dto.getEmail(), dto.getPassword());
+        int indexOfAt = dto.getEmail().indexOf("@");
+        int lastIndexOfDot = dto.getEmail().lastIndexOf(".");
+        String companyName = dto.getEmail().substring(indexOfAt + 1, lastIndexOfDot);
+
+        System.out.println(companyName);
+        Boolean isCompanyExist = companyManager.isCompanyExists(companyName).getBody();
+
+        System.out.println("Is companyName= "+isCompanyExist);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        Optional<Auth> optionalAuth;
+
+        if (isCompanyExist) {
+            optionalAuth = repository.findByCompanyEmailAndPassword(dto.getEmail(), dto.getPassword());
+        } else {
+            optionalAuth = repository.findByPersonalEmailAndPassword(dto.getEmail(), dto.getPassword());
+        }
 
         if (optionalAuth.isEmpty()) {
             throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
@@ -130,6 +154,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
         return new TokenResponseDto(token.get());
     }
+
 
 
 

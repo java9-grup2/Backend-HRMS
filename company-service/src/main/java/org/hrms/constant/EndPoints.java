@@ -11,7 +11,8 @@ public class EndPoints {
     public static final String UPDATE ="/update";
     public static final String FINDALL ="/findall";
 
-    //Auth
+    //Company
+    public static final String ISCOMPANYEXISTS ="/iscompanyexists";
     public static final String REGISTERVISITOR ="/registervisitor";
     public static final String REGISTERMANAGER ="/registermanager";
     public static final String REGISTEREMPLOYEE ="/registeremployee";

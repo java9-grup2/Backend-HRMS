@@ -39,4 +39,8 @@ public class CompanyService extends ServiceManager<Company, Long> {
         }
 
     }
+
+    public Boolean IsCompanyExists(String companyName) {
+        return repository.existsByCompanyName(companyName);
+    }
 }
