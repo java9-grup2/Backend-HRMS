@@ -50,7 +50,6 @@ public class UserController {
     public ResponseEntity<Boolean> deleteUserByAuthId(@PathVariable Long authid) {
         return ResponseEntity.ok(service.deleteUserByAuthId(authid));
     }
-
 }
 
 

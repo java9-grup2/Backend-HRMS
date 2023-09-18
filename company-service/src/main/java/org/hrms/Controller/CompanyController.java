@@ -1,17 +1,14 @@
 package org.hrms.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.hrms.constant.EndPoints;
 import org.hrms.dto.request.SaveCompanyRequestDto;
 import org.hrms.rabbitmq.model.CreateCompanyModel;
 import org.hrms.service.CompanyService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static org.hrms.constant.EndPoints.COMPANY;
-import static org.hrms.constant.EndPoints.SAVE;
+import static org.hrms.constant.EndPoints.*;
 
 @RestController
 @RequestMapping(COMPANY)
@@ -26,7 +23,13 @@ public class CompanyController {
         return ResponseEntity.ok(service.createCompany(model));
     }
 
+    @PostMapping(ISCOMPANYEXISTS)
+    public ResponseEntity<Boolean> isCompanyExists(@RequestParam String companyName) {
+        return ResponseEntity.ok(service.IsCompanyExists(companyName));
+    }
+
     @GetMapping("message")
+
     public ResponseEntity<String> message() {
         return ResponseEntity.ok("sa");
     }
