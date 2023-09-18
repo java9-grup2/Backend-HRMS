@@ -20,11 +20,16 @@ public class UserController {
 
     private final UserService service;
 
+    @PostMapping(APPROVEMANAGER)
+    public ResponseEntity<Boolean> approveManager(@RequestParam Long adminId, @RequestParam Long userId) {
+        Boolean result = service.approveManagerUser(adminId, userId);
+        return ResponseEntity.ok(result);
+    }
+
     @PostMapping(SAVEVISITOR)
     public ResponseEntity<User> registerVisitor(@RequestBody RegisterVisitorModel model) {
         return ResponseEntity.ok(service.saveVisitorUser(model));
     }
-
 
     @PostMapping(SAVEMANAGER)
     public ResponseEntity<User> registerManager(@RequestBody RegisterManagerModel model) {

@@ -12,6 +12,7 @@ import org.hrms.rabbitmq.producer.UpdateUserProducer;
 import org.hrms.repository.IUserRepository;
 import org.hrms.repository.entity.User;
 import org.hrms.repository.enums.EStatus;
+import org.hrms.repository.enums.EUserType;
 import org.hrms.utility.JwtTokenManager;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,31 @@ public class UserService extends ServiceManager<User,Long> {
         this.jwtTokenManager = jwtTokenManager;
         this.updateUserProducer = updateUserProducer;
         this.deleteUserByAuthIdProducer = deleteUserByAuthIdProducer;
+    }
+    /*
+        admin onayı icin user service kısmına bi metod yazıldı,
+        usertype manager olan bir kullanıcı icin ordan onay almamıs bir kullanıcının id'si girilip onaylandı
+        onaylayan kisininde usertype admin olmasina dikkat edildi.
+     */
+    public Boolean approveManagerUser(Long adminId, Long userId) {
+        Optional<User> adminOptional = repository.findById(adminId);
+        if (adminOptional.isEmpty() || adminOptional.get().getUserType() != EUserType.ADMIN) {
+            throw new UserManagerException(ErrorType.UNAUTHORIZED);
+        }
+
+        Optional<User> userOptional = repository.findById(userId);
+        if (userOptional.isEmpty() || userOptional.get().getUserType() != EUserType.MANAGER) {
+            throw new UserManagerException(ErrorType.BAD_REQUEST);
+        }
+
+        if (userOptional.get().getStatus() == EStatus.ACTIVE) {
+            throw new UserManagerException(ErrorType.USER_ALREADY_APPROVED);
+        }
+
+        userOptional.get().setStatus(EStatus.ACTIVE);
+        update(userOptional.get());
+
+        return true;
     }
 
     /**

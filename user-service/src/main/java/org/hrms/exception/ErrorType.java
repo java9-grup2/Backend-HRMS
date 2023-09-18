@@ -22,7 +22,9 @@ public enum ErrorType {
     PERSONAL_EMAIL_IS_TAKEN(4118,"Bu sahsi email sistemde kayitli, lutfen baska bir mail deneyiniz" ,HttpStatus.BAD_REQUEST),
     INSUFFICIENT_PERMISSION(4119, "Bu islemi yapmaya yetkiniz yok", HttpStatus.BAD_REQUEST),
     USERNAME_OR_MAIL_EXIST(4120,"Kullanici adi veya mail zaten mevcut",HttpStatus.BAD_REQUEST),
-    COMPANY_EMAIL_IS_TAKEN(4121,"Bu sirket maili baskasina tanimlanmistir.",HttpStatus.BAD_REQUEST);
+    COMPANY_EMAIL_IS_TAKEN(4121,"Bu sirket maili baskasina tanimlanmistir.",HttpStatus.BAD_REQUEST),
+    UNAUTHORIZED(1111,"Kayıt edilmemiş.",HttpStatus.BAD_REQUEST),
+    USER_ALREADY_APPROVED(12324,"Zaten kaydolmuş",HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;
