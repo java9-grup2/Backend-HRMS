@@ -16,6 +16,8 @@ import java.io.Serializable;
 public class SaveEmployeeModel implements Serializable {
 
     private Long authid;
+    private String name;
+    private String surname;
     private String username;
     private String personalEmail;
     private String companyEmail;

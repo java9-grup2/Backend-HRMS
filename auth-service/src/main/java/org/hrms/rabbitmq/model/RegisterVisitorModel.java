@@ -19,6 +19,8 @@ import java.io.Serializable;
 public class RegisterVisitorModel implements Serializable {
 
     private Long authid;
+    private String name;
+    private String surname;
     private String username;
     private String password;
     private String personalEmail;

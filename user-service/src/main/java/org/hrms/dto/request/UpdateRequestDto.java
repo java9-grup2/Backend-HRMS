@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class UpdateRequestDto {
 
     private String token;
+    private String name;
+    private String surname;
     private String username;
     private String password;
     private String personalEmail;

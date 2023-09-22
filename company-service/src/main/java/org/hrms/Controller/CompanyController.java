@@ -29,7 +29,6 @@ public class CompanyController {
     }
 
     @GetMapping("message")
-
     public ResponseEntity<String> message() {
         return ResponseEntity.ok("sa");
     }

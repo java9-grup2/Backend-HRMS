@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hrms.repository.enums.EStatus;
 import org.hrms.repository.enums.EUserType;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Builder
@@ -16,6 +17,8 @@ import java.io.Serializable;
 public class SaveEmployeeModel implements Serializable {
 
     private Long authid;
+    private String name;
+    private String surname;
     private String username;
     private String personalEmail;
     private String companyEmail;

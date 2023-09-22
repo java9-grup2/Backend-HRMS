@@ -20,6 +20,8 @@ public class User extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long authid;
+    private String name;
+    private String surname;
     private String username;
     private String password;
     @Column(unique = true)
