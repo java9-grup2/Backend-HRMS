@@ -19,6 +19,7 @@ import org.hrms.utility.JwtTokenManager;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -60,16 +61,13 @@ public class AuthService extends ServiceManager<Auth,Long> {
         Auth auth = IAuthMapper.INSTANCE.toAuth(dto);
         save(auth);
 
-        System.out.println("userregister kuyruga yollamadan once");
         registerVisitorProducer.registerVisitor(IAuthMapper.INSTANCE.toRegisterVisitorModel(auth));
-        System.out.println("userregister kuyruga yollamadan sonra");
         Optional<String> optionalToken = jwtTokenManager.createToken(auth.getId());
         if (optionalToken.isEmpty()) {
             throw new AuthManagerException(ErrorType.TOKEN_NOT_CREATED);
         }
         auth.setActivationCode(optionalToken.get());
         update(auth);
-        System.out.println("activasyon maili yollamdan once");
         activationMailProducer.sendActivationMail(IAuthMapper.INSTANCE.toActivationMailModel(auth));
         return new TokenResponseDto(optionalToken.get());
     }
@@ -91,7 +89,6 @@ public class AuthService extends ServiceManager<Auth,Long> {
         if (optionalToken.isEmpty()) {
             throw new AuthManagerException(ErrorType.TOKEN_NOT_CREATED);
         }
-
         return new TokenResponseDto(optionalToken.get());
     }
 
@@ -151,7 +148,6 @@ public class AuthService extends ServiceManager<Auth,Long> {
         if (token.isEmpty()) {
             throw new AuthManagerException(ErrorType.TOKEN_NOT_CREATED);
         }
-
         return new TokenResponseDto(token.get());
     }
 
@@ -181,9 +177,9 @@ public class AuthService extends ServiceManager<Auth,Long> {
     }
 
 
-    // @PostConstruct
+//    @PostConstruct
     public void defaultAdmin() {
-        System.out.println("Bu metod her turlu calisir pasa");
+        System.out.println("Bu metod her turlu calisir ");
         Auth auth= Auth.builder()
                 .personalEmail("abc@gmail.com")
                 .companyName("abab")
@@ -217,6 +213,8 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
         Auth auth = Auth.builder()
                 .personalEmail(dto.getPersonalEmail())
+                .name(dto.getName())
+                .surname(dto.getSurname())
                 .userType(EUserType.EMPLOYEE)
                 .status(EStatus.ACTIVE)
                 .password(CodeGenerator.generateCode())
@@ -306,6 +304,8 @@ public class AuthService extends ServiceManager<Auth,Long> {
         switch (auth.getUserType()) {
             case MANAGER,ADMIN -> {
                 auth.setUsername(model.getUsername());
+                auth.setName(model.getName());
+                auth.setSurname(model.getSurname());
                 auth.setPassword(model.getPassword());
                 auth.setPersonalEmail(model.getPersonalEmail());
                 auth.setTaxNo(model.getTaxNo());
@@ -314,6 +314,8 @@ public class AuthService extends ServiceManager<Auth,Long> {
             }
             case VISITOR,EMPLOYEE -> {
                 auth.setUsername(model.getUsername());
+                auth.setName(model.getName());
+                auth.setSurname(model.getSurname());
                 auth.setPassword(model.getPassword());
                 auth.setPersonalEmail(model.getPersonalEmail());
                 update(auth);

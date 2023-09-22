@@ -61,6 +61,7 @@ public class UserService extends ServiceManager<User,Long> {
         return true;
     }
 
+
     /**
      * Kullanici adi ve email kontrolu yapar. databasede bu degerler daha once alinmissa hata firlatir.
      * @param email
@@ -96,12 +97,12 @@ public class UserService extends ServiceManager<User,Long> {
     public User saveManagerUser(RegisterManagerModel model){
         if (existByPersonalEmailAndUsernameControl(model.getPersonalEmail(),model.getUsername())) {
             User user = IUserMapper.INSTANCE.toUser(model);
+            user.setUserType(EUserType.MANAGER);
             return save(user);
         } else {
             throw new UserManagerException(ErrorType.USERNAME_OR_MAIL_EXIST);
         }
     }
-
     public Boolean saveEmployee(SaveEmployeeModel model) {
 
         if (existByPersonalEmailAndUsernameControl(model.getPersonalEmail(), model.getUsername())) {
@@ -172,6 +173,8 @@ public class UserService extends ServiceManager<User,Long> {
         switch (user.getUserType()) {
             case MANAGER,ADMIN -> {
                 user.setUsername(dto.getUsername());
+                user.setName(dto.getName());
+                user.setSurname(dto.getSurname());
                 user.setPassword(dto.getPassword());
                 user.setPersonalEmail(dto.getPersonalEmail());
                 user.setTaxNo(dto.getTaxNo());
@@ -181,6 +184,8 @@ public class UserService extends ServiceManager<User,Long> {
             }
             case VISITOR,EMPLOYEE -> {
                 user.setUsername(dto.getUsername());
+                user.setName(dto.getName());
+                user.setSurname(dto.getSurname());
                 user.setPassword(dto.getPassword());
                 user.setPersonalEmail(dto.getPersonalEmail());
                 update(user);

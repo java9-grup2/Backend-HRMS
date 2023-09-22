@@ -27,5 +27,4 @@ public class Company extends BaseEntity{
 
     //ayni isimde sirket olmasi durumunda sirketin ne uzerine kurulduguna bakarak ayirt edebilmek icin yapilmistir
     private String about;
-
 }

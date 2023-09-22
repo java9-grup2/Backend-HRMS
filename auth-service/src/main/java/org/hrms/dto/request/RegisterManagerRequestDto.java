@@ -16,6 +16,10 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class RegisterManagerRequestDto {
 
+    @NotBlank(message = "Isim bos birakalmaz")
+    private String name;
+    @NotBlank(message = "Soy isim bos birakalmaz")
+    private String surname;
     @NotBlank(message = "username is a must")
     @Size(min = 4,max = 16,message = "Username must be between 4 to 16 character")
     private String username;

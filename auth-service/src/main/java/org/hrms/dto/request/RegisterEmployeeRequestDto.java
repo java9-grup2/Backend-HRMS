@@ -16,14 +16,12 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class RegisterEmployeeRequestDto {
 
-//    manager id
     @NotBlank
     private String token;
     @NotBlank
     private String name;
     @NotBlank
     private String surname;
-
     @NotBlank
     private String personalEmail;
 
