@@ -35,3 +35,8 @@ rabbitmq:
   delete-user-by-authid-bindingKey: deleteUserByAuthidBindingKey
   delete-user-by-authid-queue: deleteUserByAuthidQueue
   delete-auth-by-id-queue: deleteAuthByIdQueue
+  approve-manager-mail-queue: approveManagerMailQueue
+  approve-manager-mail-bindingKey: approveManagerMailBindingKey
+  create-admin-user-queue: createAdminUserQueue
+  activate-manager-status-bindingKey: activateManagerStatusBindingKey
+  activate-manager-status-queue: activateManagerStatusQueue

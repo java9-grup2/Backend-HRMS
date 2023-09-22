@@ -1,6 +1,7 @@
 package org.hrms.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.hrms.dto.request.ApproveManagerRequestDto;
 import org.hrms.dto.request.RegisterVisitorRequestDto;
 import org.hrms.dto.request.UpdateRequestDto;
 import org.hrms.rabbitmq.model.RegisterManagerModel;
@@ -21,9 +22,9 @@ public class UserController {
     private final UserService service;
 
     @PostMapping(APPROVEMANAGER)
-    public ResponseEntity<Boolean> approveManager(@RequestParam Long adminId, @RequestParam Long userId) {
-        Boolean result = service.approveManagerUser(adminId, userId);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<Boolean> approveManager(@RequestBody ApproveManagerRequestDto dto) {
+
+        return ResponseEntity.ok(service.approveManagerUser(dto));
     }
 
     @PostMapping(SAVEVISITOR)

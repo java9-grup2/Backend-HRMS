@@ -11,15 +11,14 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterManagerModel implements Serializable {
+public class ApproveManagerMailModel implements Serializable {
 
-    private Long authid;
-    private String name;
-    private String surname;
     private String username;
     private String password;
     private String personalEmail;
     private String companyEmail;
-    private String taxNo;
+    private String name;
+    private String surname;
     private String companyName;
+    private String taxNo;
 }

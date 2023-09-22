@@ -42,3 +42,6 @@ rabbitmq:
   delete-user-by-authid-queue: deleteUserByAuthidQueue
   create-company-queue: createCompanyQueue
   create-company-bindingKey: createCompanyBindingKey
+  create-admin-user-queue: createAdminUserQueue
+  create-admin-user-bindingKey: createAdminUserBindingKey
+  activate-manager-status-queue: activateManagerStatusQueue

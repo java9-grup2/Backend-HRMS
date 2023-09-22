@@ -20,7 +20,8 @@ public enum ErrorType {
     INVALID_TOKEN(4116,"Gecersiz token" ,HttpStatus.BAD_REQUEST),
     TOKEN_NOT_CREATED(4117,"Token olusturulamadi" ,HttpStatus.BAD_REQUEST),
     PERSONAL_EMAIL_IS_TAKEN(4118,"Bu email sistemde kayitli" ,HttpStatus.BAD_REQUEST),
-    INSUFFICIENT_PERMISSION(4119, "Bu islemi yapmaya yetkiniz yok", HttpStatus.BAD_REQUEST);
+    INSUFFICIENT_PERMISSION(4119, "Bu islemi yapmaya yetkiniz yok", HttpStatus.BAD_REQUEST),
+    USER_TYPE_MISMATCH(12324,"Kullanicinin tipi bu istege uygun degildir.",HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;

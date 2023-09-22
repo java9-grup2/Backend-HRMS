@@ -24,7 +24,8 @@ public enum ErrorType {
     USERNAME_OR_MAIL_EXIST(4120,"Kullanici adi veya mail zaten mevcut",HttpStatus.BAD_REQUEST),
     COMPANY_EMAIL_IS_TAKEN(4121,"Bu sirket maili baskasina tanimlanmistir.",HttpStatus.BAD_REQUEST),
     UNAUTHORIZED(1111,"Kayıt edilmemiş.",HttpStatus.BAD_REQUEST),
-    USER_ALREADY_APPROVED(12324,"Zaten kaydolmuş",HttpStatus.BAD_REQUEST);
+    USER_ALREADY_APPROVED(12324,"Kullanici zaten onaylanmis",HttpStatus.BAD_REQUEST),
+    USER_TYPE_MISMATCH(12324,"Kullanicinin tipi bu istege uygun degildir.",HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;

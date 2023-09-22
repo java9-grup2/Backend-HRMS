@@ -37,7 +37,7 @@ public class User extends BaseEntity{
     @Builder.Default
     EStatus status = EStatus.PENDING;
 
-    String taxNo;
-    String companyName;
+    private String taxNo;
+    private String companyName;
 
 }

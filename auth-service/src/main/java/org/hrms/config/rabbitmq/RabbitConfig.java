@@ -68,12 +68,36 @@ public class RabbitConfig {
     @Value("${rabbitmq.create-company-bindingKey}")
     private String createCompanyBindingKey;
 
+    @Value("${rabbitmq.create-admin-user-queue}")
+    private String createAdminUserQueue;
+
+    @Value("${rabbitmq.create-admin-user-bindingKey}")
+    private String createAdminUserBindingKey;
+
+    @Value("${rabbitmq.activate-manager-status-queue}")
+    private String activateManagerStatusQueue;
+
 
     @Bean
     DirectExchange exchangeAuth() {
         return new DirectExchange(authExchange);
     }
 
+
+
+    @Bean
+    Queue activateManagerStatusQueue() {
+        return new Queue(activateManagerStatusQueue);
+    }
+    @Bean
+    Queue createAdminUserQueue() {
+        return new Queue(createAdminUserQueue);
+    }
+
+    @Bean
+    public Binding createAdminUserBinding(final DirectExchange exchangeAuth, final Queue createAdminUserQueue) {
+        return BindingBuilder.bind(createAdminUserQueue).to(exchangeAuth).with(createAdminUserBindingKey);
+    }
 
     @Bean
     Queue createCompanyQueue() {

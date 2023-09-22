@@ -43,11 +43,53 @@ public class RabbitConfig {
     @Value("${rabbitmq.delete-auth-by-id-queue}")
     private String deleteAuthByIdQueue;
 
+    @Value("${rabbitmq.approve-manager-mail-queue}")
+    private String approveManagerMailQueue;
+
+    @Value("${rabbitmq.approve-manager-mail-bindingKey}")
+    private String approveManagerMailBindingKey;
+
+    @Value("${rabbitmq.create-admin-user-queue}")
+    private String createAdminUserQueue;
+
+    @Value("${rabbitmq.activate-manager-status-bindingKey}")
+    private String activateManagerStatusBindingKey;
+
+    @Value("${rabbitmq.activate-manager-status-queue}")
+    private String activateManagerStatusQueue;
+
+
     @Bean
     DirectExchange exchangeUser() {
         return new DirectExchange(exchangeUser);
     }
 
+
+    @Bean
+    Queue activateManagerStatusQueue() {
+        return new Queue(activateManagerStatusQueue);
+    }
+
+    @Bean
+    public Binding activateManagerStatusBinding(final DirectExchange exchangeUser,final Queue activateManagerStatusQueue) {
+        return BindingBuilder.bind(activateManagerStatusQueue).to(exchangeUser).with(activateManagerStatusBindingKey);
+    }
+
+    @Bean
+    Queue createAdminUserQueue() {
+        return new Queue(createAdminUserQueue);
+    }
+
+
+    @Bean
+    Queue approveManagerMailQueue() {
+        return new Queue(approveManagerMailQueue);
+    }
+
+    @Bean
+    public Binding approveManagerBinding(final DirectExchange exchangeUser, final Queue approveManagerMailQueue ) {
+        return BindingBuilder.bind(approveManagerMailQueue).to(exchangeUser).with(approveManagerMailBindingKey);
+    }
 
     @Bean
     Queue deleteAuthByIdQueue() {

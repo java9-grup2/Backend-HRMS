@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hrms.repository.enums.EStatus;
+import org.hrms.repository.enums.EUserType;
 
 import java.io.Serializable;
 
@@ -11,15 +13,13 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterManagerModel implements Serializable {
+public class CreateAdminUserModel implements Serializable {
 
     private Long authid;
-    private String name;
-    private String surname;
-    private String username;
     private String password;
     private String personalEmail;
-    private String companyEmail;
-    private String taxNo;
     private String companyName;
+    EUserType userType;
+    EStatus status;
+
 }

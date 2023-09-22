@@ -91,17 +91,13 @@ public class JwtTokenManager {
                     .withIssuedAt(new Date())
                     .withExpiresAt(date)
                     .sign(Algorithm.HMAC512(secretKey));
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         return Optional.ofNullable(token);
     }
 
-
-
     public Optional<Long> getIdFromToken(String token) {
-
         try {
             Algorithm algorithm = Algorithm.HMAC512(secretKey);
             JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
@@ -143,8 +139,8 @@ public class JwtTokenManager {
             if (decodedJWT == null) {
                 throw new AuthManagerException(ErrorType.INVALID_TOKEN);
             }
-            String role = decodedJWT.getClaim("companyName").asString();
-            return Optional.of(role);
+            String companyName = decodedJWT.getClaim("companyName").asString();
+            return Optional.of(companyName);
         } catch (Exception e) {
             System.out.println(e);
             throw new AuthManagerException(ErrorType.INVALID_TOKEN);
