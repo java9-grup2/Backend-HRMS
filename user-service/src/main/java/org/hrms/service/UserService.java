@@ -1,12 +1,16 @@
 package org.hrms.service;
 
+import org.hrms.dto.request.ApproveManagerRequestDto;
 import org.hrms.dto.request.UpdateRequestDto;
 import org.hrms.exception.UserManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.mapper.IUserMapper;
+import org.hrms.rabbitmq.model.CreateAdminUserModel;
 import org.hrms.rabbitmq.model.RegisterManagerModel;
 import org.hrms.rabbitmq.model.RegisterVisitorModel;
 import org.hrms.rabbitmq.model.SaveEmployeeModel;
+import org.hrms.rabbitmq.producer.ActivateManagerStatusProducer;
+import org.hrms.rabbitmq.producer.ApproveManagerMailProducer;
 import org.hrms.rabbitmq.producer.DeleteUserByAuthIdProducer;
 import org.hrms.rabbitmq.producer.UpdateUserProducer;
 import org.hrms.repository.IUserRepository;
@@ -28,36 +32,54 @@ public class UserService extends ServiceManager<User,Long> {
     private final UpdateUserProducer updateUserProducer;
     private final DeleteUserByAuthIdProducer deleteUserByAuthIdProducer;
 
-    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer, DeleteUserByAuthIdProducer deleteUserByAuthIdProducer) {
+    private final ApproveManagerMailProducer approveManagerMailProducer;
+
+    private final ActivateManagerStatusProducer activateManagerStatusProducer;
+
+    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer, DeleteUserByAuthIdProducer deleteUserByAuthIdProducer, ApproveManagerMailProducer approveManagerMailProducer, ActivateManagerStatusProducer activateManagerStatusProducer) {
         super(repository);
         this.repository = repository;
         this.jwtTokenManager = jwtTokenManager;
         this.updateUserProducer = updateUserProducer;
         this.deleteUserByAuthIdProducer = deleteUserByAuthIdProducer;
+        this.approveManagerMailProducer = approveManagerMailProducer;
+        this.activateManagerStatusProducer = activateManagerStatusProducer;
     }
     /*
         admin onayı icin user service kısmına bi metod yazıldı,
         usertype manager olan bir kullanıcı icin ordan onay almamıs bir kullanıcının id'si girilip onaylandı
         onaylayan kisininde usertype admin olmasina dikkat edildi.
      */
-    public Boolean approveManagerUser(Long adminId, Long userId) {
-        Optional<User> adminOptional = repository.findById(adminId);
-        if (adminOptional.isEmpty() || adminOptional.get().getUserType() != EUserType.ADMIN) {
-            throw new UserManagerException(ErrorType.UNAUTHORIZED);
+    public Boolean approveManagerUser(ApproveManagerRequestDto dto) {
+        Optional<Long> optionalAdminAuthId = jwtTokenManager.getIdFromToken(dto.getToken());
+        if (optionalAdminAuthId.isEmpty() ) {
+            throw new UserManagerException(ErrorType.INVALID_TOKEN);
+        }
+        System.out.println("admin id:"+optionalAdminAuthId.get());
+        Optional<User> optionalAdmin = repository.findByAuthid(optionalAdminAuthId.get());
+        if (optionalAdmin.isEmpty()) {
+            throw new UserManagerException(ErrorType.INSUFFICIENT_PERMISSION);
         }
 
-        Optional<User> userOptional = repository.findById(userId);
-        if (userOptional.isEmpty() || userOptional.get().getUserType() != EUserType.MANAGER) {
-            throw new UserManagerException(ErrorType.BAD_REQUEST);
+        Optional<User> optionalManager = repository.findByAuthid(dto.getManagerAuthId());
+        if (optionalManager.isEmpty()) {
+            throw new UserManagerException(ErrorType.USER_NOT_FOUND);
         }
 
-        if (userOptional.get().getStatus() == EStatus.ACTIVE) {
+        System.out.println(optionalManager.get().getUserType());
+        if(!optionalManager.get().getUserType().equals(EUserType.MANAGER)){
+            throw new UserManagerException(ErrorType.USER_TYPE_MISMATCH);
+        }
+
+        if (optionalManager.get().getStatus().equals(EStatus.ACTIVE.toString())) {
             throw new UserManagerException(ErrorType.USER_ALREADY_APPROVED);
         }
 
-        userOptional.get().setStatus(EStatus.ACTIVE);
-        update(userOptional.get());
+        optionalManager.get().setStatus(EStatus.ACTIVE);
+        update(optionalManager.get());
 
+        approveManagerMailProducer.sendApproveManagerMail(IUserMapper.INSTANCE.toApproveManagerMailModel(optionalManager.get()));
+        activateManagerStatusProducer.activateManagerStatus(optionalManager.get().getAuthid());
         return true;
     }
 
@@ -206,6 +228,13 @@ public class UserService extends ServiceManager<User,Long> {
         Long authid1 = optionalUser.get().getAuthid();
         deleteById(optionalUser.get().getId());
         deleteUserByAuthIdProducer.deleteUserByAuthid(authid1);
+        return true;
+    }
+
+    public Boolean createAdminUser(CreateAdminUserModel model) {
+        User user = IUserMapper.INSTANCE.toUser(model);
+        System.out.println(user);
+        save(user);
         return true;
     }
 }

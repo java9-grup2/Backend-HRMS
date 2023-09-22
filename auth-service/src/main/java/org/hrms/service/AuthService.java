@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 @Service
 public class AuthService extends ServiceManager<Auth,Long> {
@@ -40,7 +38,9 @@ public class AuthService extends ServiceManager<Auth,Long> {
     private final CreateCompanyProducer createCompanyProducer;
     private final ICompanyManager companyManager;
 
-    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer, CreateCompanyProducer createCompanyProducer, ICompanyManager companyManager) {
+    private final CreateAdminUserProducer createAdminUserProducer;
+
+    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer, CreateCompanyProducer createCompanyProducer, ICompanyManager companyManager, CreateAdminUserProducer createAdminUserProducer) {
         super(repository);
         this.repository = repository;
         this.registerVisitorProducer = registerVisitorProducer;
@@ -52,6 +52,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         this.activateStatusProducer = activateStatusProducer;
         this.createCompanyProducer = createCompanyProducer;
         this.companyManager = companyManager;
+        this.createAdminUserProducer = createAdminUserProducer;
     }
 
     public TokenResponseDto registerVisitor(RegisterVisitorRequestDto dto) {
@@ -77,6 +78,8 @@ public class AuthService extends ServiceManager<Auth,Long> {
         existByPersonalEmailAndUsernameControl(dto.getPersonalEmail(), dto.getUsername());
 
         Auth auth = IAuthMapper.INSTANCE.toAuth(dto);
+        String companyEmail = "manager" + dto.getName() + "@" + dto.getCompanyName() + ".com";
+        auth.setCompanyEmail(companyEmail);
         auth.setUserType(EUserType.MANAGER);
         save(auth);
 
@@ -144,7 +147,14 @@ public class AuthService extends ServiceManager<Auth,Long> {
             throw new AuthManagerException(ErrorType.ACCOUNT_NOT_ACTIVE);
         }
 
-        Optional<String> token = jwtTokenManager.createToken(optionalAuth.get().getId(),optionalAuth.get().getUserType());
+        Optional<String> token;
+
+        if (optionalAuth.get().getCompanyName() == null) {
+            token = jwtTokenManager.createToken(optionalAuth.get().getId(),optionalAuth.get().getUserType());
+        }else{
+            token = jwtTokenManager.createToken(optionalAuth.get().getId(),optionalAuth.get().getUserType(),optionalAuth.get().getCompanyName());
+        }
+
         if (token.isEmpty()) {
             throw new AuthManagerException(ErrorType.TOKEN_NOT_CREATED);
         }
@@ -177,28 +187,38 @@ public class AuthService extends ServiceManager<Auth,Long> {
     }
 
 
-//    @PostConstruct
+    @PostConstruct
     public void defaultAdmin() {
-        System.out.println("Bu metod her turlu calisir ");
+        boolean existsByUserType = repository.existsByUserType(EUserType.ADMIN);
+        if (existsByUserType) {
+            return;
+        }
         Auth auth= Auth.builder()
-                .personalEmail("abc@gmail.com")
-                .companyName("abab")
-                .password("abab")
+                .personalEmail("admin@gmail.com")
+                .companyName("serverOwner")
+                .password("admin")
                 .status(EStatus.ACTIVE)
                 .userType(EUserType.ADMIN)
                 .build();
         save(auth);
+
+        createAdminUserProducer.createAdminUser(IAuthMapper.INSTANCE.toCreateAdminUserModel(auth));
     }
 
     public Boolean registerEmployee(RegisterEmployeeRequestDto dto) {
         Optional<String> optionalRole = jwtTokenManager.getRoleFromToken(dto.getToken());
         Optional<String> companyNameFromToken = jwtTokenManager.getCompanyNameFromToken(dto.getToken());
 
+        System.out.println(optionalRole.get());
+        System.out.println(companyNameFromToken.get());
+
         if (optionalRole.isEmpty()) {
+            System.out.println("Burasi rol");
             throw new AuthManagerException(ErrorType.INVALID_TOKEN);
         }
 
         if (companyNameFromToken.isEmpty()) {
+            System.out.println("Burasi sirketIsim");
             throw new AuthManagerException(ErrorType.INVALID_TOKEN);
         }
 
@@ -332,6 +352,21 @@ public class AuthService extends ServiceManager<Auth,Long> {
             throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
         }
         deleteById(id);
+        return true;
+    }
+
+    public Boolean activateManagerStatus(Long authid) {
+        Optional<Auth> optionalManager = findById(authid);
+        if (optionalManager.isEmpty()) {
+            throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
+        }
+
+        if (!optionalManager.get().getUserType().equals(EUserType.MANAGER)) {
+            throw new AuthManagerException(ErrorType.USER_TYPE_MISMATCH);
+        }
+
+        optionalManager.get().setStatus(EStatus.ACTIVE);
+        update(optionalManager.get());
         return true;
     }
 }

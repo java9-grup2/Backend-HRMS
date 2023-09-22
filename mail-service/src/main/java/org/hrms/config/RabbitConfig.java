@@ -17,6 +17,14 @@ public class RabbitConfig {
     @Value("${rabbitmq.register-employee-mail-queue}")
     private String registerEmployeeMailQueue;
 
+    @Value("${rabbitmq.approve-manager-mail-queue}")
+    private String approveManagerMailQueue;
+
+
+    @Bean
+    Queue approveManagerMailQueue() {
+        return new Queue(approveManagerMailQueue);
+    }
 
     @Bean
     Queue activationMailQueue() {

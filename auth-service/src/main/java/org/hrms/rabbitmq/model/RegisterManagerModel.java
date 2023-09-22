@@ -22,6 +22,7 @@ public class RegisterManagerModel implements Serializable {
     private String username;
     private String password;
     private String personalEmail;
+    private String companyEmail;
     private String taxNo;
     private String companyName;
 }

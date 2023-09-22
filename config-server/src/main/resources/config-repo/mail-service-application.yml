@@ -24,3 +24,4 @@ spring:
 rabbitmq:
   activation-mail-queue: activationMailQueue
   register-employee-mail-queue: registerEmployeeMailQueue
+  approve-manager-mail-queue: approveManagerMailQueue

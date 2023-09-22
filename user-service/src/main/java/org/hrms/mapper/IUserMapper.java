@@ -1,10 +1,7 @@
 package org.hrms.mapper;
 
 import org.hrms.dto.request.RegisterVisitorRequestDto;
-import org.hrms.rabbitmq.model.RegisterManagerModel;
-import org.hrms.rabbitmq.model.RegisterVisitorModel;
-import org.hrms.rabbitmq.model.SaveEmployeeModel;
-import org.hrms.rabbitmq.model.UpdateUserModel;
+import org.hrms.rabbitmq.model.*;
 import org.hrms.repository.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -25,4 +22,7 @@ public interface IUserMapper {
     @Mapping(source = "authid",target = "id")
     UpdateUserModel toUpdateUserModel(final User user);
 
+    ApproveManagerMailModel toApproveManagerMailModel(final User user);
+
+    User toUser(final CreateAdminUserModel model);
 }
