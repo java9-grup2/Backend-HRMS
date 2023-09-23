@@ -14,6 +14,7 @@ public class EndPoints {
     public static final String ACTIVATESTATUS ="/activatestatus";
     public static final String APPROVEMANAGER ="/approvemanager";
     public static final String UPDATE ="/update";
+    public static final String UPDATECOMPANYDETAILS ="/updatecompanydetails";
     public static final String FINDALL ="/findall";
 
 }

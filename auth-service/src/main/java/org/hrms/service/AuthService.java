@@ -9,6 +9,7 @@ import org.hrms.manager.ICompanyManager;
 import org.hrms.mapper.IAuthMapper;
 import org.hrms.rabbitmq.model.DeleteAuthContainsCompanyNameModel;
 import org.hrms.rabbitmq.model.RegisterEmployeeMailModel;
+import org.hrms.rabbitmq.model.UpdateAuthCompanyNameDetailsModel;
 import org.hrms.rabbitmq.model.UpdateUserModel;
 import org.hrms.rabbitmq.producer.*;
 import org.hrms.repository.IAuthRepository;
@@ -388,5 +389,33 @@ public class AuthService extends ServiceManager<Auth,Long> {
         }
 
         return true;
+    }
+
+    public Boolean updateCompanyDetails(UpdateAuthCompanyNameDetailsModel model) {
+
+        List<Auth> allUsers = findAll();
+        String oldCompanyName = model.getOldCompanyName();
+        List<Auth> usersToUpdate = allUsers.stream()
+                .filter(user -> user.getCompanyName().equals(oldCompanyName))
+                .collect(Collectors.toList());
+
+        try {
+            for (Auth auth : usersToUpdate) {
+                companyNameSetter(auth, model.getNewCompanyName());
+            }
+        } catch (Exception e) {
+            throw new AuthManagerException(ErrorType.COULD_NOT_UPDATE_ALL_USERS);
+        }
+        return true;
+    }
+
+    public void companyNameSetter(Auth auth,String newCompanyName) {
+
+        String userOldCompanyMail = auth.getCompanyEmail();
+        int indexOfAt = userOldCompanyMail.indexOf("@");
+        String newCompanyMail = userOldCompanyMail.substring(0, indexOfAt) + "@" + newCompanyName + ".com";
+        auth.setCompanyName(newCompanyName);
+        auth.setCompanyEmail(newCompanyMail);
+        update(auth);
     }
 }

@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.ApproveManagerRequestDto;
 import org.hrms.dto.request.RegisterVisitorRequestDto;
 import org.hrms.dto.request.UpdateRequestDto;
-import org.hrms.rabbitmq.model.DeleteUsersContainsCompanyNameModel;
-import org.hrms.rabbitmq.model.RegisterManagerModel;
-import org.hrms.rabbitmq.model.RegisterVisitorModel;
-import org.hrms.rabbitmq.model.SaveEmployeeModel;
+import org.hrms.rabbitmq.model.*;
 import org.hrms.repository.entity.User;
 import org.hrms.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +58,11 @@ public class UserController {
     @DeleteMapping(DELETEBYCOMPANYNAME)
     public ResponseEntity<Boolean> deleteByCompanyName(@RequestBody DeleteUsersContainsCompanyNameModel model) {
         return ResponseEntity.ok(service.deleteByCompanyName(model));
+    }
+
+    @PutMapping(UPDATECOMPANYDETAILS)
+    public ResponseEntity<Boolean> updateCompanyDetails(@RequestBody UpdateUsersCompanyNameDetailsModel model) {
+        return ResponseEntity.ok(service.updateCompanyDetails(model));
     }
 }
 

@@ -22,7 +22,8 @@ public enum ErrorType {
     PERSONAL_EMAIL_IS_TAKEN(4118,"Bu email sistemde kayitli" ,HttpStatus.BAD_REQUEST),
     INSUFFICIENT_PERMISSION(4119, "Bu islemi yapmaya yetkiniz yok", HttpStatus.BAD_REQUEST),
     USER_TYPE_MISMATCH(12324,"Kullanicinin tipi bu istege uygun degildir.",HttpStatus.BAD_REQUEST),
-    COULD_NOT_DELETE_ALL_USERS(12324,"Kullanicilarin hepsi silinemedi.",HttpStatus.BAD_REQUEST);
+    COULD_NOT_DELETE_ALL_USERS(12324,"Kullanicilarin hepsi silinemedi.",HttpStatus.BAD_REQUEST),
+    COULD_NOT_UPDATE_ALL_USERS(12324,"Kullanicilarin hepsi guncellenmedi.",HttpStatus.BAD_REQUEST);
 
 
     private int code;

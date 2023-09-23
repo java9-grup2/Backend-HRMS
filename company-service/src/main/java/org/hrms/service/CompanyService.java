@@ -5,8 +5,12 @@ import org.hrms.exception.CompanyManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.mapper.ICompanyMapper;
 import org.hrms.rabbitmq.model.CreateCompanyModel;
+import org.hrms.rabbitmq.model.UpdateAuthCompanyNameDetailsModel;
+import org.hrms.rabbitmq.model.UpdateUsersCompanyNameDetailsModel;
 import org.hrms.rabbitmq.producer.DeleteAuthByIdProducer;
 import org.hrms.rabbitmq.producer.DeleteUsersContainsCompanyNameProducer;
+import org.hrms.rabbitmq.producer.UpdateAuthCompanyNameDetailsProducer;
+import org.hrms.rabbitmq.producer.UpdateUsersCompanyNameDetailsProducer;
 import org.hrms.repository.ICompanyRepository;
 import org.hrms.repository.entity.Company;
 import org.hrms.utility.ServiceManager;
@@ -22,11 +26,17 @@ public class CompanyService extends ServiceManager<Company, Long> {
 
     private final DeleteUsersContainsCompanyNameProducer deleteUsersContainsCompanyNameProducer;
 
-    public CompanyService(ICompanyRepository repository, DeleteAuthByIdProducer deleteAuthByIdProducer, DeleteUsersContainsCompanyNameProducer deleteUsersContainsCompanyNameProducer) {
+    private final UpdateUsersCompanyNameDetailsProducer updateUsersCompanyNameDetailsProducer;
+
+    private final UpdateAuthCompanyNameDetailsProducer updateAuthCompanyNameDetailsProducer;
+
+    public CompanyService(ICompanyRepository repository, DeleteAuthByIdProducer deleteAuthByIdProducer, DeleteUsersContainsCompanyNameProducer deleteUsersContainsCompanyNameProducer, UpdateUsersCompanyNameDetailsProducer updateUsersCompanyNameDetailsProducer, UpdateAuthCompanyNameDetailsProducer updateAuthCompanyNameDetailsProducer) {
         super(repository);
         this.repository = repository;
         this.deleteAuthByIdProducer = deleteAuthByIdProducer;
         this.deleteUsersContainsCompanyNameProducer = deleteUsersContainsCompanyNameProducer;
+        this.updateUsersCompanyNameDetailsProducer = updateUsersCompanyNameDetailsProducer;
+        this.updateAuthCompanyNameDetailsProducer = updateAuthCompanyNameDetailsProducer;
     }
 
     public Boolean createCompany(CreateCompanyModel model) {
@@ -65,15 +75,38 @@ public class CompanyService extends ServiceManager<Company, Long> {
         if (optionalCompany.isEmpty()) {
             throw new CompanyManagerException(ErrorType.COMPANY_NOT_FOUND);
         }
+        boolean existsByCompanyName = repository.existsByCompanyName(dto.getCompanyName());
 
-        try {
-            optionalCompany.get().setAbout(dto.getAbout());
-            optionalCompany.get().setNumOfEmployees(dto.getNumOfEmployees());
-            update(optionalCompany.get());
-            return true;
-        } catch (Exception e) {
-            throw new CompanyManagerException(ErrorType.BAD_REQUEST);
+        boolean existsByTaxNo = repository.existsByTaxNo(dto.getTaxNo());
+
+        boolean isCompanyNameSame = optionalCompany.get().getCompanyName().equals(dto.getCompanyName());
+        if (!isCompanyNameSame && existsByCompanyName) {
+            throw new CompanyManagerException(ErrorType.COMPANYNAME_EXISTS);
         }
+
+        if (!optionalCompany.get().getTaxNo().equals(dto.getTaxNo()) && existsByTaxNo) {
+            throw new CompanyManagerException(ErrorType.TAXNO_IS_BELONG_TO_ANOTHER_COMPANY);
+        }
+
+        if (!isCompanyNameSame) {
+            UpdateUsersCompanyNameDetailsModel updateUsersCompanyNameDetailsModel = new UpdateUsersCompanyNameDetailsModel();
+            updateUsersCompanyNameDetailsModel.setOldCompanyName(optionalCompany.get().getCompanyName());
+            updateUsersCompanyNameDetailsModel.setNewCompanyName(dto.getCompanyName());
+            updateUsersCompanyNameDetailsProducer.updateUsersCompanyNameDetails(updateUsersCompanyNameDetailsModel);
+
+            UpdateAuthCompanyNameDetailsModel updateAuthCompanyNameDetailsModel = new UpdateAuthCompanyNameDetailsModel();
+            updateAuthCompanyNameDetailsModel.setOldCompanyName(optionalCompany.get().getCompanyName());
+            updateAuthCompanyNameDetailsModel.setNewCompanyName(dto.getCompanyName());
+            updateAuthCompanyNameDetailsProducer.updateAuthCompanyNameDetails(updateAuthCompanyNameDetailsModel);
+        }
+
+        optionalCompany.get().setCompanyName(dto.getCompanyName());
+        optionalCompany.get().setAbout(dto.getAbout());
+        optionalCompany.get().setNumOfEmployees(dto.getNumOfEmployees());
+        optionalCompany.get().setTaxNo(dto.getTaxNo());
+        update(optionalCompany.get());
+        return true;
+
     }
 
     public Boolean deleteCompanyById(Long id) {

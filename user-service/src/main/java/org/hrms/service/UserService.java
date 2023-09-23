@@ -258,4 +258,33 @@ public class UserService extends ServiceManager<User,Long> {
         deleteAuthContainsCompanyNameProducer.deleteAuthContainsCompanyName(IUserMapper.INSTANCE.toDeleteAuthContainsCompanyNameModel(model));
         return true;
     }
+
+    public Boolean updateCompanyDetails(UpdateUsersCompanyNameDetailsModel model) {
+        List<User> allUsers = findAll();
+        String oldCompanyName = model.getOldCompanyName();
+        List<User> usersToUpdate = allUsers.stream()
+                .filter(user -> user.getCompanyName().equals(oldCompanyName))
+                .collect(Collectors.toList());
+
+
+
+        try {
+            for (User user : usersToUpdate) {
+                companyNameSetter(user, model.getNewCompanyName());
+            }
+        } catch (Exception e) {
+            throw new UserManagerException(ErrorType.COULD_NOT_UPDATE_ALL_USERS);
+        }
+        return true;
+    }
+
+    public void companyNameSetter(User user,String newCompanyName) {
+
+        String userOldCompanyMail = user.getCompanyEmail();
+        int indexOfAt = userOldCompanyMail.indexOf("@");
+        String newCompanyMail = userOldCompanyMail.substring(0, indexOfAt) + "@" + newCompanyName + ".com";
+        user.setCompanyName(newCompanyName);
+        user.setCompanyEmail(newCompanyMail);
+        update(user);
+    }
 }
