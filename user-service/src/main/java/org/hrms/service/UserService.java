@@ -5,14 +5,8 @@ import org.hrms.dto.request.UpdateRequestDto;
 import org.hrms.exception.UserManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.mapper.IUserMapper;
-import org.hrms.rabbitmq.model.CreateAdminUserModel;
-import org.hrms.rabbitmq.model.RegisterManagerModel;
-import org.hrms.rabbitmq.model.RegisterVisitorModel;
-import org.hrms.rabbitmq.model.SaveEmployeeModel;
-import org.hrms.rabbitmq.producer.ActivateManagerStatusProducer;
-import org.hrms.rabbitmq.producer.ApproveManagerMailProducer;
-import org.hrms.rabbitmq.producer.DeleteUserByAuthIdProducer;
-import org.hrms.rabbitmq.producer.UpdateUserProducer;
+import org.hrms.rabbitmq.model.*;
+import org.hrms.rabbitmq.producer.*;
 import org.hrms.repository.IUserRepository;
 import org.hrms.repository.entity.User;
 import org.hrms.repository.enums.EStatus;
@@ -21,7 +15,9 @@ import org.hrms.utility.JwtTokenManager;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService extends ServiceManager<User,Long> {
@@ -36,7 +32,9 @@ public class UserService extends ServiceManager<User,Long> {
 
     private final ActivateManagerStatusProducer activateManagerStatusProducer;
 
-    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer, DeleteUserByAuthIdProducer deleteUserByAuthIdProducer, ApproveManagerMailProducer approveManagerMailProducer, ActivateManagerStatusProducer activateManagerStatusProducer) {
+    private final DeleteAuthContainsCompanyNameProducer deleteAuthContainsCompanyNameProducer;
+
+    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer, DeleteUserByAuthIdProducer deleteUserByAuthIdProducer, ApproveManagerMailProducer approveManagerMailProducer, ActivateManagerStatusProducer activateManagerStatusProducer, DeleteAuthContainsCompanyNameProducer deleteAuthContainsCompanyNameProducer) {
         super(repository);
         this.repository = repository;
         this.jwtTokenManager = jwtTokenManager;
@@ -44,6 +42,7 @@ public class UserService extends ServiceManager<User,Long> {
         this.deleteUserByAuthIdProducer = deleteUserByAuthIdProducer;
         this.approveManagerMailProducer = approveManagerMailProducer;
         this.activateManagerStatusProducer = activateManagerStatusProducer;
+        this.deleteAuthContainsCompanyNameProducer = deleteAuthContainsCompanyNameProducer;
     }
     /*
         admin onayı icin user service kısmına bi metod yazıldı,
@@ -120,6 +119,7 @@ public class UserService extends ServiceManager<User,Long> {
         if (existByPersonalEmailAndUsernameControl(model.getPersonalEmail(),model.getUsername())) {
             User user = IUserMapper.INSTANCE.toUser(model);
             user.setUserType(EUserType.MANAGER);
+            user.setCompanyName(user.getCompanyName().toLowerCase());
             return save(user);
         } else {
             throw new UserManagerException(ErrorType.USERNAME_OR_MAIL_EXIST);
@@ -133,6 +133,7 @@ public class UserService extends ServiceManager<User,Long> {
                 throw new UserManagerException(ErrorType.PERSONAL_EMAIL_IS_TAKEN);
             }
             User user = IUserMapper.INSTANCE.toUser(model);
+            user.setCompanyName(user.getCompanyName().toLowerCase());
             save(user);
         }
 
@@ -200,7 +201,7 @@ public class UserService extends ServiceManager<User,Long> {
                 user.setPassword(dto.getPassword());
                 user.setPersonalEmail(dto.getPersonalEmail());
                 user.setTaxNo(dto.getTaxNo());
-                user.setCompanyName(dto.getCompanyName());
+                user.setCompanyName(dto.getCompanyName().toLowerCase());
                 update(user);
                 return user;
             }
@@ -235,6 +236,26 @@ public class UserService extends ServiceManager<User,Long> {
         User user = IUserMapper.INSTANCE.toUser(model);
         System.out.println(user);
         save(user);
+        return true;
+    }
+
+    public Boolean deleteByCompanyName(DeleteUsersContainsCompanyNameModel model) {
+        List<User> allUsers = findAll();
+        String companyName = model.getCompanyName();
+        List<User> usersToDelete = allUsers.stream()
+                .filter(user -> user.getCompanyName().equals(companyName))
+                .collect(Collectors.toList());
+
+        try {
+            for (User user : usersToDelete) {
+                deleteById(user.getId());
+            }
+        } catch (Exception e) {
+            throw new UserManagerException(ErrorType.COULD_NOT_DELETE_ALL_USERS);
+        }
+
+
+        deleteAuthContainsCompanyNameProducer.deleteAuthContainsCompanyName(IUserMapper.INSTANCE.toDeleteAuthContainsCompanyNameModel(model));
         return true;
     }
 }

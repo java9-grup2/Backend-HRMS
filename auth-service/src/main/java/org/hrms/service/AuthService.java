@@ -7,6 +7,7 @@ import org.hrms.exception.AuthManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.manager.ICompanyManager;
 import org.hrms.mapper.IAuthMapper;
+import org.hrms.rabbitmq.model.DeleteAuthContainsCompanyNameModel;
 import org.hrms.rabbitmq.model.RegisterEmployeeMailModel;
 import org.hrms.rabbitmq.model.UpdateUserModel;
 import org.hrms.rabbitmq.producer.*;
@@ -20,7 +21,9 @@ import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService extends ServiceManager<Auth,Long> {
@@ -79,8 +82,9 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
         Auth auth = IAuthMapper.INSTANCE.toAuth(dto);
         String companyEmail = "manager" + dto.getName() + "@" + dto.getCompanyName() + ".com";
-        auth.setCompanyEmail(companyEmail);
+        auth.setCompanyEmail(companyEmail.toLowerCase());
         auth.setUserType(EUserType.MANAGER);
+        auth.setCompanyName(auth.getCompanyName().toLowerCase());
         save(auth);
 
         registerManagerProducer.registerManager(IAuthMapper.INSTANCE.toRegisterManagerModel(auth));
@@ -121,10 +125,8 @@ public class AuthService extends ServiceManager<Auth,Long> {
         int lastIndexOfDot = dto.getEmail().lastIndexOf(".");
         String companyName = dto.getEmail().substring(indexOfAt + 1, lastIndexOfDot);
 
-        System.out.println(companyName);
         Boolean isCompanyExist = companyManager.isCompanyExists(companyName).getBody();
 
-        System.out.println("Is companyName= "+isCompanyExist);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -239,7 +241,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
                 .status(EStatus.ACTIVE)
                 .password(CodeGenerator.generateCode())
                 .companyEmail(emailSetter(dto.getName(),dto.getSurname(),companyNameFromToken.get()))
-                .companyName(companyNameFromToken.get())
+                .companyName(companyNameFromToken.get().toLowerCase())
                 .build();
 
         auth.setUsername(usernameSetter(auth.getCompanyEmail()));
@@ -329,7 +331,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
                 auth.setPassword(model.getPassword());
                 auth.setPersonalEmail(model.getPersonalEmail());
                 auth.setTaxNo(model.getTaxNo());
-                auth.setCompanyName(model.getCompanyName());
+                auth.setCompanyName(model.getCompanyName().toLowerCase());
                 update(auth);
             }
             case VISITOR,EMPLOYEE -> {
@@ -367,6 +369,24 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
         optionalManager.get().setStatus(EStatus.ACTIVE);
         update(optionalManager.get());
+        return true;
+    }
+
+    public Boolean deleteByCompanyName(DeleteAuthContainsCompanyNameModel model) {
+        List<Auth> allUsers = findAll();
+        String companyName = model.getCompanyName();
+        List<Auth> usersToDelete = allUsers.stream()
+                .filter(auth -> auth.getCompanyName().equals(companyName))
+                .collect(Collectors.toList());
+
+        try {
+            for (Auth auth : usersToDelete) {
+                deleteById(auth.getId());
+            }
+        } catch (Exception e) {
+            throw new AuthManagerException(ErrorType.COULD_NOT_DELETE_ALL_USERS);
+        }
+
         return true;
     }
 }

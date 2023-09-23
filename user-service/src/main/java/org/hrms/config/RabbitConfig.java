@@ -59,11 +59,36 @@ public class RabbitConfig {
     private String activateManagerStatusQueue;
 
 
+    @Value("${rabbitmq.delete-users-contains-companyName-queue}")
+    private String deleteUsersContainsCompanyNameQueue;
+
+    @Value("${rabbitmq.delete-auth-contains-companyName-queue}")
+    private String deleteAuthContainsCompanyNameQueue;
+
+    @Value("${rabbitmq.delete-auth-contains-companyName-bindingKey}")
+    private String deleteAuthContainsCompanyNameBindingKey;
+
+
     @Bean
     DirectExchange exchangeUser() {
         return new DirectExchange(exchangeUser);
     }
 
+
+    @Bean
+    Queue deleteAuthContainsCompanyNameQueue() {
+        return new Queue(deleteAuthContainsCompanyNameQueue);
+    }
+
+    @Bean
+    public Binding deleteAuthContainsCompanyNameBinding(final DirectExchange exchangeUser, final Queue deleteAuthContainsCompanyNameQueue) {
+        return BindingBuilder.bind(deleteAuthContainsCompanyNameQueue).to(exchangeUser).with(deleteAuthContainsCompanyNameBindingKey);
+    }
+
+    @Bean
+    Queue deleteUsersContainsCompanyNameQueue() {
+        return new Queue(deleteUsersContainsCompanyNameQueue);
+    }
 
     @Bean
     Queue activateManagerStatusQueue() {

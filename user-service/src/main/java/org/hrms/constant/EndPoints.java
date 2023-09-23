@@ -7,6 +7,7 @@ public class EndPoints {
 
     //genel
     public static final String DELETEBYAUTHID ="/deletebyauthid/{authid}";
+    public static final String DELETEBYCOMPANYNAME ="/deletebycompanyname";
     public static final String SAVEVISITOR ="/savevisitor";
     public static final String SAVEMANAGER ="/savemanager";
     public static final String SAVEEMPLOYEE ="/saveemployee";

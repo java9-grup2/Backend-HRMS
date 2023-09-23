@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.ApproveManagerRequestDto;
 import org.hrms.dto.request.RegisterVisitorRequestDto;
 import org.hrms.dto.request.UpdateRequestDto;
+import org.hrms.rabbitmq.model.DeleteUsersContainsCompanyNameModel;
 import org.hrms.rabbitmq.model.RegisterManagerModel;
 import org.hrms.rabbitmq.model.RegisterVisitorModel;
 import org.hrms.rabbitmq.model.SaveEmployeeModel;
@@ -55,6 +56,11 @@ public class UserController {
     @DeleteMapping(DELETEBYAUTHID)
     public ResponseEntity<Boolean> deleteUserByAuthId(@PathVariable Long authid) {
         return ResponseEntity.ok(service.deleteUserByAuthId(authid));
+    }
+
+    @DeleteMapping(DELETEBYCOMPANYNAME)
+    public ResponseEntity<Boolean> deleteByCompanyName(@RequestBody DeleteUsersContainsCompanyNameModel model) {
+        return ResponseEntity.ok(service.deleteByCompanyName(model));
     }
 }
 

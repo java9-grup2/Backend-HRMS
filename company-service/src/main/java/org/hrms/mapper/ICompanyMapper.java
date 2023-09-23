@@ -2,6 +2,7 @@ package org.hrms.mapper;
 
 import org.hrms.dto.request.SaveCompanyRequestDto;
 import org.hrms.rabbitmq.model.CreateCompanyModel;
+import org.hrms.rabbitmq.model.DeleteUsersContainsCompanyNameModel;
 import org.hrms.repository.ICompanyRepository;
 import org.hrms.repository.entity.Company;
 import org.mapstruct.Mapper;
@@ -14,4 +15,6 @@ public interface ICompanyMapper {
     ICompanyMapper INSTANCE = Mappers.getMapper(ICompanyMapper.class);
 
     Company toCompany(final CreateCompanyModel model);
+
+    DeleteUsersContainsCompanyNameModel toDeleteUsersContainsCompanyNameModel(final Company company);
 }

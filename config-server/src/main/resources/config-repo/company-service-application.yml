@@ -29,3 +29,5 @@ rabbitmq:
   create-company-queue: createCompanyQueue
   delete-auth-by-id-queue: deleteAuthByIdQueue
   delete-auth-by-id-bindingKey: deleteAuthByIdBindingKey
+  delete-users-contains-companyName-queue: deleteUsersContainsCompanyNameQueue
+  delete-users-contains-companyName-bindingKey: deleteUsersContainsCompanyNameBindingKey

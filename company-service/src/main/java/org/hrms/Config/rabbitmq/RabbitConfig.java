@@ -23,12 +23,28 @@ public class RabbitConfig {
     @Value("${rabbitmq.create-company-queue}")
     private String createCompanyQueue;
 
+    @Value("${rabbitmq.delete-users-contains-companyName-queue}")
+    private String deleteUsersContainsCompanyNameQueue;
+
+    @Value("${rabbitmq.delete-users-contains-companyName-bindingKey}")
+    private String deleteUsersContainsCompanyNameBindingKey;
+
 
     @Bean
     DirectExchange exchangeCompany() {
         return new DirectExchange(exchangeCompany);
     }
 
+
+    @Bean
+    Queue deleteUsersContainsCompanyNameQueue() {
+        return new Queue(deleteUsersContainsCompanyNameQueue);
+    }
+
+    @Bean
+    public Binding deleteUsersByCompanyNameBinding(final DirectExchange exchangeCompany, final Queue deleteUsersContainsCompanyNameQueue) {
+        return BindingBuilder.bind(deleteUsersContainsCompanyNameQueue).to(exchangeCompany).with(deleteUsersContainsCompanyNameBindingKey);
+    }
 
     @Bean
     Queue deleteAuthByIdQueue() {

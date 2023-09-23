@@ -40,3 +40,7 @@ rabbitmq:
   create-admin-user-queue: createAdminUserQueue
   activate-manager-status-bindingKey: activateManagerStatusBindingKey
   activate-manager-status-queue: activateManagerStatusQueue
+  delete-users-contains-companyName-queue: deleteUsersContainsCompanyNameQueue
+  delete-auth-contains-companyName-queue: deleteAuthContainsCompanyNameQueue
+  delete-auth-contains-companyName-bindingKey: deleteAuthContainsCompanyNameBindingKey
+

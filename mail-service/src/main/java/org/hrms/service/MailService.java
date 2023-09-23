@@ -48,8 +48,8 @@ public class MailService {
 
         String htmlContent = "<div style=\"background-color: #007bff; color: white; text-align: center; padding: 10px; border-radius: 15px\">" +
                 "<h2 style=\"margin: 0; background-color: orangered; color: white; border: 2px solid red; border-radius: 15px; \">Aramiza Hosgeldin "+model.getName().toUpperCase()+" ◕‿◕✿, Sirket hesap bilgilerin assagida paylasilmistir</h2>" +
-                "<p style=\"font-size: 18px;\"> Emailin : "+model.getCompanyEmail()+"</p>" +
-                "<p style=\"font-size: 18px;\"> Sifren : "+model.getPassword()+"</p>" +
+                "<p style=\"font-size: 18px; color:white;\"> Emailin : "+model.getCompanyEmail()+"</p>" +
+                "<p style=\"font-size: 18px; color:white;\"> Sifren : "+model.getPassword()+"</p>" +
                 "</div>";
 
         helper.setText(htmlContent, true);

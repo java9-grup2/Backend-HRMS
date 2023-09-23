@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.*;
 import org.hrms.dto.response.MessageResponseDto;
 import org.hrms.dto.response.TokenResponseDto;
+import org.hrms.rabbitmq.model.DeleteAuthContainsCompanyNameModel;
 import org.hrms.rabbitmq.model.UpdateUserModel;
 import org.hrms.service.AuthService;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import static org.hrms.constant.EndPoints.*;
+import static org.hrms.constant.EndPoints.DELETEBYCOMPANYNAME;
 
 @RestController
 @RequestMapping(AUTH)
@@ -53,5 +55,10 @@ public class AuthController {
     @DeleteMapping(DELETEBYID)
     public ResponseEntity<Boolean> deleteAuthById(@PathVariable Long id) {
         return ResponseEntity.ok(service.deleteAuthById(id));
+    }
+
+    @DeleteMapping(DELETEBYCOMPANYNAME)
+    public ResponseEntity<Boolean> deleteByCompanyName(@RequestBody DeleteAuthContainsCompanyNameModel model) {
+        return ResponseEntity.ok(service.deleteByCompanyName(model));
     }
 }

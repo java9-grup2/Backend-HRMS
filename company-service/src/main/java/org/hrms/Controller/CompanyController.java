@@ -1,12 +1,14 @@
 package org.hrms.Controller;
 
 import lombok.RequiredArgsConstructor;
-import org.hrms.constant.EndPoints;
-import org.hrms.dto.request.SaveCompanyRequestDto;
+import org.hrms.dto.request.UpdateCompanyRequestDto;
 import org.hrms.rabbitmq.model.CreateCompanyModel;
+import org.hrms.repository.entity.Company;
 import org.hrms.service.CompanyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.hrms.constant.EndPoints.*;
 
@@ -32,4 +34,25 @@ public class CompanyController {
     public ResponseEntity<String> message() {
         return ResponseEntity.ok("sa");
     }
+
+    @GetMapping(FINDALL)
+    public ResponseEntity<List<Company>> findAllCompanies() {
+        return ResponseEntity.ok(service.findAll());
+    }
+
+    @GetMapping(FINDBYID)
+    public ResponseEntity<Company> findCompanyById(Long id) {
+        return ResponseEntity.ok(service.findCompanyById(id));
+    }
+
+    @PutMapping(UPDATE)
+    public ResponseEntity<Boolean> updateCompanyDetails(@RequestBody UpdateCompanyRequestDto dto) {
+        return ResponseEntity.ok(service.updateCompanyDetailsByManager(dto));
+    }
+
+    @DeleteMapping(DELETEBYID)
+    public ResponseEntity<Boolean> deleteCompanyById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.deleteCompanyById(id));
+    }
+
 }
