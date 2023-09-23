@@ -77,6 +77,8 @@ public class RabbitConfig {
     @Value("${rabbitmq.activate-manager-status-queue}")
     private String activateManagerStatusQueue;
 
+    @Value("${rabbitmq.delete-auth-contains-companyName-queue}")
+    private String deleteAuthContainsCompanyNameQueue;
 
     @Bean
     DirectExchange exchangeAuth() {
@@ -84,6 +86,10 @@ public class RabbitConfig {
     }
 
 
+    @Bean
+    Queue deleteAuthContainsCompanyNameQueue() {
+        return new Queue(deleteAuthContainsCompanyNameQueue);
+    }
 
     @Bean
     Queue activateManagerStatusQueue() {

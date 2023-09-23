@@ -21,7 +21,8 @@ public enum ErrorType {
     TOKEN_NOT_CREATED(4117,"Token olusturulamadi" ,HttpStatus.BAD_REQUEST),
     PERSONAL_EMAIL_IS_TAKEN(4118,"Bu email sistemde kayitli" ,HttpStatus.BAD_REQUEST),
     INSUFFICIENT_PERMISSION(4119, "Bu islemi yapmaya yetkiniz yok", HttpStatus.BAD_REQUEST),
-    TAXNO_IS_BELONG_TO_ANOTHER_COMPANY(4120, "Girdiginiz vergi numarasi baska sirekete ait, lutfen dogru numarayi girdiginizden emin olunuz", HttpStatus.BAD_REQUEST);
+    TAXNO_IS_BELONG_TO_ANOTHER_COMPANY(4120, "Girdiginiz vergi numarasi baska sirekete ait, lutfen dogru numarayi girdiginizden emin olunuz", HttpStatus.BAD_REQUEST),
+    COMPANY_NOT_FOUND(4120,"Boyle bir sirket bulunamadi",HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;

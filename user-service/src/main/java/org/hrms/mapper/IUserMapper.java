@@ -25,4 +25,6 @@ public interface IUserMapper {
     ApproveManagerMailModel toApproveManagerMailModel(final User user);
 
     User toUser(final CreateAdminUserModel model);
+
+    DeleteAuthContainsCompanyNameModel toDeleteAuthContainsCompanyNameModel(final DeleteUsersContainsCompanyNameModel model);
 }

@@ -10,6 +10,7 @@ public class EndPoints {
     public static final String SAVE ="/save";
     public static final String UPDATE ="/update";
     public static final String FINDALL ="/findall";
+    public static final String FINDBYID ="/findbyid";
 
     //Company
     public static final String ISCOMPANYEXISTS ="/iscompanyexists";
