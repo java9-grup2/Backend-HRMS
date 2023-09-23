@@ -10,6 +10,7 @@ public class EndPoints {
     public static final String DELETEBYCOMPANYNAME ="/deletebycompanyname";
     public static final String SAVE ="/save";
     public static final String UPDATE ="/update";
+    public static final String UPDATECOMPANYDETAILS ="/updatecompanydetails";
     public static final String FINDALL ="/findall";
 
     //Auth

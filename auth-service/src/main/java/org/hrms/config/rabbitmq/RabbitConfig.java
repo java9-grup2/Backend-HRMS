@@ -80,11 +80,19 @@ public class RabbitConfig {
     @Value("${rabbitmq.delete-auth-contains-companyName-queue}")
     private String deleteAuthContainsCompanyNameQueue;
 
+
+    @Value("${rabbitmq.update-auth-companyName-details-Queue}")
+    private String updateAuthCompanyNameDetailsQueue;
+
     @Bean
     DirectExchange exchangeAuth() {
         return new DirectExchange(authExchange);
     }
 
+    @Bean
+    Queue updateAuthCompanyNameDetailsQueue() {
+        return new Queue(updateAuthCompanyNameDetailsQueue);
+    }
 
     @Bean
     Queue deleteAuthContainsCompanyNameQueue() {

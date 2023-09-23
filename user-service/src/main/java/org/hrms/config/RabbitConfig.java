@@ -69,9 +69,18 @@ public class RabbitConfig {
     private String deleteAuthContainsCompanyNameBindingKey;
 
 
+    @Value("${rabbitmq.update-users-companyName-details-queue}")
+    private String updateUsersCompanyNameDetailsQueue;
+
     @Bean
     DirectExchange exchangeUser() {
         return new DirectExchange(exchangeUser);
+    }
+
+
+    @Bean
+    Queue updateUsersCompanyNameDetailsQueue() {
+        return new Queue(updateUsersCompanyNameDetailsQueue);
     }
 
 

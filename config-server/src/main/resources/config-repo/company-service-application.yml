@@ -31,3 +31,7 @@ rabbitmq:
   delete-auth-by-id-bindingKey: deleteAuthByIdBindingKey
   delete-users-contains-companyName-queue: deleteUsersContainsCompanyNameQueue
   delete-users-contains-companyName-bindingKey: deleteUsersContainsCompanyNameBindingKey
+  update-users-companyName-details-queue: updateUsersCompanyNameDetailsQueue
+  update-users-companyName-details-bindingKey: updateUsersCompanyNameDetailsBindingKey
+  update-auth-companyName-details-Queue: updateAuthCompanyNameDetailsQueue
+  update-auth-companyName-details-bindingKey: updateAuthCompanyNameDetailsBindingKey

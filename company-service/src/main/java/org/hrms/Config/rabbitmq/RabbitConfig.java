@@ -29,12 +29,48 @@ public class RabbitConfig {
     @Value("${rabbitmq.delete-users-contains-companyName-bindingKey}")
     private String deleteUsersContainsCompanyNameBindingKey;
 
+    @Value("${rabbitmq.update-users-companyName-details-queue}")
+    private String updateUsersCompanyNameDetailsQueue;
+
+    @Value("${rabbitmq.update-users-companyName-details-bindingKey}")
+    private String updateUsersCompanyNameDetailsBindingKey;
+
+
+    @Value("${rabbitmq.update-auth-companyName-details-Queue}")
+    private String updateAuthCompanyNameDetailsQueue;
+
+    @Value("${rabbitmq.update-auth-companyName-details-bindingKey}")
+    private String updateAuthCompanyNameDetailsBindingKey;
+
+
+
 
     @Bean
     DirectExchange exchangeCompany() {
         return new DirectExchange(exchangeCompany);
     }
 
+
+    @Bean
+    Queue updateAuthCompanyNameDetailsQueue() {
+        return new Queue(updateAuthCompanyNameDetailsQueue);
+    }
+
+    @Bean
+    public Binding updateAuthCompanyNameDetailsBinding(final DirectExchange exchangeCompany, final Queue updateAuthCompanyNameDetailsQueue) {
+        return BindingBuilder.bind(updateAuthCompanyNameDetailsQueue).to(exchangeCompany).with(updateAuthCompanyNameDetailsBindingKey);
+    }
+
+
+    @Bean
+    Queue updateUsersCompanyNameDetailsQueue() {
+        return new Queue(updateUsersCompanyNameDetailsQueue);
+    }
+
+    @Bean
+    public Binding updateUsersCompanyNameDetailsBinding(final DirectExchange exchangeCompany, final Queue updateUsersCompanyNameDetailsQueue) {
+        return BindingBuilder.bind(updateUsersCompanyNameDetailsQueue).to(exchangeCompany).with(updateUsersCompanyNameDetailsBindingKey);
+    }
 
     @Bean
     Queue deleteUsersContainsCompanyNameQueue() {
