@@ -20,6 +20,7 @@ public class EndPoints {
     public static final String LOGIN ="/login";
     public static final String ACTIVATION ="/activation";
     public static final String ISCOMPANYEXISTS ="/iscompanyexists";
+    public static final String FORGOTPASSWORD ="/forgotpassword";
 
 
 }

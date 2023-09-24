@@ -7,10 +7,7 @@ import org.hrms.exception.AuthManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.manager.ICompanyManager;
 import org.hrms.mapper.IAuthMapper;
-import org.hrms.rabbitmq.model.DeleteAuthContainsCompanyNameModel;
-import org.hrms.rabbitmq.model.RegisterEmployeeMailModel;
-import org.hrms.rabbitmq.model.UpdateAuthCompanyNameDetailsModel;
-import org.hrms.rabbitmq.model.UpdateUserModel;
+import org.hrms.rabbitmq.model.*;
 import org.hrms.rabbitmq.producer.*;
 import org.hrms.repository.IAuthRepository;
 import org.hrms.repository.entity.Auth;
@@ -44,7 +41,9 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
     private final CreateAdminUserProducer createAdminUserProducer;
 
-    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer, CreateCompanyProducer createCompanyProducer, ICompanyManager companyManager, CreateAdminUserProducer createAdminUserProducer) {
+    private final ForgotPasswordMailProducer forgotPasswordMailProducer;
+
+    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer, CreateCompanyProducer createCompanyProducer, ICompanyManager companyManager, CreateAdminUserProducer createAdminUserProducer, ForgotPasswordMailProducer forgotPasswordMailProducer) {
         super(repository);
         this.repository = repository;
         this.registerVisitorProducer = registerVisitorProducer;
@@ -57,6 +56,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         this.createCompanyProducer = createCompanyProducer;
         this.companyManager = companyManager;
         this.createAdminUserProducer = createAdminUserProducer;
+        this.forgotPasswordMailProducer = forgotPasswordMailProducer;
     }
 
     public TokenResponseDto registerVisitor(RegisterVisitorRequestDto dto) {
@@ -417,5 +417,35 @@ public class AuthService extends ServiceManager<Auth,Long> {
         auth.setCompanyName(newCompanyName);
         auth.setCompanyEmail(newCompanyMail);
         update(auth);
+    }
+
+    public Boolean forgotPassword(String email) {
+        boolean existsByPersonalEmail = repository.existsByPersonalEmail(email);
+        if (existsByPersonalEmail) {
+            Optional<Auth> optionalAuth = repository.findByPersonalEmail(email);
+            if (optionalAuth.isEmpty()) {
+                throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
+            }
+            forgotPasswordMailProducer.forgotPasswordMailSender(ForgotPasswordMailModel.builder()
+                    .email(optionalAuth.get().getPersonalEmail())
+                    .password(optionalAuth.get().getPassword())
+                    .build());
+            return true;
+        }
+
+        boolean existsByCompanyEmail = repository.existsByCompanyEmail(email);
+        if (existsByCompanyEmail) {
+            Optional<Auth> optionalAuth = repository.findByCompanyEmail(email);
+            if (optionalAuth.isEmpty()) {
+                throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
+            }
+            forgotPasswordMailProducer.forgotPasswordMailSender(ForgotPasswordMailModel.builder()
+                    .email(optionalAuth.get().getPersonalEmail())
+                    .password(optionalAuth.get().getPassword())
+                    .build());
+            return true;
+        }
+
+        return false;
     }
 }

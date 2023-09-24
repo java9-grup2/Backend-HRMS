@@ -66,4 +66,9 @@ public class AuthController {
     public ResponseEntity<Boolean> updateCompanyDetails(@RequestBody UpdateAuthCompanyNameDetailsModel model) {
         return ResponseEntity.ok(service.updateCompanyDetails(model));
     }
+
+    @PostMapping(FORGOTPASSWORD)
+    public ResponseEntity<Boolean> forgotPassword(@RequestParam String email) {
+        return ResponseEntity.ok(service.forgotPassword(email));
+    }
 }

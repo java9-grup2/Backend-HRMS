@@ -84,9 +84,28 @@ public class RabbitConfig {
     @Value("${rabbitmq.update-auth-companyName-details-Queue}")
     private String updateAuthCompanyNameDetailsQueue;
 
+
+
+    @Value("${rabbitmq.forgot-password-mail-queue}")
+    private String forgotPasswordMailQueue;
+
+    @Value("${rabbitmq.forgot-password-mail-bindingKey}")
+    private String forgotPasswordMailBindingKey;
+
     @Bean
     DirectExchange exchangeAuth() {
         return new DirectExchange(authExchange);
+    }
+
+
+    @Bean
+    Queue forgotPasswordMailQueue() {
+        return new Queue(forgotPasswordMailQueue);
+    }
+
+    @Bean
+    public Binding forgotPaswordMailBinding(final DirectExchange exchangeAuth,final Queue forgotPasswordMailQueue) {
+        return BindingBuilder.bind(forgotPasswordMailQueue).to(exchangeAuth).with(forgotPasswordMailBindingKey);
     }
 
     @Bean
