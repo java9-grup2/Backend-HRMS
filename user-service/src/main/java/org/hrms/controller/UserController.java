@@ -2,6 +2,7 @@ package org.hrms.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.ApproveManagerRequestDto;
+import org.hrms.dto.request.ListWorkersRequestDto;
 import org.hrms.dto.request.RegisterVisitorRequestDto;
 import org.hrms.dto.request.UpdateRequestDto;
 import org.hrms.rabbitmq.model.*;
@@ -10,7 +11,10 @@ import org.hrms.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.util.List;
+
 import static org.hrms.constant.EndPoints.*;
+import static org.hrms.constant.EndPoints.LISTWORKERS;
 
 @RestController
 @RequestMapping(USER)
@@ -63,6 +67,12 @@ public class UserController {
     @PutMapping(UPDATECOMPANYDETAILS)
     public ResponseEntity<Boolean> updateCompanyDetails(@RequestBody UpdateUsersCompanyNameDetailsModel model) {
         return ResponseEntity.ok(service.updateCompanyDetails(model));
+    }
+
+
+    @GetMapping(LISTWORKERS)
+    public ResponseEntity<List<User>> listWorkersAsManager(ListWorkersRequestDto dto) {
+        return ResponseEntity.ok(service.listWorkersAsManager(dto));
     }
 }
 

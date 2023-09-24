@@ -1,6 +1,8 @@
 package org.hrms.service;
 
 import org.hrms.dto.request.*;
+import org.hrms.dto.response.ForgotPasswordResponseDto;
+import org.hrms.dto.response.LoginResponseDto;
 import org.hrms.dto.response.TokenResponseDto;
 import org.hrms.dto.response.MessageResponseDto;
 import org.hrms.exception.AuthManagerException;
@@ -121,7 +123,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
     }
 
 
-    public TokenResponseDto login(LoginRequestDto dto) {
+    public LoginResponseDto login(LoginRequestDto dto) {
         int indexOfAt = dto.getEmail().indexOf("@");
         int lastIndexOfDot = dto.getEmail().lastIndexOf(".");
         String companyName = dto.getEmail().substring(indexOfAt + 1, lastIndexOfDot);
@@ -161,7 +163,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         if (token.isEmpty()) {
             throw new AuthManagerException(ErrorType.TOKEN_NOT_CREATED);
         }
-        return new TokenResponseDto(token.get());
+        return new LoginResponseDto(token.get(),optionalAuth.get().getUserType().toString(),optionalAuth.get().getCompanyName());
     }
 
 
@@ -419,10 +421,11 @@ public class AuthService extends ServiceManager<Auth,Long> {
         update(auth);
     }
 
-    public Boolean forgotPassword(String email) {
-        boolean existsByPersonalEmail = repository.existsByPersonalEmail(email);
+    public ForgotPasswordResponseDto forgotPassword(ForgotPasswordRequestDto dto) {
+        String successMessage = "Sifreniz basariyla sahsi mailinize gonderilmistir";
+        boolean existsByPersonalEmail = repository.existsByPersonalEmail(dto.getEmail());
         if (existsByPersonalEmail) {
-            Optional<Auth> optionalAuth = repository.findByPersonalEmail(email);
+            Optional<Auth> optionalAuth = repository.findByPersonalEmail(dto.getEmail());
             if (optionalAuth.isEmpty()) {
                 throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
             }
@@ -430,12 +433,12 @@ public class AuthService extends ServiceManager<Auth,Long> {
                     .email(optionalAuth.get().getPersonalEmail())
                     .password(optionalAuth.get().getPassword())
                     .build());
-            return true;
+            return new ForgotPasswordResponseDto(successMessage);
         }
 
-        boolean existsByCompanyEmail = repository.existsByCompanyEmail(email);
+        boolean existsByCompanyEmail = repository.existsByCompanyEmail(dto.getEmail());
         if (existsByCompanyEmail) {
-            Optional<Auth> optionalAuth = repository.findByCompanyEmail(email);
+            Optional<Auth> optionalAuth = repository.findByCompanyEmail(dto.getEmail());
             if (optionalAuth.isEmpty()) {
                 throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
             }
@@ -443,9 +446,9 @@ public class AuthService extends ServiceManager<Auth,Long> {
                     .email(optionalAuth.get().getPersonalEmail())
                     .password(optionalAuth.get().getPassword())
                     .build());
-            return true;
+            return new ForgotPasswordResponseDto(successMessage);
         }
 
-        return false;
+        throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
     }
 }

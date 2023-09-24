@@ -16,5 +16,6 @@ public class EndPoints {
     public static final String UPDATE ="/update";
     public static final String UPDATECOMPANYDETAILS ="/updatecompanydetails";
     public static final String FINDALL ="/findall";
+    public static final String LISTWORKERS ="/listworkers";
 
 }

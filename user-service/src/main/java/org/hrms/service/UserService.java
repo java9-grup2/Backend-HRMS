@@ -1,6 +1,7 @@
 package org.hrms.service;
 
 import org.hrms.dto.request.ApproveManagerRequestDto;
+import org.hrms.dto.request.ListWorkersRequestDto;
 import org.hrms.dto.request.UpdateRequestDto;
 import org.hrms.exception.UserManagerException;
 import org.hrms.exception.ErrorType;
@@ -286,5 +287,20 @@ public class UserService extends ServiceManager<User,Long> {
         user.setCompanyName(newCompanyName);
         user.setCompanyEmail(newCompanyMail);
         update(user);
+    }
+
+    public List<User> listWorkersAsManager(ListWorkersRequestDto dto) {
+        List<User> allWorkers = repository.findAllWorkers();
+        if (allWorkers.isEmpty()) {
+            throw new UserManagerException(ErrorType.NO_DATA_FOUND);
+        }
+
+        List<User> list = allWorkers.stream().filter(user -> user.getCompanyName().equals(dto.getCompanyName())).toList();
+
+        if (list.isEmpty()) {
+            throw new UserManagerException(ErrorType.NO_DATA_FOUND);
+        }
+
+        return list;
     }
 }
