@@ -2,6 +2,8 @@ package org.hrms.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.*;
+import org.hrms.dto.response.ForgotPasswordResponseDto;
+import org.hrms.dto.response.LoginResponseDto;
 import org.hrms.dto.response.MessageResponseDto;
 import org.hrms.dto.response.TokenResponseDto;
 import org.hrms.rabbitmq.model.DeleteAuthContainsCompanyNameModel;
@@ -38,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping(LOGIN)
-    public ResponseEntity<TokenResponseDto> login(@RequestBody LoginRequestDto dto) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto dto) {
         return ResponseEntity.ok(service.login(dto));
     }
 
@@ -68,7 +70,7 @@ public class AuthController {
     }
 
     @PostMapping(FORGOTPASSWORD)
-    public ResponseEntity<Boolean> forgotPassword(@RequestParam String email) {
-        return ResponseEntity.ok(service.forgotPassword(email));
+    public ResponseEntity<ForgotPasswordResponseDto> forgotPassword(@RequestBody ForgotPasswordRequestDto dto) {
+        return ResponseEntity.ok(service.forgotPassword(dto));
     }
 }
