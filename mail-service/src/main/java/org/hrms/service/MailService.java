@@ -3,6 +3,7 @@ package org.hrms.service;
 import lombok.RequiredArgsConstructor;
 import org.hrms.rabbitmq.model.ActivationMailModel;
 import org.hrms.rabbitmq.model.ApproveManagerMailModel;
+import org.hrms.rabbitmq.model.ForgotPasswordMailModel;
 import org.hrms.rabbitmq.model.RegisterEmployeeMailModel;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -74,6 +75,24 @@ public class MailService {
                 "<p style=\"font-size: 18px;\"> Sirket Ismi : "+model.getCompanyName()+"</p>" +
                 "<p style=\"font-size: 18px;\"> Sirket Vergi No : "+model.getTaxNo()+"</p>" +
                 "</div>";
+
+        helper.setText(htmlContent, true);
+
+        javaMailSender.send(mimeMessage);
+    }
+
+    public void sendForgotPasswordMail(ForgotPasswordMailModel model) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+        helper.setFrom("${java9mail}");
+        helper.setTo(model.getEmail());
+        helper.setSubject("Yonca Hesap Sifreniz");
+
+        String htmlContent = "<div style=\"background-color: #007bff; color: white; text-align: center; padding: 10px; border-radius: 15px\">" +
+                "<h2 style=\"margin: 0;\">Hesap Sifreniz Assagida Paylasilmistir</h2>"+
+                "<p style=\"font-size: 18px; color:white; border: 1px solid black; background-color: orangered;\"> Hesap sifreniz : <span style=\"font-size: 18px; color:orangered;\">"+model.getPassword()+"</span></p>\n";
+
 
         helper.setText(htmlContent, true);
 

@@ -22,4 +22,8 @@ public interface IAuthRepository extends JpaRepository<Auth,Long> {
     boolean existsByCompanyEmail(String companyEmail);
 
     boolean existsByUserType(EUserType usertype);
+
+    Optional<Auth> findByCompanyEmail(String companyEmail);
+
+    Optional<Auth> findByPersonalEmail(String personalEmail);
 }

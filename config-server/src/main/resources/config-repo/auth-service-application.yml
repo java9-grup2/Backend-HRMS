@@ -47,3 +47,5 @@ rabbitmq:
   activate-manager-status-queue: activateManagerStatusQueue
   delete-auth-contains-companyName-queue: deleteAuthContainsCompanyNameQueue
   update-auth-companyName-details-Queue: updateAuthCompanyNameDetailsQueue
+  forgot-password-mail-queue: forgotPasswordMailQueue
+  forgot-password-mail-bindingKey: forgotPasswordMailBindingKey

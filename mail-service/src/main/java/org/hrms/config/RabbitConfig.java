@@ -21,6 +21,16 @@ public class RabbitConfig {
     private String approveManagerMailQueue;
 
 
+    @Value("${rabbitmq.forgot-password-mail-queue}")
+    private String forgotPasswordMailQueue;
+
+
+
+    @Bean
+    Queue forgotPasswordMailQueue() {
+        return new Queue(forgotPasswordMailQueue);
+    }
+
     @Bean
     Queue approveManagerMailQueue() {
         return new Queue(approveManagerMailQueue);
