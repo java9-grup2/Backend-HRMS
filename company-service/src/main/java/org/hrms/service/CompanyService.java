@@ -77,9 +77,11 @@ public class CompanyService extends ServiceManager<Company, Long> {
 
     public Boolean updateCompanyDetailsByManager(UpdateCompanyRequestDto dto) {
         Optional<Company> optionalCompany = findById(dto.getId());
+//        Optional<Company> optionalCompany = repository.findByCompanyName(dto.getCompanyName());
         if (optionalCompany.isEmpty()) {
             throw new CompanyManagerException(ErrorType.COMPANY_NOT_FOUND);
         }
+
         boolean existsByCompanyName = repository.existsByCompanyName(dto.getCompanyName());
 
         boolean existsByTaxNo = repository.existsByTaxNo(dto.getTaxNo());
@@ -96,16 +98,16 @@ public class CompanyService extends ServiceManager<Company, Long> {
         if (!isCompanyNameSame) {
             UpdateUsersCompanyNameDetailsModel updateUsersCompanyNameDetailsModel = new UpdateUsersCompanyNameDetailsModel();
             updateUsersCompanyNameDetailsModel.setOldCompanyName(optionalCompany.get().getCompanyName());
-            updateUsersCompanyNameDetailsModel.setNewCompanyName(dto.getCompanyName());
+            updateUsersCompanyNameDetailsModel.setNewCompanyName(dto.getCompanyName().toLowerCase());
             updateUsersCompanyNameDetailsProducer.updateUsersCompanyNameDetails(updateUsersCompanyNameDetailsModel);
 
             UpdateAuthCompanyNameDetailsModel updateAuthCompanyNameDetailsModel = new UpdateAuthCompanyNameDetailsModel();
             updateAuthCompanyNameDetailsModel.setOldCompanyName(optionalCompany.get().getCompanyName());
-            updateAuthCompanyNameDetailsModel.setNewCompanyName(dto.getCompanyName());
+            updateAuthCompanyNameDetailsModel.setNewCompanyName(dto.getCompanyName().toLowerCase());
             updateAuthCompanyNameDetailsProducer.updateAuthCompanyNameDetails(updateAuthCompanyNameDetailsModel);
         }
 
-        optionalCompany.get().setCompanyName(dto.getCompanyName());
+        optionalCompany.get().setCompanyName(dto.getCompanyName().toLowerCase());
         optionalCompany.get().setAbout(dto.getAbout());
         optionalCompany.get().setNumOfEmployees(dto.getNumOfEmployees());
         optionalCompany.get().setTaxNo(dto.getTaxNo());
@@ -196,5 +198,13 @@ public class CompanyService extends ServiceManager<Company, Long> {
 
 
         return listHoliday;
+    }
+
+    public Company findCompanyByCompanyName(String companyName) {
+        Optional<Company> optionalCompany = repository.findByCompanyName(companyName);
+        if (optionalCompany.isEmpty()) {
+            throw new CompanyManagerException(ErrorType.COMPANY_NOT_FOUND);
+        }
+        return optionalCompany.get();
     }
 }

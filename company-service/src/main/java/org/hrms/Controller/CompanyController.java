@@ -46,6 +46,12 @@ public class CompanyController {
         return ResponseEntity.ok(service.findCompanyById(id));
     }
 
+    @GetMapping(FINDBYCOMPANYNAME)
+    public ResponseEntity<Company> findCompanyByCompanyName(String companyName) {
+        return ResponseEntity.ok(service.findCompanyByCompanyName(companyName));
+    }
+
+
     @PutMapping(UPDATE)
     public ResponseEntity<Boolean> updateCompanyDetails(@RequestBody UpdateCompanyRequestDto dto) {
         return ResponseEntity.ok(service.updateCompanyDetailsByManager(dto));
