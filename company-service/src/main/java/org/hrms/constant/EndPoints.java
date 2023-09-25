@@ -11,6 +11,7 @@ public class EndPoints {
     public static final String UPDATE ="/update";
     public static final String FINDALL ="/findall";
     public static final String FINDBYID ="/findbyid";
+    public static final String FINDBYCOMPANYNAME ="/findbycompanyname";
 
     //Company
     public static final String ISCOMPANYEXISTS ="/iscompanyexists";
