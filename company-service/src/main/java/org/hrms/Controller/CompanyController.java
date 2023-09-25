@@ -1,6 +1,7 @@
 package org.hrms.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.hrms.dto.request.PublicHolidayCompanyRequestDto;
 import org.hrms.dto.request.UpdateCompanyRequestDto;
 import org.hrms.rabbitmq.model.CreateCompanyModel;
 import org.hrms.repository.entity.Company;
@@ -54,6 +55,13 @@ public class CompanyController {
     public ResponseEntity<Boolean> deleteCompanyById(@PathVariable Long id) {
         return ResponseEntity.ok(service.deleteCompanyById(id));
     }
+
+    @GetMapping(PUBLICHOLIDAY)
+    public ResponseEntity<List<PublicHolidayCompanyRequestDto>> getPublicHoliday(){
+        return ResponseEntity.ok(service.getPublicHoliday());
+    }
+
+
 
 
 
