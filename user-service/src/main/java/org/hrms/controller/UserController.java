@@ -2,6 +2,7 @@ package org.hrms.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.ApproveManagerRequestDto;
+//import org.hrms.dto.request.ListWorkersRequestDto;
 import org.hrms.dto.request.ListWorkersRequestDto;
 import org.hrms.dto.request.RegisterVisitorRequestDto;
 import org.hrms.dto.request.UpdateRequestDto;
@@ -74,6 +75,9 @@ public class UserController {
     public ResponseEntity<List<User>> listWorkersAsManager(ListWorkersRequestDto dto) {
         return ResponseEntity.ok(service.listWorkersAsManager(dto));
     }
+
+
+
 }
 
 
