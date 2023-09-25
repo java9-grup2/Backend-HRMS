@@ -21,7 +21,6 @@ spring:
       routes:
         - id: auth-service
           predicates:
-            #- Path=/api/v1/auth/**          #localhost/api/v1/auth/findall
             - Path=/auth/**
           uri: http://localhost:9090
           filters:
@@ -33,7 +32,6 @@ spring:
 
         - id: user-service
           predicates:
-            #- Path=/api/v1/user/**          #localhost/api/v1/user/findall
             - Path=/user/**
           uri: http://localhost:9091
           filters:
@@ -45,7 +43,6 @@ spring:
 
         - id: company-service
           predicates:
-            #- Path=/api/v1/company/**          #localhost/api/v1/company/findall
             - Path=/company/**
           uri: http://localhost:9092
           filters:
@@ -55,5 +52,15 @@ spring:
                 enabled: true
                 fallbackUri: forward:/fallback/companyservice
 
+        - id: financial-performance-service
+          predicates:
+            - Path=/financialperformance/**
+          uri: http://localhost:9093
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - name: CircuitBreaker
+              args:
+                enabled: true
+                fallbackUri: forward:/fallback/financialperformance
       default-filters:
         - RewritePath= /(?<segment>.*),/api/v1/$\{segment}

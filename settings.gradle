@@ -5,4 +5,5 @@ include 'config-server'
 include 'user-service'
 include 'api-gateway-service'
 include 'company-service'
+include 'financial-performance-service'
 
