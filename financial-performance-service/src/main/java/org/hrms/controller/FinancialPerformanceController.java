@@ -36,4 +36,10 @@ public class FinancialPerformanceController {
     public ResponseEntity<FinancialPerformance> findSelectedYear(@Valid FindSelectedYearRequestDto dto) {
         return ResponseEntity.ok(service.findSelectedYear(dto));
     }
+
+    @PostMapping(CALCULATETOTALEXPENSES)
+    public ResponseEntity<Double> calculateTotalExpensesForCompany(@RequestBody String companyName) {
+        Double totalExpenses = service.calculateTotalExpensesForCompany(companyName);
+        return ResponseEntity.ok(totalExpenses);
+    }
 }

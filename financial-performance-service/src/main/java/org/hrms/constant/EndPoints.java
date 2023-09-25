@@ -16,6 +16,7 @@ public class EndPoints {
     //Company
     public static final String ISCOMPANYEXISTS ="/iscompanyexists";
     public static final String REGISTERVISITOR ="/registervisitor";
+    public static final String CALCULATETOTALEXPENSES ="/CALCULATETOTALEXPENSES";
     public static final String REGISTERMANAGER ="/registermanager";
     public static final String REGISTEREMPLOYEE ="/registeremployee";
     public static final String LOGIN ="/login";

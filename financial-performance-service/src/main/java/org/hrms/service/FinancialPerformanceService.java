@@ -95,4 +95,24 @@ public class FinancialPerformanceService extends ServiceManager<FinancialPerform
 
         throw new FinancialPerformanceException(ErrorType.NO_DETAILS_FOR_SELECTED_YEAR);
     }
+
+    /**
+     * Şirketin toplam gider bilgisini hesaplayan metod.
+     * @param companyName Şirket adı
+     * @return Toplam gider bilgisi
+     */
+    public Double calculateTotalExpensesForCompany(String companyName) {
+        List<FinancialPerformance> financialPerformanceList = repository.findByCompanyName(companyName);
+
+        Double totalExpenses = 0.0;
+
+        for (FinancialPerformance financialPerformance : financialPerformanceList) {
+            if (financialPerformance.getAnnualExpenses() != null) {
+                totalExpenses += financialPerformance.getAnnualExpenses();
+            }
+        }
+
+        return totalExpenses;
+    }
+
 }
