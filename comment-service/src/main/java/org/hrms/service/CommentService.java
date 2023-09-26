@@ -8,25 +8,27 @@ import org.hrms.manager.IUserManager;
 import org.hrms.mapper.ICommentMapper;
 import org.hrms.repository.ICommentRepository;
 import org.hrms.repository.entity.Comment;
+import org.hrms.repository.enums.EStatus;
 import org.hrms.repository.enums.EUserType;
 import org.hrms.utility.JwtTokenManager;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CommentService extends ServiceManager<Comment,Long> {
 
-    private final ICommentRepository commentRepository;
+    private final ICommentRepository repository;
 
     private final JwtTokenManager jwtTokenManager;
 
     private final IUserManager userManager;
 
-    public CommentService(ICommentRepository commentRepository, JwtTokenManager jwtTokenManager, IUserManager userManager) {
-        super(commentRepository);
-        this.commentRepository = commentRepository;
+    public CommentService(ICommentRepository repository, JwtTokenManager jwtTokenManager, IUserManager userManager) {
+        super(repository);
+        this.repository = repository;
         this.jwtTokenManager = jwtTokenManager;
         this.userManager = userManager;
     }
@@ -53,5 +55,23 @@ public class CommentService extends ServiceManager<Comment,Long> {
         save(comment);
 
         return new CommentSaveResponseDto("Yorumunuz onaya gitmistir. Onaylandiktan sonra sirket sayfasi yorumlari kisminda gorebilirsiniz");
+    }
+
+    public List<Comment> getAllPendingComments() {
+        List<Comment> allPendingComments = repository.getAllPendingComments();
+        if (allPendingComments.isEmpty()) {
+            throw new CommentManagerException(ErrorType.NO_PENDING_COMMENT);
+        }
+        return allPendingComments;
+    }
+
+    public Boolean approveComment(Long id) {
+        Optional<Comment> optionalComment = findById(id);
+        if (optionalComment.isEmpty()) {
+            throw new CommentManagerException(ErrorType.COMMENT_NOT_FOUND);
+        }
+        optionalComment.get().setStatus(EStatus.ACTIVE);
+        update(optionalComment.get());
+        return true;
     }
 }

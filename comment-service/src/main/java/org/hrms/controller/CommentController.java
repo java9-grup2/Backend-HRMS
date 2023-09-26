@@ -3,12 +3,14 @@ package org.hrms.controller;
 import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.CommentSaveRequestDto;
 import org.hrms.dto.response.CommentSaveResponseDto;
+import org.hrms.repository.entity.Comment;
 import org.hrms.service.CommentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.hrms.constant.EndPoints.COMMENT;
-import static org.hrms.constant.EndPoints.SAVE;
+import java.util.List;
+
+import static org.hrms.constant.EndPoints.*;
 
 @RestController
 @RequestMapping(COMMENT)
@@ -28,4 +30,13 @@ public class CommentController {
         return ResponseEntity.ok("Calisiyor");
     }
 
+    @GetMapping(GETALLPENDINGCOMMENTS)
+    public ResponseEntity<List<Comment>> getAllPendingComments() {
+        return ResponseEntity.ok(service.getAllPendingComments());
+    }
+
+    @PutMapping(APPROVECOMMENT)
+    public ResponseEntity<Boolean> approveComment(@RequestParam Long id) {
+        return ResponseEntity.ok(service.approveComment(id));
+    }
 }

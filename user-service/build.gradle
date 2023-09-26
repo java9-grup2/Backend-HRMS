@@ -3,5 +3,6 @@ dependencies {
     implementation libs.springBootJpa
     implementation libs.springBootRabbitMq
     implementation libs.springCloudConfigClient
+    implementation libs.springCloudOpenFeign
 }
 

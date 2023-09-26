@@ -1,11 +1,10 @@
 package org.hrms.service;
 
-import org.hrms.dto.request.ApproveManagerRequestDto;
-import org.hrms.dto.request.IsCommentMatchesRequestDto;
-import org.hrms.dto.request.ListWorkersRequestDto;
-import org.hrms.dto.request.UpdateRequestDto;
+import org.hrms.dto.request.*;
+import org.hrms.dto.response.ApproveCommentOfEmployeeResponseDto;
 import org.hrms.exception.UserManagerException;
 import org.hrms.exception.ErrorType;
+import org.hrms.manager.ICommentManager;
 import org.hrms.mapper.IUserMapper;
 import org.hrms.rabbitmq.model.*;
 import org.hrms.rabbitmq.producer.*;
@@ -36,7 +35,9 @@ public class UserService extends ServiceManager<User,Long> {
 
     private final DeleteAuthContainsCompanyNameProducer deleteAuthContainsCompanyNameProducer;
 
-    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer, DeleteUserByAuthIdProducer deleteUserByAuthIdProducer, ApproveManagerMailProducer approveManagerMailProducer, ActivateManagerStatusProducer activateManagerStatusProducer, DeleteAuthContainsCompanyNameProducer deleteAuthContainsCompanyNameProducer) {
+    private final ICommentManager commentManager;
+
+    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer, DeleteUserByAuthIdProducer deleteUserByAuthIdProducer, ApproveManagerMailProducer approveManagerMailProducer, ActivateManagerStatusProducer activateManagerStatusProducer, DeleteAuthContainsCompanyNameProducer deleteAuthContainsCompanyNameProducer, ICommentManager commentManager) {
         super(repository);
         this.repository = repository;
         this.jwtTokenManager = jwtTokenManager;
@@ -45,6 +46,7 @@ public class UserService extends ServiceManager<User,Long> {
         this.approveManagerMailProducer = approveManagerMailProducer;
         this.activateManagerStatusProducer = activateManagerStatusProducer;
         this.deleteAuthContainsCompanyNameProducer = deleteAuthContainsCompanyNameProducer;
+        this.commentManager = commentManager;
     }
     /*
         admin onayı icin user service kısmına bi metod yazıldı,
@@ -319,5 +321,18 @@ public class UserService extends ServiceManager<User,Long> {
         }
 
         return true;
+    }
+
+    public ApproveCommentOfEmployeeResponseDto approveCommentOfEmployee(ApproveCommentOfEmployeeRequestDto dto) {
+        EUserType userType = dto.getUserType();
+        if (!userType.equals(EUserType.ADMIN)) {
+            throw new UserManagerException(ErrorType.INSUFFICIENT_PERMISSION);
+        }
+        Boolean isValid = commentManager.approveComment(dto.getCommentId()).getBody();
+        if (!isValid) {
+            throw new UserManagerException(ErrorType.COMMENT_NOT_FOUND);
+        }
+
+        return new ApproveCommentOfEmployeeResponseDto("Yorum basariyla onaylandi");
     }
 }
