@@ -6,4 +6,5 @@ include 'user-service'
 include 'api-gateway-service'
 include 'company-service'
 include 'financial-performance-service'
+include 'comment-service'
 

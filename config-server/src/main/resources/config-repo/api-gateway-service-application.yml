@@ -62,5 +62,17 @@ spring:
               args:
                 enabled: true
                 fallbackUri: forward:/fallback/financialperformance
+
+        - id: comment-service
+          predicates:
+            - Path=/comment/**
+          uri: http://localhost:9094
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - name: CircuitBreaker
+              args:
+                enabled: true
+                fallbackUri: forward:/fallback/commentservice
+
       default-filters:
         - RewritePath= /(?<segment>.*),/api/v1/$\{segment}
