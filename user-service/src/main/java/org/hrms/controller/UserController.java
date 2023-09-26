@@ -1,11 +1,8 @@
 package org.hrms.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.hrms.dto.request.ApproveManagerRequestDto;
+import org.hrms.dto.request.*;
 //import org.hrms.dto.request.ListWorkersRequestDto;
-import org.hrms.dto.request.ListWorkersRequestDto;
-import org.hrms.dto.request.RegisterVisitorRequestDto;
-import org.hrms.dto.request.UpdateRequestDto;
 import org.hrms.rabbitmq.model.*;
 import org.hrms.repository.entity.User;
 import org.hrms.service.UserService;
@@ -76,8 +73,10 @@ public class UserController {
         return ResponseEntity.ok(service.listWorkersAsManager(dto));
     }
 
-
-
+    @PostMapping(ISCOMMENTMATCHES)
+    public ResponseEntity<Boolean> isCommentDetailsValid(@RequestBody IsCommentMatchesRequestDto dto) {
+        return ResponseEntity.ok(service.isCommentDetailsValid(dto));
+    }
 }
 
 
