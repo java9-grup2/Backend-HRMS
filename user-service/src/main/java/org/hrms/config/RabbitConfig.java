@@ -72,11 +72,45 @@ public class RabbitConfig {
     @Value("${rabbitmq.update-users-companyName-details-queue}")
     private String updateUsersCompanyNameDetailsQueue;
 
+    @Value("${rabbitmq.delete-company-by-register-deny-Queue}")
+    private String deleteCompanyByRegisterDenyQueue;
+
+
+    @Value("${rabbitmq.delete-company-by-register-deny-bindingKey}")
+    private String deleteCompanyByRegisterDenyBindingKey;
+
+
+    @Value("${rabbitmq.manager-deny-mail-queue}")
+    private String managerDenyMailQueue;
+
+
+    @Value("${rabbitmq.manager-deny-mail-bindingKey}")
+    private String managerDenyMailBindingKey;
+
     @Bean
     DirectExchange exchangeUser() {
         return new DirectExchange(exchangeUser);
     }
 
+
+    @Bean
+    Queue managerDenyMailQueue() {
+        return new Queue(managerDenyMailQueue);
+    }
+
+    @Bean
+    public Binding managerDenyMailBinding(final DirectExchange exchangeUser,final Queue managerDenyMailQueue) {
+        return BindingBuilder.bind(managerDenyMailQueue).to(exchangeUser).with(managerDenyMailBindingKey);
+    }
+
+    @Bean
+    Queue deleteCompanyByRegisterDenyQueue() {
+        return new Queue(deleteCompanyByRegisterDenyQueue);
+    }
+    @Bean
+    public Binding deleteCompanyByRegisterDenyBinding(final DirectExchange exchangeUser,final Queue deleteCompanyByRegisterDenyQueue) {
+        return BindingBuilder.bind(deleteCompanyByRegisterDenyQueue).to(exchangeUser).with(deleteCompanyByRegisterDenyBindingKey);
+    }
 
     @Bean
     Queue updateUsersCompanyNameDetailsQueue() {

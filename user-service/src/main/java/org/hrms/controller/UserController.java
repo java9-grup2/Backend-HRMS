@@ -22,12 +22,6 @@ public class UserController {
 
     private final UserService service;
 
-    @PostMapping(APPROVEMANAGER)
-    public ResponseEntity<Boolean> approveManager(@RequestBody ApproveManagerRequestDto dto) {
-
-        return ResponseEntity.ok(service.approveManagerUser(dto));
-    }
-
     @PostMapping(SAVEVISITOR)
     public ResponseEntity<User> registerVisitor(@RequestBody RegisterVisitorModel model) {
         return ResponseEntity.ok(service.saveVisitorUser(model));
@@ -84,9 +78,25 @@ public class UserController {
         return ResponseEntity.ok(service.approveCommentOfEmployee(dto));
     }
 
+    @PostMapping(DENYCOMMENT)
+    public ResponseEntity<Boolean> denyCommentOfEmployee(@RequestBody DenyCommentOfEmployeeRequestDto dto) {
+        return ResponseEntity.ok(service.denyCommentOfEmployee(dto));
+    }
+
     @GetMapping(LISTPENDINGMANAGERAPPROVAL)
     public ResponseEntity<List<User>> listPendingManagerApproval() {
         return ResponseEntity.ok(service.listPendingManagerApproval());
+    }
+
+    @PostMapping(APPROVEMANAGER)
+    public ResponseEntity<Boolean> approveManager(@RequestBody ApproveManagerRequestDto dto) {
+
+        return ResponseEntity.ok(service.approveManagerUser(dto));
+    }
+
+    @PostMapping(DENYMANAGER)
+    public ResponseEntity<Boolean> denyRegisterManager(@RequestBody DenyManagerRequestDto dto) {
+        return ResponseEntity.ok(service.denyRegisterManager(dto));
     }
 }
 

@@ -1,10 +1,7 @@
 package org.hrms.service;
 
 import lombok.RequiredArgsConstructor;
-import org.hrms.rabbitmq.model.ActivationMailModel;
-import org.hrms.rabbitmq.model.ApproveManagerMailModel;
-import org.hrms.rabbitmq.model.ForgotPasswordMailModel;
-import org.hrms.rabbitmq.model.RegisterEmployeeMailModel;
+import org.hrms.rabbitmq.model.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -94,6 +91,24 @@ public class MailService {
                 "<p style=\"font-size: 18px; color:white; border: 1px solid black; background-color: orangered;\"> Hesap sifreniz : <span style=\"font-size: 18px; color:orangered;\">"+model.getPassword()+"</span></p>\n";
 
 
+        helper.setText(htmlContent, true);
+
+        javaMailSender.send(mimeMessage);
+    }
+
+    public void sendDenyMessageToManager(ManagerDenyMailModel model) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+
+        helper.setFrom("${java9mail}");
+        helper.setTo(model.getPersonalEmail());
+        helper.setSubject("Yonca Uygulamasi Olarak Kotu Bir Haberimiz Var (·•᷄\u200Eࡇ•᷅ )");
+
+        String htmlContent = "<div style=\"background-color: palegreen; color: darkblue; text-align: center; padding: 10px; border-radius: 15px\">" +
+                "<h2 style=\"margin: 0;\">Sanırım admin bir şeyleri beğenmedi ki kayıt isteğiniz reddedildi.</h2>" +
+                "<p style=\"margin: 0;\">Detaylı sorularınız için lütfen bu adrese mail gönderiniz.</p>" +
+                "<p style=\"margin: 0;\">Yonca ailesi olarak iyi günler dileriz \uD83D\uDC4B</p>" +
+                "</div>";
         helper.setText(htmlContent, true);
 
         javaMailSender.send(mimeMessage);
