@@ -20,6 +20,7 @@ public class EndPoints {
     public static final String ISCOMMENTMATCHES ="/iscommentmatches";
     public static final String APPROVECOMMENTOFEMPLOYEE ="/approvecommentofemployee";
     public static final String APPROVECOMMENT ="/approvecomment";
+    public static final String LISTPENDINGMANAGERAPPROVAL ="/listpendingmanagerapproval";
 
 
 }

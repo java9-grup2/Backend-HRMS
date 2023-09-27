@@ -83,6 +83,11 @@ public class UserController {
     public ResponseEntity<ApproveCommentOfEmployeeResponseDto> approveCommentOfEmployee(@RequestBody ApproveCommentOfEmployeeRequestDto dto) {
         return ResponseEntity.ok(service.approveCommentOfEmployee(dto));
     }
+
+    @GetMapping(LISTPENDINGMANAGERAPPROVAL)
+    public ResponseEntity<List<User>> listPendingManagerApproval() {
+        return ResponseEntity.ok(service.listPendingManagerApproval());
+    }
 }
 
 

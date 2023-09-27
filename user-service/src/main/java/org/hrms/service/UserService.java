@@ -335,4 +335,13 @@ public class UserService extends ServiceManager<User,Long> {
 
         return new ApproveCommentOfEmployeeResponseDto("Yorum basariyla onaylandi");
     }
+
+    public List<User> listPendingManagerApproval() {
+        List<User> allPendingManagerApproval = repository.findAllPendingManagerApproval();
+        if (allPendingManagerApproval.isEmpty()) {
+            throw new UserManagerException(ErrorType.NOT_PENDING_APPROVAL);
+        }
+
+        return allPendingManagerApproval;
+    }
 }
