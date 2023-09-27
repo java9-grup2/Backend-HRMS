@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.PublicHolidayCompanyRequestDto;
 import org.hrms.dto.request.UpdateCompanyRequestDto;
 import org.hrms.rabbitmq.model.CreateCompanyModel;
+import org.hrms.rabbitmq.model.DeleteCompanyByRegisterDenyModel;
 import org.hrms.repository.entity.Company;
 import org.hrms.service.CompanyService;
 import org.springframework.http.ResponseEntity;
@@ -68,7 +69,10 @@ public class CompanyController {
     }
 
 
-
+    @DeleteMapping(DELETEBYCOMPANYNAME)
+    public ResponseEntity<Boolean> deleteByCompanyName(DeleteCompanyByRegisterDenyModel model) {
+        return ResponseEntity.ok(service.deleteByCompanyName(model));
+    }
 
 
 }

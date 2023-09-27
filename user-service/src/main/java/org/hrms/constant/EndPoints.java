@@ -13,6 +13,7 @@ public class EndPoints {
     public static final String SAVEEMPLOYEE ="/saveemployee";
     public static final String ACTIVATESTATUS ="/activatestatus";
     public static final String APPROVEMANAGER ="/approvemanager";
+    public static final String DENYMANAGER ="/denymanager";
     public static final String UPDATE ="/update";
     public static final String UPDATECOMPANYDETAILS ="/updatecompanydetails";
     public static final String FINDALL ="/findall";
@@ -21,6 +22,9 @@ public class EndPoints {
     public static final String APPROVECOMMENTOFEMPLOYEE ="/approvecommentofemployee";
     public static final String APPROVECOMMENT ="/approvecomment";
     public static final String LISTPENDINGMANAGERAPPROVAL ="/listpendingmanagerapproval";
+    public static final String DENYCOMMENT ="/denycomment";
+    public static final String DELETECOMMENT ="/deletecomment";
+
 
 
 }

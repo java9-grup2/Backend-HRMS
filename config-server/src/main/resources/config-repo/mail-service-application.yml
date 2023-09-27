@@ -26,3 +26,5 @@ rabbitmq:
   register-employee-mail-queue: registerEmployeeMailQueue
   approve-manager-mail-queue: approveManagerMailQueue
   forgot-password-mail-queue: forgotPasswordMailQueue
+  manager-deny-mail-queue: managerDenyMailQueue
+

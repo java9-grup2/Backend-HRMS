@@ -44,5 +44,9 @@ rabbitmq:
   delete-auth-contains-companyName-queue: deleteAuthContainsCompanyNameQueue
   delete-auth-contains-companyName-bindingKey: deleteAuthContainsCompanyNameBindingKey
   update-users-companyName-details-queue: updateUsersCompanyNameDetailsQueue
+  delete-company-by-register-deny-Queue: deleteCompanyByRegisterDenyQueue
+  delete-company-by-register-deny-bindingKey: deleteCompanyByRegisterDenyBindingKey
+  manager-deny-mail-bindingKey: managerDenyMailBindingKey
+  manager-deny-mail-queue: managerDenyMailQueue
 
 

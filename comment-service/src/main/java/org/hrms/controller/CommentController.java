@@ -39,4 +39,9 @@ public class CommentController {
     public ResponseEntity<Boolean> approveComment(@RequestParam Long id) {
         return ResponseEntity.ok(service.approveComment(id));
     }
+
+    @DeleteMapping(DELETECOMMENT)
+    public ResponseEntity<Boolean> deleteCommentById(@RequestParam Long id) {
+        return ResponseEntity.ok(service.deleteCommentById(id));
+    }
 }

@@ -24,7 +24,13 @@ public class RabbitConfig {
     @Value("${rabbitmq.forgot-password-mail-queue}")
     private String forgotPasswordMailQueue;
 
+    @Value("${rabbitmq.manager-deny-mail-queue}")
+    private String managerDenyMailQueue;
 
+    @Bean
+    Queue managerDenyMailQueue() {
+        return new Queue(managerDenyMailQueue);
+    }
 
     @Bean
     Queue forgotPasswordMailQueue() {
