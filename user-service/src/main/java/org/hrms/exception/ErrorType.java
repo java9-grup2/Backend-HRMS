@@ -29,7 +29,8 @@ public enum ErrorType {
     COULD_NOT_DELETE_ALL_USERS(12324,"Kullanicilarin hepsi silinemedi.",HttpStatus.BAD_REQUEST),
     COULD_NOT_UPDATE_ALL_USERS(12324,"Kullanicilarin hepsi guncellenmedi.",HttpStatus.BAD_REQUEST),
     NO_DATA_FOUND(12324,"Aradiginiz kriterlerde kullanici/kullanicilar bulunamadi.",HttpStatus.BAD_REQUEST),
-    COMMENT_NOT_FOUND(12325,"Boyle bir yorum bulunamadi.",HttpStatus.BAD_REQUEST);
+    COMMENT_NOT_FOUND(12325,"Boyle bir yorum bulunamadi.",HttpStatus.BAD_REQUEST),
+    NOT_PENDING_APPROVAL(12325,"Bekleyen bir onaylama istegi yok.",HttpStatus.BAD_REQUEST);
 
 
 

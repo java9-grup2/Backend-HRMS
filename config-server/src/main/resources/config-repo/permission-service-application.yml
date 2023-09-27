@@ -5,7 +5,7 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     username: postgres
-    password: 201313
+    password: ${postgre}
     url: jdbc:postgresql://localhost:5432/hrms_permissionservice
   jpa:
     hibernate:
