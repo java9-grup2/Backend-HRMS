@@ -43,13 +43,19 @@ public class RabbitConfig {
     private String updateAuthCompanyNameDetailsBindingKey;
 
 
-
+    @Value("${rabbitmq.delete-company-by-register-deny-Queue}")
+    private String deleteCompanyByRegisterDenyQueue;
 
     @Bean
     DirectExchange exchangeCompany() {
         return new DirectExchange(exchangeCompany);
     }
 
+
+    @Bean
+    Queue deleteCompanyByRegisterDenyQueue() {
+        return new Queue(deleteCompanyByRegisterDenyQueue);
+    }
 
     @Bean
     Queue updateAuthCompanyNameDetailsQueue() {

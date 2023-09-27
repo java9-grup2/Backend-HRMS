@@ -74,4 +74,17 @@ public class CommentService extends ServiceManager<Comment,Long> {
         update(optionalComment.get());
         return true;
     }
+
+    public Boolean deleteCommentById(Long id) {
+        Optional<Comment> optionalComment = findById(id);
+        if (optionalComment.isEmpty()) {
+            throw new CommentManagerException(ErrorType.COMMENT_NOT_FOUND);
+        }
+        try {
+            deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

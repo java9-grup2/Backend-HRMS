@@ -37,7 +37,11 @@ public class UserService extends ServiceManager<User,Long> {
 
     private final ICommentManager commentManager;
 
-    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer, DeleteUserByAuthIdProducer deleteUserByAuthIdProducer, ApproveManagerMailProducer approveManagerMailProducer, ActivateManagerStatusProducer activateManagerStatusProducer, DeleteAuthContainsCompanyNameProducer deleteAuthContainsCompanyNameProducer, ICommentManager commentManager) {
+    private final DeleteCompanyByRegisterDenyProducer deleteCompanyByRegisterDenyProducer;
+
+    private final ManagerDenyMailProducer managerDenyMailProducer;
+
+    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer, DeleteUserByAuthIdProducer deleteUserByAuthIdProducer, ApproveManagerMailProducer approveManagerMailProducer, ActivateManagerStatusProducer activateManagerStatusProducer, DeleteAuthContainsCompanyNameProducer deleteAuthContainsCompanyNameProducer, ICommentManager commentManager, DeleteCompanyByRegisterDenyProducer deleteCompanyByRegisterDenyProducer, ManagerDenyMailProducer managerDenyMailProducer) {
         super(repository);
         this.repository = repository;
         this.jwtTokenManager = jwtTokenManager;
@@ -47,6 +51,8 @@ public class UserService extends ServiceManager<User,Long> {
         this.activateManagerStatusProducer = activateManagerStatusProducer;
         this.deleteAuthContainsCompanyNameProducer = deleteAuthContainsCompanyNameProducer;
         this.commentManager = commentManager;
+        this.deleteCompanyByRegisterDenyProducer = deleteCompanyByRegisterDenyProducer;
+        this.managerDenyMailProducer = managerDenyMailProducer;
     }
     /*
         admin onayı icin user service kısmına bi metod yazıldı,
@@ -332,7 +338,6 @@ public class UserService extends ServiceManager<User,Long> {
         if (!isValid) {
             throw new UserManagerException(ErrorType.COMMENT_NOT_FOUND);
         }
-
         return new ApproveCommentOfEmployeeResponseDto("Yorum basariyla onaylandi");
     }
 
@@ -343,5 +348,45 @@ public class UserService extends ServiceManager<User,Long> {
         }
 
         return allPendingManagerApproval;
+    }
+
+    public Boolean denyCommentOfEmployee(DenyCommentOfEmployeeRequestDto dto) {
+        if (!dto.getUserType().equals(EUserType.ADMIN)) {
+            throw new UserManagerException(ErrorType.INSUFFICIENT_PERMISSION);
+        }
+        Boolean isValid = commentManager.approveComment(dto.getCommentId()).getBody();
+        if (!isValid) {
+            throw new UserManagerException(ErrorType.COMMENT_NOT_FOUND);
+        }
+
+        Boolean isDeleted = commentManager.deleteCommentById(dto.getCommentId()).getBody();
+        if (!isDeleted) {
+            throw new UserManagerException(ErrorType.BAD_REQUEST);
+        }
+
+        return true;
+
+    }
+
+    public Boolean denyRegisterManager(DenyManagerRequestDto dto) {
+        if (!dto.getUserType().equals(EUserType.ADMIN)) {
+            throw new UserManagerException(ErrorType.INSUFFICIENT_PERMISSION);
+        }
+        Optional<User> optionalManager = repository.findByAuthid(dto.getAuthId());
+        if (optionalManager.isEmpty()) {
+            throw new UserManagerException(ErrorType.USER_NOT_FOUND);
+        }
+        if (!optionalManager.get().getUserType().equals(EUserType.MANAGER)) {
+            throw new UserManagerException(ErrorType.USER_TYPE_MISMATCH);
+        }
+        try {
+            deleteUserByAuthId(dto.getAuthId());
+            deleteCompanyByRegisterDenyProducer.deleteCompanyByName(new DeleteCompanyByRegisterDenyModel(optionalManager.get().getCompanyName()));
+            managerDenyMailProducer.sendDenyMailToManager(new ManagerDenyMailModel(optionalManager.get().getPersonalEmail()));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 }

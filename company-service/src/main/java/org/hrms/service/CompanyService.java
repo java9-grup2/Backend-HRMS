@@ -6,6 +6,7 @@ import org.hrms.exception.CompanyManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.mapper.ICompanyMapper;
 import org.hrms.rabbitmq.model.CreateCompanyModel;
+import org.hrms.rabbitmq.model.DeleteCompanyByRegisterDenyModel;
 import org.hrms.rabbitmq.model.UpdateAuthCompanyNameDetailsModel;
 import org.hrms.rabbitmq.model.UpdateUsersCompanyNameDetailsModel;
 import org.hrms.rabbitmq.producer.DeleteAuthByIdProducer;
@@ -206,5 +207,18 @@ public class CompanyService extends ServiceManager<Company, Long> {
             throw new CompanyManagerException(ErrorType.COMPANY_NOT_FOUND);
         }
         return optionalCompany.get();
+    }
+
+    public Boolean deleteByCompanyName(DeleteCompanyByRegisterDenyModel model) {
+        Optional<Company> optionalCompany = repository.findByCompanyName(model.getCompanyName());
+        if (optionalCompany.isEmpty()) {
+            throw new CompanyManagerException(ErrorType.COMPANY_NOT_FOUND);
+        }
+        try {
+            deleteById(optionalCompany.get().getId());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

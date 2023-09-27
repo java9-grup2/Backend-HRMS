@@ -35,3 +35,4 @@ rabbitmq:
   update-users-companyName-details-bindingKey: updateUsersCompanyNameDetailsBindingKey
   update-auth-companyName-details-Queue: updateAuthCompanyNameDetailsQueue
   update-auth-companyName-details-bindingKey: updateAuthCompanyNameDetailsBindingKey
+  delete-company-by-register-deny-Queue: deleteCompanyByRegisterDenyQueue
