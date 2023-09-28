@@ -9,4 +9,5 @@ include 'financial-performance-service'
 include 'comment-service'
 include 'permission-service'
 include 'upcoming-payment-service'
+include 'shifts-and-breaks-service'
 

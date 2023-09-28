@@ -14,30 +14,35 @@ public class FallbackController {
 
     @GetMapping("/authservice")
     public ResponseEntity<String> authServiceFallback(){
-        return  ResponseEntity.ok("Auth sevice suanda hizmet verememektedir!!!");
+        return  ResponseEntity.ok("Auth service suanda hizmet verememektedir!!!");
     }
 
     @GetMapping("/userservice")
     public ResponseEntity<String> userServiceFallback(){
-        return  ResponseEntity.ok("User sevice suanda hizmet verememektedir!!!");
+        return  ResponseEntity.ok("User service suanda hizmet verememektedir!!!");
     }
     @GetMapping("/companyservice")
     public ResponseEntity<String> companyServiceFallback(){
-        return  ResponseEntity.ok("Company sevice suanda hizmet verememektedir!!!");
+        return  ResponseEntity.ok("Company service suanda hizmet verememektedir!!!");
     }
 
     @GetMapping("/financialperformance")
     public ResponseEntity<String> financialPerformanceServiceFallback(){
-        return  ResponseEntity.ok("Financial performance sevice suanda hizmet verememektedir!!!");
+        return  ResponseEntity.ok("Financial performance service suanda hizmet verememektedir!!!");
     }
 
     @GetMapping("/commentservice")
     public ResponseEntity<String> commentServiceFallback(){
-        return  ResponseEntity.ok("Comment sevice suanda hizmet verememektedir!!!");
+        return  ResponseEntity.ok("Comment service suanda hizmet verememektedir!!!");
     }
 
     @GetMapping("/upcomingpaymentservice")
     public ResponseEntity<String> upcomingPaymentServiceFallback(){
-        return  ResponseEntity.ok("Upcoming Paymnet sevice suanda hizmet verememektedir!!!");
+        return  ResponseEntity.ok("Upcoming Paymnet service suanda hizmet verememektedir!!!");
+    }
+
+    @GetMapping("/shiftsandbreaksservice")
+    public ResponseEntity<String> shiftsAndBreaksServiceFallback(){
+        return  ResponseEntity.ok("Shifts and Breaks service suanda hizmet verememektedir!!!");
     }
 }
