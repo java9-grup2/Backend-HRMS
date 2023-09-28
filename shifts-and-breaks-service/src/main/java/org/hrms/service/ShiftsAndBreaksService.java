@@ -8,19 +8,24 @@ import org.hrms.mapper.IShiftAndBreaksMapper;
 import org.hrms.repository.IShiftsAndBreaksRepository;
 import org.hrms.repository.entity.ShiftsAndBreaks;
 import org.hrms.repository.enums.EUserType;
+import org.hrms.utility.JwtTokenManager;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ShiftsAndBreaksService extends ServiceManager<ShiftsAndBreaks,Long> {
 
     private final IShiftsAndBreaksRepository repository;
     private final ICompanyManager companyManager;
+    private final JwtTokenManager jwtTokenManager;
 
-    public ShiftsAndBreaksService(IShiftsAndBreaksRepository repository, ICompanyManager companyManager) {
+    public ShiftsAndBreaksService(IShiftsAndBreaksRepository repository, ICompanyManager companyManager, JwtTokenManager jwtTokenManager) {
         super(repository);
         this.repository = repository;
         this.companyManager = companyManager;
+        this.jwtTokenManager = jwtTokenManager;
     }
 
     public Boolean createShiftsAndBreaks(CreateShiftsAndBreaksRequestDto dto) {
@@ -51,5 +56,14 @@ public class ShiftsAndBreaksService extends ServiceManager<ShiftsAndBreaks,Long>
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public ShiftsAndBreaks showShiftsAndBreaksInfo(String companyName) {
+        Optional<ShiftsAndBreaks> optionalShift = repository.findByCompanyName(companyName);
+        if (optionalShift.isEmpty()) {
+            throw new ShiftsAndBreaksException(ErrorType.SHIFT_NOT_FOUND);
+        }
+        return optionalShift.get();
+
     }
 }
