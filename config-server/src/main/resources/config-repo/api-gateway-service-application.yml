@@ -73,6 +73,16 @@ spring:
               args:
                 enabled: true
                 fallbackUri: forward:/fallback/commentservice
+        - id: upcoming-payment-service
+          predicates:
+            - Path=/upcoming/**
+          uri: http://localhost:9096
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - name: CircuitBreaker
+              args:
+                enabled: true
+                fallbackUri: forward:/fallback/upcomingpaymentservice
 
       default-filters:
         - RewritePath= /(?<segment>.*),/api/v1/$\{segment}

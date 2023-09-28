@@ -35,4 +35,9 @@ public class FallbackController {
     public ResponseEntity<String> commentServiceFallback(){
         return  ResponseEntity.ok("Comment sevice suanda hizmet verememektedir!!!");
     }
+
+    @GetMapping("/upcomingpaymentservice")
+    public ResponseEntity<String> upcomingPaymentServiceFallback(){
+        return  ResponseEntity.ok("Upcoming Paymnet sevice suanda hizmet verememektedir!!!");
+    }
 }
