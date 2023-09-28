@@ -9,8 +9,8 @@ public class EndPoints {
     public static final String FINDALL = "/findall";
     public static final String FINDBYID = "/findbyid";
     public static final String SAVECOMPANY = "/savecompany";
-    public static final String CREATENEWUPCOMİNGPAYMENT = "/createNewUpcomingPayment";
-    public static final String FINDALLWİTHCOMPANY = "/findallwithcompanyname";
+    public static final String CREATENEWUPCOMINGPAYMENT = "/createNewUpcomingPayment";
+    public static final String FINDALLWITHCOMPANY = "/findallwithcompanyname";
 
 
 }
