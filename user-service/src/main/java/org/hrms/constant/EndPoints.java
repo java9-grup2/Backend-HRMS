@@ -18,5 +18,6 @@ public class EndPoints {
     public static final String FINDALL ="/findall";
     public static final String LISTWORKERS ="/listworkers";
     public static final String ISCOMMENTMATCHES ="/iscommentmatches";
+    public static final String PERSONELINFO ="/personelinfo";
 
 }

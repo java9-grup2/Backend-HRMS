@@ -77,6 +77,11 @@ public class UserController {
     public ResponseEntity<Boolean> isCommentDetailsValid(@RequestBody IsCommentMatchesRequestDto dto) {
         return ResponseEntity.ok(service.isCommentDetailsValid(dto));
     }
+
+    @GetMapping(PERSONELINFO)
+    public ResponseEntity<User> showPersonelInfo(PersonelInfoRequestDto dto) {
+        return ResponseEntity.ok(service.showPersonelInfo(dto));
+    }
 }
 
 

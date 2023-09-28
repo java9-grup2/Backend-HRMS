@@ -1,9 +1,6 @@
 package org.hrms.service;
 
-import org.hrms.dto.request.ApproveManagerRequestDto;
-import org.hrms.dto.request.IsCommentMatchesRequestDto;
-import org.hrms.dto.request.ListWorkersRequestDto;
-import org.hrms.dto.request.UpdateRequestDto;
+import org.hrms.dto.request.*;
 import org.hrms.exception.UserManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.mapper.IUserMapper;
@@ -319,5 +316,19 @@ public class UserService extends ServiceManager<User,Long> {
         }
 
         return true;
+    }
+
+    public User showPersonelInfo(PersonelInfoRequestDto dto) {
+        Optional<Long> optionalAuthId = jwtTokenManager.getIdFromToken(dto.getToken());
+        if (optionalAuthId.isEmpty()) {
+            throw new UserManagerException(ErrorType.INVALID_TOKEN);
+        }
+
+        Optional<User> user = repository.findByAuthid(optionalAuthId.get());
+        if (user.isEmpty()) {
+            throw new UserManagerException(ErrorType.USER_NOT_FOUND);
+        }
+
+        return user.get();
     }
 }

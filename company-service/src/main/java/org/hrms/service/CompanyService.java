@@ -32,7 +32,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
     private final UpdateUsersCompanyNameDetailsProducer updateUsersCompanyNameDetailsProducer;
 
     private final UpdateAuthCompanyNameDetailsProducer updateAuthCompanyNameDetailsProducer;
-   public final List<PublicHolidayCompanyRequestDto> publicHoliday;
+    public final List<PublicHolidayCompanyRequestDto> publicHoliday;
 
     public CompanyService(ICompanyRepository repository, DeleteAuthByIdProducer deleteAuthByIdProducer, DeleteUsersContainsCompanyNameProducer deleteUsersContainsCompanyNameProducer, UpdateUsersCompanyNameDetailsProducer updateUsersCompanyNameDetailsProducer, UpdateAuthCompanyNameDetailsProducer updateAuthCompanyNameDetailsProducer, List<PublicHolidayCompanyRequestDto> publicHoliday) {
         super(repository);
@@ -66,6 +66,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
     public Boolean IsCompanyExists(String companyName) {
         return repository.existsByCompanyName(companyName);
     }
+
     public Company findCompanyById(Long id) {
         Optional<Company> optionalCompany = findById(id);
 
@@ -128,12 +129,12 @@ public class CompanyService extends ServiceManager<Company, Long> {
         return true;
     }
 
-    public List<PublicHolidayCompanyRequestDto> getPublicHoliday(){
+    public List<PublicHolidayCompanyRequestDto> getPublicHoliday() {
 
         List<PublicHolidayCompanyRequestDto> listHoliday = new ArrayList<>();
 
         PublicHolidayCompanyRequestDto holiday1 = new PublicHolidayCompanyRequestDto();
-        Long id1= 1L;
+        Long id1 = 1L;
         holiday1.setId(id1);
         holiday1.setName("Yılbaşı");
         holiday1.setDate("01.01.2023");
@@ -141,7 +142,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
         listHoliday.add(holiday1);
 
         PublicHolidayCompanyRequestDto holiday2 = new PublicHolidayCompanyRequestDto();
-        Long id2= 2L;
+        Long id2 = 2L;
         holiday2.setId(id2);
         holiday2.setName("Ramazan Bayramı");
         holiday2.setDate("21.04.2023 - 23.04.2023");
@@ -149,7 +150,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
         listHoliday.add(holiday2);
 
         PublicHolidayCompanyRequestDto holiday3 = new PublicHolidayCompanyRequestDto();
-        Long id3= 3L;
+        Long id3 = 3L;
         holiday3.setId(id3);
         holiday3.setName("Ulusal Egemenlik ve Çocuk Bayramı");
         holiday3.setDate("23.04.2023");
@@ -157,7 +158,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
         listHoliday.add(holiday3);
 
         PublicHolidayCompanyRequestDto holiday4 = new PublicHolidayCompanyRequestDto();
-        Long id4= 4L;
+        Long id4 = 4L;
         holiday4.setId(id4);
         holiday4.setName("Emek ve Dayanışma Günü");
         holiday4.setDate("01.05.2023");
@@ -165,7 +166,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
         listHoliday.add(holiday4);
 
         PublicHolidayCompanyRequestDto holiday5 = new PublicHolidayCompanyRequestDto();
-        Long id5= 5L;
+        Long id5 = 5L;
         holiday5.setId(id5);
         holiday5.setName("Atatürk’ü Anma, Gençlik ve Spor Bayramı");
         holiday5.setDate("19.05.2023");
@@ -173,7 +174,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
         listHoliday.add(holiday5);
 
         PublicHolidayCompanyRequestDto holiday6 = new PublicHolidayCompanyRequestDto();
-        Long id6= 6L;
+        Long id6 = 6L;
         holiday6.setId(id6);
         holiday6.setName("Kurban Bayramı");
         holiday6.setDate("28.06.2023-01.07.2023");
@@ -181,7 +182,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
         listHoliday.add(holiday6);
 
         PublicHolidayCompanyRequestDto holiday7 = new PublicHolidayCompanyRequestDto();
-        Long id7= 7L;
+        Long id7 = 7L;
         holiday7.setId(id7);
         holiday7.setName("Zafer Bayramı");
         holiday7.setDate("30.08.2023");
@@ -189,7 +190,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
         listHoliday.add(holiday7);
 
         PublicHolidayCompanyRequestDto holiday8 = new PublicHolidayCompanyRequestDto();
-        Long id8= 8L;
+        Long id8 = 8L;
         holiday8.setId(id8);
         holiday8.setName("Cumhuriyet Bayramı");
         holiday8.setDate("29.10.2023");
