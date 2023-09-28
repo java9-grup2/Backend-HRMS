@@ -389,4 +389,17 @@ public class UserService extends ServiceManager<User,Long> {
         }
 
     }
+
+    public User showPersonelInfo(String token) {
+        Optional<Long> optionalAuthId = jwtTokenManager.getIdFromToken(token);
+        if (optionalAuthId.isEmpty()) {
+            throw new UserManagerException(ErrorType.INVALID_TOKEN);
+        }
+        Optional<User> optionalUser = repository.findByAuthid(optionalAuthId.get());
+        if (optionalUser.isEmpty()) {
+            throw new UserManagerException(ErrorType.USER_NOT_FOUND);
+        }
+        return optionalUser.get();
+
+    }
 }

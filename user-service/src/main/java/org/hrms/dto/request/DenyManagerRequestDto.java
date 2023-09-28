@@ -12,5 +12,5 @@ import org.hrms.repository.enums.EUserType;
 @AllArgsConstructor
 public class DenyManagerRequestDto {
     private EUserType userType;
-    private Long AuthId;
+    private Long authId;
 }
