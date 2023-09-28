@@ -98,6 +98,11 @@ public class UserController {
     public ResponseEntity<Boolean> denyRegisterManager(@RequestBody DenyManagerRequestDto dto) {
         return ResponseEntity.ok(service.denyRegisterManager(dto));
     }
+
+    @GetMapping(EMPLOYEEINFO)
+    public ResponseEntity<User> showEmployeeInfo(@RequestParam String token) {
+        return ResponseEntity.ok(service.showPersonelInfo(token));
+    }
 }
 
 

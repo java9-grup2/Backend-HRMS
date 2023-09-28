@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class CreatePermissionRequestDto {
-
+    //EuserType userType:
     Long managerid;
     Long workerid;
     TypeOfPermit typeOfPermit;

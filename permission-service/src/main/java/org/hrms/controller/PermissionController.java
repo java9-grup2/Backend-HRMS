@@ -33,5 +33,6 @@ public class PermissionController {
         return ResponseEntity.ok(permissionService.updateStatus(updateStatusRequestDto));
     }
 
+
 }
 
