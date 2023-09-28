@@ -84,5 +84,17 @@ spring:
                 enabled: true
                 fallbackUri: forward:/fallback/upcomingpaymentservice
 
+        - id: shifts-and-breaks-service
+          predicates:
+            - Path=/shiftsandbreaks/**
+          uri: http://localhost:9095
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - name: CircuitBreaker
+              args:
+                enabled: true
+                fallbackUri: forward:/fallback/shiftsandbreaksservice
+
+
       default-filters:
         - RewritePath= /(?<segment>.*),/api/v1/$\{segment}
