@@ -30,12 +30,12 @@ public class UpcomingpaymentController {
         return ResponseEntity.ok(this.service.findAll());
     }
 
-    @PostMapping(CREATENEWUPCOMİNGPAYMENT)
+    @PostMapping(CREATENEWUPCOMINGPAYMENT)
     public ResponseEntity<Upcomingpayment> createNewCompanyPayment(@RequestBody Upcomingpayment upcomingpayment) {
         return ResponseEntity.ok((Upcomingpayment) this.service.save(upcomingpayment));
     }
 
-    @GetMapping(FINDALLWİTHCOMPANY)
+    @GetMapping(FINDALLWITHCOMPANY)
     public ResponseEntity<List<Upcomingpayment>> findAllWithCompany(@RequestParam String companyName) {
         return ResponseEntity.ok(this.service.findAllWithCompany(companyName));
     }

@@ -1,10 +1,10 @@
 package org.hrms.repository;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hrms.repository.enums.PaymentType;
 
 import javax.persistence.*;
 
@@ -17,10 +17,12 @@ public class Upcomingpayment extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long companyid;
+    private Long companyId;
     private String companyName;
     private String paymentName;
-    private String paymentamount;
-    private String paymentdate;
-    private String durum;
+    private String paymentAmount;
+    private String paymentDate;
+    private String status;
+    @Enumerated(EnumType.STRING)
+    private PaymentType type; //Gida,yol vs.
 }
