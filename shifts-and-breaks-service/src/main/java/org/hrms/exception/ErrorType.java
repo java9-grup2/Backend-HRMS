@@ -23,6 +23,7 @@ public enum ErrorType {
     INSUFFICIENT_PERMISSION(4119, "Bu islemi yapmaya yetkiniz yok", HttpStatus.BAD_REQUEST),
     TAXNO_IS_BELONG_TO_ANOTHER_COMPANY(4120, "Girdiginiz vergi numarasi baska sirekete ait, lutfen dogru numarayi girdiginizden emin olunuz", HttpStatus.BAD_REQUEST),
     COMPANY_NOT_FOUND(4120,"Boyle bir sirket bulunamadi",HttpStatus.BAD_REQUEST),
+    SHIFT_NOT_FOUND(4120,"Boyle bir vardiya bulunamadi",HttpStatus.BAD_REQUEST),
     COMPANYNAME_EXISTS(4120,"Sirket ismi zaten mevcut",HttpStatus.BAD_REQUEST),
     SELECTED_YEAR_ALREADY_EXISTS(4122,"Secili yil bilgileri zaten mevcut",HttpStatus.BAD_REQUEST),
     NO_DETAILS_FOR_SELECTED_YEAR(4123,"Secili yila ait bir bilgi bulunamamistir",HttpStatus.BAD_REQUEST),

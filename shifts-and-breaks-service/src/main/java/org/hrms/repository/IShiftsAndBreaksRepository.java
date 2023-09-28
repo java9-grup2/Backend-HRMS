@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface IShiftsAndBreaksRepository extends JpaRepository<ShiftsAndBreaks,Long> {
 
 
-    boolean existsByCompanyNameAndShiftTypes(String companyName,EShiftTypes shiftTypes);
+    boolean existsByCompanyNameAndShiftTypes(String companyName, EShiftTypes shiftTypes);
+
+    Optional<ShiftsAndBreaks> findByCompanyName(String companyName);
 }
