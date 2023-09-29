@@ -54,6 +54,7 @@ public class UserService extends ServiceManager<User,Long> {
         this.deleteCompanyByRegisterDenyProducer = deleteCompanyByRegisterDenyProducer;
         this.managerDenyMailProducer = managerDenyMailProducer;
     }
+
     /*
         admin onayı icin user service kısmına bi metod yazıldı,
         usertype manager olan bir kullanıcı icin ordan onay almamıs bir kullanıcının id'si girilip onaylandı
@@ -61,10 +62,10 @@ public class UserService extends ServiceManager<User,Long> {
      */
     public Boolean approveManagerUser(ApproveManagerRequestDto dto) {
         Optional<Long> optionalAdminAuthId = jwtTokenManager.getIdFromToken(dto.getToken());
-        if (optionalAdminAuthId.isEmpty() ) {
+        if (optionalAdminAuthId.isEmpty()) {
             throw new UserManagerException(ErrorType.INVALID_TOKEN);
         }
-        System.out.println("admin id:"+optionalAdminAuthId.get());
+        System.out.println("admin id:" + optionalAdminAuthId.get());
         Optional<User> optionalAdmin = repository.findByAuthid(optionalAdminAuthId.get());
         if (optionalAdmin.isEmpty()) {
             throw new UserManagerException(ErrorType.INSUFFICIENT_PERMISSION);
@@ -76,7 +77,7 @@ public class UserService extends ServiceManager<User,Long> {
         }
 
         System.out.println(optionalManager.get().getUserType());
-        if(!optionalManager.get().getUserType().equals(EUserType.MANAGER)){
+        if (!optionalManager.get().getUserType().equals(EUserType.MANAGER)) {
             throw new UserManagerException(ErrorType.USER_TYPE_MISMATCH);
         }
 
@@ -95,6 +96,7 @@ public class UserService extends ServiceManager<User,Long> {
 
     /**
      * Kullanici adi ve email kontrolu yapar. databasede bu degerler daha once alinmissa hata firlatir.
+     *
      * @param email
      * @param username
      */
@@ -116,8 +118,8 @@ public class UserService extends ServiceManager<User,Long> {
 
     }
 
-    public User saveVisitorUser(RegisterVisitorModel model){
-        if (existByPersonalEmailAndUsernameControl(model.getPersonalEmail(),model.getUsername())) {
+    public User saveVisitorUser(RegisterVisitorModel model) {
+        if (existByPersonalEmailAndUsernameControl(model.getPersonalEmail(), model.getUsername())) {
             User user = IUserMapper.INSTANCE.toUser(model);
             return save(user);
         } else {
@@ -125,8 +127,8 @@ public class UserService extends ServiceManager<User,Long> {
         }
     }
 
-    public User saveManagerUser(RegisterManagerModel model){
-        if (existByPersonalEmailAndUsernameControl(model.getPersonalEmail(),model.getUsername())) {
+    public User saveManagerUser(RegisterManagerModel model) {
+        if (existByPersonalEmailAndUsernameControl(model.getPersonalEmail(), model.getUsername())) {
             User user = IUserMapper.INSTANCE.toUser(model);
             user.setUserType(EUserType.MANAGER);
             user.setCompanyName(user.getCompanyName().toLowerCase());
@@ -135,6 +137,7 @@ public class UserService extends ServiceManager<User,Long> {
             throw new UserManagerException(ErrorType.USERNAME_OR_MAIL_EXIST);
         }
     }
+
     public Boolean saveEmployee(SaveEmployeeModel model) {
 
         if (existByPersonalEmailAndUsernameControl(model.getPersonalEmail(), model.getUsername())) {
@@ -166,7 +169,7 @@ public class UserService extends ServiceManager<User,Long> {
     public Boolean updateUser(UpdateRequestDto dto) {
         Optional<String> optionalRole = jwtTokenManager.getRoleFromToken(dto.getToken());
         Optional<Long> optionalId = jwtTokenManager.getIdFromToken(dto.getToken());
-        if(optionalRole.isEmpty()){
+        if (optionalRole.isEmpty()) {
             throw new UserManagerException(ErrorType.INVALID_TOKEN);
         }
 
@@ -197,6 +200,7 @@ public class UserService extends ServiceManager<User,Long> {
 
     /**
      * Guncellenecek kullanicinin tipine gore gerekli alanlari gunceller ve databasede update eder.
+     *
      * @param user
      * @param dto
      * @return
@@ -204,7 +208,7 @@ public class UserService extends ServiceManager<User,Long> {
     public User setUpdateSettings(User user, UpdateRequestDto dto) {
 
         switch (user.getUserType()) {
-            case MANAGER,ADMIN -> {
+            case MANAGER, ADMIN -> {
                 user.setUsername(dto.getUsername());
                 user.setName(dto.getName());
                 user.setSurname(dto.getSurname());
@@ -215,7 +219,7 @@ public class UserService extends ServiceManager<User,Long> {
                 update(user);
                 return user;
             }
-            case VISITOR,EMPLOYEE -> {
+            case VISITOR, EMPLOYEE -> {
                 user.setUsername(dto.getUsername());
                 user.setName(dto.getName());
                 user.setSurname(dto.getSurname());
@@ -277,7 +281,6 @@ public class UserService extends ServiceManager<User,Long> {
                 .collect(Collectors.toList());
 
 
-
         try {
             for (User user : usersToUpdate) {
                 companyNameSetter(user, model.getNewCompanyName());
@@ -288,7 +291,7 @@ public class UserService extends ServiceManager<User,Long> {
         return true;
     }
 
-    public void companyNameSetter(User user,String newCompanyName) {
+    public void companyNameSetter(User user, String newCompanyName) {
 
         String userOldCompanyMail = user.getCompanyEmail();
         int indexOfAt = userOldCompanyMail.indexOf("@");
@@ -387,8 +390,8 @@ public class UserService extends ServiceManager<User,Long> {
         } catch (Exception e) {
             return false;
         }
-
     }
+
 
     public User showPersonelInfo(String token) {
         Optional<Long> optionalAuthId = jwtTokenManager.getIdFromToken(token);
@@ -400,6 +403,14 @@ public class UserService extends ServiceManager<User,Long> {
             throw new UserManagerException(ErrorType.USER_NOT_FOUND);
         }
         return optionalUser.get();
-
     }
+
+    public EUserType getUserType(Long authid){
+        return repository.findByAuthid(authid).get().getUserType();
+    }
+
+    public String getUsername(Long authid){
+        return repository.findUsernameByAuthid(authid);
+    }
+
 }

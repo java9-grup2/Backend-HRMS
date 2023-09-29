@@ -2,9 +2,8 @@ package org.hrms.constant;
 
 public class EndPoints {
 
-        public static final String VERSION = "/v1";
-        public static final String API = "/api";
-        public static final String PERMISSION = "/permission";
+        public static final String VERSION = "api/v1";
+        public static final String PERMISSION =VERSION +"/permission";
         public static final String SAVE = "/save";
         public static final String UPDATE = "/update";
         public static final String DELETE = "/delete";

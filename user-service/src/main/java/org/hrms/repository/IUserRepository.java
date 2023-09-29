@@ -1,6 +1,7 @@
 package org.hrms.repository;
 
 import org.hrms.repository.entity.User;
+import org.hrms.repository.enums.EUserType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -24,6 +25,8 @@ public interface IUserRepository extends JpaRepository<User,Long> {
 
     @Query("Select u from User u where u.userType = 'MANAGER' AND  u.status = 'PENDING'")
     List<User> findAllPendingManagerApproval();
+
+    String findUsernameByAuthid(Long authid);
 
 
 }
