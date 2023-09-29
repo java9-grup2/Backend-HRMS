@@ -6,6 +6,7 @@ import org.hrms.dto.request.*;
 import org.hrms.dto.response.ApproveCommentOfEmployeeResponseDto;
 import org.hrms.rabbitmq.model.*;
 import org.hrms.repository.entity.User;
+import org.hrms.repository.enums.EUserType;
 import org.hrms.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -102,6 +103,16 @@ public class UserController {
     @GetMapping(EMPLOYEEINFO)
     public ResponseEntity<User> showEmployeeInfo(@RequestParam String token) {
         return ResponseEntity.ok(service.showPersonelInfo(token));
+    }
+
+    @GetMapping("getUserType")
+    public ResponseEntity<EUserType> getUserType(@RequestParam Long authid){
+        return ResponseEntity.ok(service.getUserType(authid));
+    }
+
+    @GetMapping("getUsername")
+    public ResponseEntity<String> getUsername(@RequestParam Long authid){
+        return ResponseEntity.ok(service.getUsername(authid));
     }
 
 

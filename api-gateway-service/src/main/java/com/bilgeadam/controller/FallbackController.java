@@ -1,6 +1,5 @@
 package com.bilgeadam.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +33,10 @@ public class FallbackController {
     @GetMapping("/commentservice")
     public ResponseEntity<String> commentServiceFallback(){
         return  ResponseEntity.ok("Comment service suanda hizmet verememektedir!!!");
+    }
+    @GetMapping("/permissionservice")
+    public ResponseEntity<String> permissionServiceFallback(){
+        return  ResponseEntity.ok("Permission service suanda hizmet verememektedir!!!");
     }
 
     @GetMapping("/upcomingpaymentservice")

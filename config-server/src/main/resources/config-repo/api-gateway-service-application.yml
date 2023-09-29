@@ -94,7 +94,16 @@ spring:
               args:
                 enabled: true
                 fallbackUri: forward:/fallback/shiftsandbreaksservice
-
+        - id: permission-service
+          predicates:
+            - Path=/permission/**
+          uri: http://localhost:9011
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - name: CircuitBreaker
+              args:
+                enabled: true
+                fallbackUri: forward:/fallback/permissionservice
 
       default-filters:
         - RewritePath= /(?<segment>.*),/api/v1/$\{segment}

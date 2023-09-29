@@ -13,18 +13,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 @Builder
-public class WorkerPermissionForWorker {
-
+public class PersonelPermissionResponseDto {
     Long id;
-    TypeOfPermit typeOfPermit;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    String username;
     LocalDate startDate;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDate endDate;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    LocalDate dateOfRequest;
-    Integer numberOfDays;
+    TypeOfPermit typeOfPermit;
     ApprovalStatus approvalStatus;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    LocalDate replyDate;
 }
