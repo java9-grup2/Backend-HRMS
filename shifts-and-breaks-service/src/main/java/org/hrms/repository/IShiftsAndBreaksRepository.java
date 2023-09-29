@@ -5,6 +5,7 @@ import org.hrms.repository.enums.EShiftTypes;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -13,5 +14,5 @@ public interface IShiftsAndBreaksRepository extends JpaRepository<ShiftsAndBreak
 
     boolean existsByCompanyNameAndShiftTypes(String companyName, EShiftTypes shiftTypes);
 
-    Optional<ShiftsAndBreaks> findByCompanyName(String companyName);
+    List<ShiftsAndBreaks> findAllByCompanyName(String companyName);
 }
