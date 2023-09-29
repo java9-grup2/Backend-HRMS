@@ -12,6 +12,7 @@ import org.hrms.utility.JwtTokenManager;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,12 +59,19 @@ public class ShiftsAndBreaksService extends ServiceManager<ShiftsAndBreaks,Long>
         }
     }
 
-    public ShiftsAndBreaks showShiftsAndBreaksInfo(String companyName) {
-        Optional<ShiftsAndBreaks> optionalShift = repository.findByCompanyName(companyName);
-        if (optionalShift.isEmpty()) {
+    public List<ShiftsAndBreaks> showShiftsAndBreaksInfo(String companyName) {
+        List<ShiftsAndBreaks> allShifts = repository.findAllByCompanyName(companyName);
+        if (allShifts.isEmpty()) {
             throw new ShiftsAndBreaksException(ErrorType.SHIFT_NOT_FOUND);
         }
-        return optionalShift.get();
+
+        List<ShiftsAndBreaks> list = allShifts.stream().filter(user -> user.getCompanyName().equals(companyName)).toList();
+
+        if (list.isEmpty()) {
+            throw new ShiftsAndBreaksException(ErrorType.SHIFT_NOT_FOUND);
+        }
+
+        return list;
 
     }
 }

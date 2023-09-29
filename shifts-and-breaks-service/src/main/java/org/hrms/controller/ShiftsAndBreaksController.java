@@ -8,6 +8,8 @@ import org.hrms.service.ShiftsAndBreaksService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.hrms.constant.EndPoints.*;
 
 @RestController
@@ -28,7 +30,7 @@ public class ShiftsAndBreaksController {
     }
 
     @GetMapping(SHIFTINFO)
-    public ResponseEntity<ShiftsAndBreaks> showShiftsAndBreaksInfo(String companyName) {
+    public ResponseEntity<List<ShiftsAndBreaks>> showShiftsAndBreaksInfo(String companyName) {
         return ResponseEntity.ok(service.showShiftsAndBreaksInfo(companyName));
     }
 }
