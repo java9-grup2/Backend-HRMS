@@ -403,4 +403,12 @@ public class UserService extends ServiceManager<User,Long> {
         return optionalUser.get();
 
     }
+
+    public EUserType getUserType(Long authid){
+        return repository.findByAuthid(authid).get().getUserType();
+    }
+
+    public String getUsername(Long authid){
+        return repository.findUsernameByAuthid(authid);
+    }
 }
