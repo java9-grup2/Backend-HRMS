@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hrms.repository.enums.EStatus;
 
 import javax.persistence.*;
 
@@ -27,4 +28,8 @@ public class Company extends BaseEntity{
 
     //ayni isimde sirket olmasi durumunda sirketin ne uzerine kurulduguna bakarak ayirt edebilmek icin yapilmistir
     private String about;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private EStatus status = EStatus.PENDING ;
 }

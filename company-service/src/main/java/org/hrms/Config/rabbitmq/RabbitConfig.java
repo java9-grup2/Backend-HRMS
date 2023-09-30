@@ -46,9 +46,18 @@ public class RabbitConfig {
     @Value("${rabbitmq.delete-company-by-register-deny-Queue}")
     private String deleteCompanyByRegisterDenyQueue;
 
+    @Value("${rabbitmq.activate-company-status-queue}")
+    private String activateCompanyStatusQueue;
+
     @Bean
     DirectExchange exchangeCompany() {
         return new DirectExchange(exchangeCompany);
+    }
+
+
+    @Bean
+    Queue activateCompanyStatusQueue() {
+        return new Queue(activateCompanyStatusQueue);
     }
 
 

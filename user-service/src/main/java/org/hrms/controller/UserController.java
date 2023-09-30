@@ -105,15 +105,15 @@ public class UserController {
         return ResponseEntity.ok(service.showPersonelInfo(token));
     }
 
-    @GetMapping("getUserType")
-    public ResponseEntity<EUserType> getUserType(@RequestParam Long authid){
-        return ResponseEntity.ok(service.getUserType(authid));
-    }
-
-    @GetMapping("getUsername")
-    public ResponseEntity<String> getUsername(@RequestParam Long authid){
-        return ResponseEntity.ok(service.getUsername(authid));
-    }
+//    @GetMapping("getUserType")
+//    public ResponseEntity<EUserType> getUserType(@RequestParam Long authid){
+//        return ResponseEntity.ok(service.getUserType(authid));
+//    }
+//
+//    @GetMapping("getUsername")
+//    public ResponseEntity<String> getUsername(@RequestParam Long authid){
+//        return ResponseEntity.ok(service.getUsername(authid));
+//    }
 
 
 }

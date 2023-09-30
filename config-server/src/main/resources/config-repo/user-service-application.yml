@@ -48,5 +48,7 @@ rabbitmq:
   delete-company-by-register-deny-bindingKey: deleteCompanyByRegisterDenyBindingKey
   manager-deny-mail-bindingKey: managerDenyMailBindingKey
   manager-deny-mail-queue: managerDenyMailQueue
+  activate-company-status-bindingKey: activateCompanyStatusBindingKey
+  activate-company-status-queue: activateCompanyStatusQueue
 
 

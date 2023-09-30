@@ -3,6 +3,7 @@ package org.hrms.Controller;
 import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.PublicHolidayCompanyRequestDto;
 import org.hrms.dto.request.UpdateCompanyRequestDto;
+import org.hrms.rabbitmq.model.ActivateCompanyStatusModel;
 import org.hrms.rabbitmq.model.CreateCompanyModel;
 import org.hrms.rabbitmq.model.DeleteCompanyByRegisterDenyModel;
 import org.hrms.repository.entity.Company;
@@ -20,7 +21,6 @@ import static org.hrms.constant.EndPoints.*;
 public class CompanyController {
 
     private final CompanyService service;
-
 
     @PostMapping(SAVE)
     public ResponseEntity<Boolean> createCompany(CreateCompanyModel model) {
@@ -70,9 +70,13 @@ public class CompanyController {
 
 
     @DeleteMapping(DELETEBYCOMPANYNAME)
-    public ResponseEntity<Boolean> deleteByCompanyName(DeleteCompanyByRegisterDenyModel model) {
+    public ResponseEntity<Boolean> deleteByCompanyName(@RequestBody DeleteCompanyByRegisterDenyModel model) {
         return ResponseEntity.ok(service.deleteByCompanyName(model));
     }
 
+    @PutMapping(ACTIVATESTATUS)
+    public ResponseEntity<Boolean> activateCompanyStatus(@RequestBody ActivateCompanyStatusModel model) {
+        return ResponseEntity.ok(service.activateCompanyStatus(model));
+    }
 
 }
