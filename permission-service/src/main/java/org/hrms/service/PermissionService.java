@@ -1,18 +1,22 @@
 package org.hrms.service;
 
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.hrms.dto.request.CreatePermissionRequestDto;
+import org.hrms.dto.response.PersonelPermissionResponseDto;
 import org.hrms.exception.ErrorType;
 import org.hrms.exception.PermissionManagerException;
 import org.hrms.manager.IUserManager;
+import org.hrms.mapper.IPermissionMapper;
 import org.hrms.repository.IPermissionRepository;
 import org.hrms.repository.entity.Permission;
 import org.hrms.repository.enums.ApprovalStatus;
 import org.hrms.repository.enums.EUserType;
 import org.hrms.utility.ServiceManager;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,11 +39,13 @@ public class PermissionService extends ServiceManager<Permission, Long> {
                 .startDate(dto.getStartDate())
                 .endDate(dto.getEndDate())
                 .build();
-        permission.setNumberOfDays((int) ChronoUnit.DAYS.between(permission.getEndDate(), permission.getStartDate()));
+        permission.setNumberOfDays((int) ChronoUnit.DAYS.between(permission.getStartDate(), permission.getEndDate()));
+        System.out.println(permission.getAuthid());
         try {
             EUserType temp = userManager.getUserType(permission.getAuthid()).getBody();
-            if (temp.equals(EUserType.EMPLOYEE)) {
-                permission.setUserType(EUserType.EMPLOYEE);
+            System.out.println(temp);
+            if (temp.equals(EUserType.VISITOR)) {       //employee olarak değiştirilmeli test için visitor yaptım.
+                permission.setUserType(EUserType.VISITOR);
                 permission.setApprovalStatus(ApprovalStatus.PENDING);
             } else if (temp.equals(EUserType.MANAGER)) {
                 permission.setUserType(EUserType.MANAGER);
@@ -53,79 +59,35 @@ public class PermissionService extends ServiceManager<Permission, Long> {
         permissionRepository.save(permission);
         return true;
     }
-//    public List<PersonelPermissionResponseDto> getPermissionsAll2() {
-//        List<Permission> permissions = permissionRepository.findAll();
-//        List<PersonelPermissionResponseDto> permissionDtos = new ArrayList<>();
-//
-//        for (Permission permission : permissions) {
-//            PersonelPermissionResponseDto dto = new PersonelPermissionResponseDto();
-//            dto.setId(permission.getId());
-//            //bu kodu cuma günü çözücem
-//            //dto.setUsername(userManager.getUsername(permission.getAuthid()).getBody());
-//            dto.setStartDate(permission.getStartDate());
-//            dto.setEndDate(permission.getEndDate());
-//            dto.setTypeOfPermit(permission.getTypeOfPermit());
-//            dto.setApprovalStatus(permission.getApprovalStatus());
-//
-//            permissionDtos.add(dto);
-//        }
-//
-//        return permissionDtos;
-//    }
 
 
-    //    public List<PersonelPermissionResponseDto> getPermissionsAll2() {
-//        List<Permission> permissionList = permissionRepository.findAll();
-//        List<PersonelPermissionResponseDto> dtoList = new ArrayList<>();
-//        permissionList.forEach(permission -> {
-//            PersonelPermissionResponseDto responseDto = IPermissionMapper.INSTANCE.entityToDto(permission);
-//            //String username = userManager.getUsername(permission.getAuthid()).getBody();
-//            //responseDto.setUsername(username);
-//            dtoList.add(responseDto);
-//        });
-//
-//        return dtoList;
-//    }
-    public List<Permission> getPermissionsAll() {
+    public List<PersonelPermissionResponseDto> getPermissionsAll() {
         List<Permission> permissionList = permissionRepository.findAll();
-        return permissionList;
+        List<PersonelPermissionResponseDto> dtoList = new ArrayList<>();
+        permissionList.forEach(permission -> {
+            PersonelPermissionResponseDto responseDto = IPermissionMapper.INSTANCE.toDto(permission);
+            String username = userManager.getUsername(permission.getAuthid()).getBody();
+            responseDto.setUsername(username);
+            dtoList.add(responseDto);
+        });
+
+        return dtoList;
     }
 
 
-    public Optional<List<Permission>> getPermissionByPerson(Long authid) {
-        Optional<List<Permission>> permissionList = permissionRepository.findOptionalByAuthid(authid);
-        return permissionList;
+    public List<PersonelPermissionResponseDto> getPermissionByPerson(Long authid) {
+        List<Permission> permissionList = permissionRepository.findOptionalByAuthid(authid).get();
+        List<PersonelPermissionResponseDto> dtoList = new ArrayList<>();
+
+        permissionList.forEach(permission -> {
+            PersonelPermissionResponseDto responseDto = IPermissionMapper.INSTANCE.toDto(permission);
+            String username = userManager.getUsername(permission.getAuthid()).getBody();
+            responseDto.setUsername(username);
+            dtoList.add(responseDto);
+        });
+
+        return dtoList;
     }
-
-//    public List<PersonelPermissionResponseDto> getPermissionByPerson2(Long authid) {
-//        List<Permission> permissionList = permissionRepository.findOptionalByAuthid(authid);
-//        List<PersonelPermissionResponseDto> dtoList = new ArrayList<>();
-//        permissionList.forEach(person -> {
-//            dtoList.add(PersonelPermissionResponseDto.builder()
-//                    .id(person.getId())
-//                    //.username(userManager.getUsername(person.getAuthid()).getBody())
-//                    .startDate(person.getStartDate())
-//                    .endDate(person.getEndDate())
-//                    .typeOfPermit(person.getTypeOfPermit())
-//                    .approvalStatus(person.getApprovalStatus())
-//                    .build());
-//        });
-//        return dtoList;
-//    }
-
-//    public List<PersonelPermissionResponseDto> getPermissionByPerson2(Long authid) {
-//        List<Permission> permissionList = permissionRepository.findOptionalByAuthid(authid);
-//        List<PersonelPermissionResponseDto> dtoList = new ArrayList<>();
-//
-//        permissionList.forEach(permission -> {
-//            PersonelPermissionResponseDto responseDto = IPermissionMapper.INSTANCE.entityToDto(permission);
-//            //String username = userManager.getUsername(permission.getAuthid()).getBody();
-//            //responseDto.setUsername(username);
-//            dtoList.add(responseDto);
-//        });
-//
-//        return dtoList;
-//    }
 
 
     public String confirmPermission(Long permissionid, Boolean confirm) {
@@ -140,7 +102,7 @@ public class PermissionService extends ServiceManager<Permission, Long> {
             talep.get().setApprovalStatus(ApprovalStatus.REJECTED);
         }
         update(talep.get());
-        return "Personel talep işlemi başarıyla sonuçlandı";
+        return "Personel talep işlemi+ " + talep.get().getApprovalStatus() + " ile güncellendi";
     }
 
 

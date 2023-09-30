@@ -26,7 +26,7 @@ public interface IUserRepository extends JpaRepository<User,Long> {
     @Query("Select u from User u where u.userType = 'MANAGER' AND  u.status = 'PENDING'")
     List<User> findAllPendingManagerApproval();
 
-    String findUsernameByAuthid(Long authid);
+//    String findUsernameByAuthid(Long authid);
 
 
 }
