@@ -14,9 +14,11 @@ import java.io.Serializable;
 public class UpdateUserModel implements Serializable {
 
     private Long id;
+    private String name;
+    private String surname;
     private String username;
     private String password;
     private String personalEmail;
-    private String taxNo;
-    private String companyName;
+    private Double salary;
+    private String phoneNumber;
 }

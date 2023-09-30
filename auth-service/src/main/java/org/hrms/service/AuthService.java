@@ -210,7 +210,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         createAdminUserProducer.createAdminUser(IAuthMapper.INSTANCE.toCreateAdminUserModel(auth));
     }
 
-    public Boolean registerEmployee(RegisterEmployeeRequestDto dto) {
+    public Boolean  registerEmployee(RegisterEmployeeRequestDto dto) {
         Optional<String> optionalRole = jwtTokenManager.getRoleFromToken(dto.getToken());
         Optional<String> companyNameFromToken = jwtTokenManager.getCompanyNameFromToken(dto.getToken());
 
@@ -243,8 +243,9 @@ public class AuthService extends ServiceManager<Auth,Long> {
                 .userType(EUserType.EMPLOYEE)
                 .status(EStatus.ACTIVE)
                 .password(CodeGenerator.generateCode())
-                .companyEmail(emailSetter(dto.getName(),dto.getSurname(),companyNameFromToken.get()))
+                .companyEmail(emailSetter(dto.getName(), dto.getSurname(), companyNameFromToken.get()))
                 .companyName(companyNameFromToken.get().toLowerCase())
+                .salary(dto.getSalary())
                 .build();
 
         auth.setUsername(usernameSetter(auth.getCompanyEmail()));
@@ -327,22 +328,22 @@ public class AuthService extends ServiceManager<Auth,Long> {
     public void setAuthUpdateSettings(Auth auth, UpdateUserModel model) {
 
         switch (auth.getUserType()) {
-            case MANAGER,ADMIN -> {
+            case ADMIN, VISITOR -> {
                 auth.setUsername(model.getUsername());
                 auth.setName(model.getName());
                 auth.setSurname(model.getSurname());
                 auth.setPassword(model.getPassword());
                 auth.setPersonalEmail(model.getPersonalEmail());
-                auth.setTaxNo(model.getTaxNo());
-                auth.setCompanyName(model.getCompanyName().toLowerCase());
                 update(auth);
             }
-            case VISITOR,EMPLOYEE -> {
+            case MANAGER, EMPLOYEE -> {
                 auth.setUsername(model.getUsername());
                 auth.setName(model.getName());
                 auth.setSurname(model.getSurname());
                 auth.setPassword(model.getPassword());
                 auth.setPersonalEmail(model.getPersonalEmail());
+                auth.setSalary(model.getSalary());
+                auth.setPhoneNumber(model.getPhoneNumber());
                 update(auth);
             }
             default -> {

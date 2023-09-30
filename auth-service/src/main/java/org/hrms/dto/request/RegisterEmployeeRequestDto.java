@@ -24,5 +24,7 @@ public class RegisterEmployeeRequestDto {
     private String surname;
     @NotBlank
     private String personalEmail;
+    @NotNull
+    private Double salary;
 
 }

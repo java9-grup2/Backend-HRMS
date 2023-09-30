@@ -29,6 +29,8 @@ public class User extends BaseEntity{
     @Column(unique = true)
     private String companyEmail;
 
+    private String phoneNumber;
+
     @Builder.Default
     @Enumerated(EnumType.STRING)
     EUserType userType = EUserType.VISITOR;
@@ -39,5 +41,7 @@ public class User extends BaseEntity{
 
     private String taxNo;
     private String companyName;
+
+    private Double salary;
 
 }

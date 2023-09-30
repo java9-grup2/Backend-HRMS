@@ -20,6 +20,7 @@ public class UpdateUserModel implements Serializable {
     private String username;
     private String password;
     private String personalEmail;
-    private String taxNo;
-    private String companyName;
+    private Double salary;
+    private String phoneNumber;
+
 }

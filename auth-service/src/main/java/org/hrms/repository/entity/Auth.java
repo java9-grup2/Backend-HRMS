@@ -33,6 +33,7 @@ public class Auth extends BaseEntity{
     private String companyEmail;
 
     private String activationCode;
+    private String phoneNumber;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
@@ -44,4 +45,5 @@ public class Auth extends BaseEntity{
 
     private String taxNo;
     private String companyName;
+    private Double salary;
 }

@@ -25,4 +25,6 @@ public class SaveEmployeeModel implements Serializable {
     private String companyName;
     private EUserType userType;
     private EStatus status;
+    private String phoneNumber;
+    private Double salary;
 }
