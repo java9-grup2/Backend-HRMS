@@ -12,7 +12,6 @@ public class UserManagerException extends RuntimeException{
         this.errorType = errorType;
     }
 
-
     public UserManagerException(ErrorType errorType) {
         super(errorType.getMessage());
         this.errorType = errorType;

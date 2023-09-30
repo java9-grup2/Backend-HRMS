@@ -410,6 +410,8 @@ public class UserService extends ServiceManager<User,Long> {
     }
 
     public String getUsername(Long authid){
-        return repository.findUsernameByAuthid(authid);
+        User user=repository.findByAuthid(authid).get();
+        return user.getUsername();
     }
+
 }
