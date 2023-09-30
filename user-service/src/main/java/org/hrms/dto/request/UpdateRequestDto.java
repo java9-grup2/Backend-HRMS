@@ -17,6 +17,6 @@ public class UpdateRequestDto {
     private String username;
     private String password;
     private String personalEmail;
-    private String taxNo;
-    private String companyName;
+    private String phoneNumber;
+    private Double salary;
 }

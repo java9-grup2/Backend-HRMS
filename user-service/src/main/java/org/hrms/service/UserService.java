@@ -208,18 +208,7 @@ public class UserService extends ServiceManager<User,Long> {
     public User setUpdateSettings(User user, UpdateRequestDto dto) {
 
         switch (user.getUserType()) {
-            case MANAGER,ADMIN -> {
-                user.setUsername(dto.getUsername());
-                user.setName(dto.getName());
-                user.setSurname(dto.getSurname());
-                user.setPassword(dto.getPassword());
-                user.setPersonalEmail(dto.getPersonalEmail());
-                user.setTaxNo(dto.getTaxNo());
-                user.setCompanyName(dto.getCompanyName().toLowerCase());
-                update(user);
-                return user;
-            }
-            case VISITOR,EMPLOYEE -> {
+            case ADMIN,VISITOR -> {
                 user.setUsername(dto.getUsername());
                 user.setName(dto.getName());
                 user.setSurname(dto.getSurname());
@@ -228,6 +217,18 @@ public class UserService extends ServiceManager<User,Long> {
                 update(user);
                 return user;
             }
+            case MANAGER, EMPLOYEE -> {
+                user.setUsername(dto.getUsername());
+                user.setName(dto.getName());
+                user.setSurname(dto.getSurname());
+                user.setPassword(dto.getPassword());
+                user.setPersonalEmail(dto.getPersonalEmail());
+                user.setPhoneNumber(dto.getPhoneNumber());
+                user.setSalary(dto.getSalary());
+                update(user);
+                return user;
+            }
+
             default -> {
                 throw new UserManagerException(ErrorType.BAD_REQUEST);
             }
