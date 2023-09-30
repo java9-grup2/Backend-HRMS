@@ -27,4 +27,6 @@ public interface IUserMapper {
     User toUser(final CreateAdminUserModel model);
 
     DeleteAuthContainsCompanyNameModel toDeleteAuthContainsCompanyNameModel(final DeleteUsersContainsCompanyNameModel model);
+
+    ActivateCompanyStatusModel toActivateCompanyStatusModel(final User user);
 }

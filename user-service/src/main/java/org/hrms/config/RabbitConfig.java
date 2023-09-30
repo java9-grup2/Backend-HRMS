@@ -87,11 +87,28 @@ public class RabbitConfig {
     @Value("${rabbitmq.manager-deny-mail-bindingKey}")
     private String managerDenyMailBindingKey;
 
+    @Value("${rabbitmq.activate-company-status-queue}")
+    private String activateCompanyStatusQueue;
+
+
+    @Value("${rabbitmq.activate-company-status-bindingKey}")
+    private String activateCompanyStatusBindingKey;
+
     @Bean
     DirectExchange exchangeUser() {
         return new DirectExchange(exchangeUser);
     }
 
+
+    @Bean
+    Queue activateCompanyStatusQueue() {
+        return new Queue(activateCompanyStatusQueue);
+    }
+
+    @Bean
+    public Binding activateCompanyStatusBindingKey(final DirectExchange exchangeUser,final Queue activateCompanyStatusQueue) {
+        return BindingBuilder.bind(activateCompanyStatusQueue).to(exchangeUser).with(activateCompanyStatusBindingKey);
+    }
 
     @Bean
     Queue managerDenyMailQueue() {

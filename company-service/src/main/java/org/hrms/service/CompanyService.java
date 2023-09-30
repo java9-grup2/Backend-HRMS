@@ -5,16 +5,14 @@ import org.hrms.dto.request.UpdateCompanyRequestDto;
 import org.hrms.exception.CompanyManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.mapper.ICompanyMapper;
-import org.hrms.rabbitmq.model.CreateCompanyModel;
-import org.hrms.rabbitmq.model.DeleteCompanyByRegisterDenyModel;
-import org.hrms.rabbitmq.model.UpdateAuthCompanyNameDetailsModel;
-import org.hrms.rabbitmq.model.UpdateUsersCompanyNameDetailsModel;
+import org.hrms.rabbitmq.model.*;
 import org.hrms.rabbitmq.producer.DeleteAuthByIdProducer;
 import org.hrms.rabbitmq.producer.DeleteUsersContainsCompanyNameProducer;
 import org.hrms.rabbitmq.producer.UpdateAuthCompanyNameDetailsProducer;
 import org.hrms.rabbitmq.producer.UpdateUsersCompanyNameDetailsProducer;
 import org.hrms.repository.ICompanyRepository;
 import org.hrms.repository.entity.Company;
+import org.hrms.repository.enums.EStatus;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
@@ -220,5 +218,17 @@ public class CompanyService extends ServiceManager<Company, Long> {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public Boolean activateCompanyStatus(ActivateCompanyStatusModel model) {
+
+        Optional<Company> optionalCompany = repository.findByCompanyName(model.getCompanyName());
+
+        if (optionalCompany.isEmpty()) {
+            throw new CompanyManagerException(ErrorType.COMPANY_NOT_FOUND);
+        }
+        optionalCompany.get().setStatus(EStatus.ACTIVE);
+        update(optionalCompany.get());
+        return true;
     }
 }
