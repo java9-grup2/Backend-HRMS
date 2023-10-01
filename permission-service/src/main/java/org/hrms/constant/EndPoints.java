@@ -9,5 +9,10 @@ public class EndPoints {
         public static final String DELETE = "/delete";
         public static final String FINDALL = "/findall";
         public static final String FINDBYID = "/findbyid";
+        public static final String FINDBYAUTHID = "/findbyauthid";
+        public static final String FINDDAYOFFBYCOMPANY = "/finddayoffbycompany";
+
+        public static final String ISDAYOFFREQUESTVALID ="/isdayoffrequestvalid";
+
 
 }

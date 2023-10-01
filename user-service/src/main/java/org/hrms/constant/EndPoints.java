@@ -25,6 +25,7 @@ public class EndPoints {
     public static final String DENYCOMMENT ="/denycomment";
     public static final String DELETECOMMENT ="/deletecomment";
     public static final String EMPLOYEEINFO ="/employeeinfo";
+    public static final String ISDAYOFFREQUESTVALID ="/isdayoffrequestvalid";
 
 
 

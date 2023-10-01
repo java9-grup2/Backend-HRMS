@@ -115,7 +115,10 @@ public class UserController {
         return ResponseEntity.ok(service.getUsername(authid));
     }
 
-
+    @PostMapping(ISDAYOFFREQUESTVALID)
+    public ResponseEntity<Boolean> isDayOffRequestValid(@RequestBody AuthIdAndCompanyNameCheckerRequestDto dto) {
+        return ResponseEntity.ok(service.isDayOffRequestValid(dto));
+    }
 
 
 }

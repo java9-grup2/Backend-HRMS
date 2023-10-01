@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
+
 @RequiredArgsConstructor
 @Getter
 public class ServiceManager <T extends BaseEntity,ID> implements IService<T,ID> {
@@ -15,8 +16,8 @@ public class ServiceManager <T extends BaseEntity,ID> implements IService<T,ID> 
     private final JpaRepository<T,ID> repository;
     @Override
     public T save(T t) {
-        t.setCreatedate(System.currentTimeMillis());
-        t.setUpdatedate(System.currentTimeMillis());
+        t.setCreateDate(System.currentTimeMillis());
+        t.setUpdateDate(System.currentTimeMillis());
 
         return repository.save(t);
     }
@@ -24,8 +25,8 @@ public class ServiceManager <T extends BaseEntity,ID> implements IService<T,ID> 
     @Override
     public Iterable<T> saveAll(Iterable<T> t) {
         t.forEach(x->{
-            x.setCreatedate(System.currentTimeMillis());
-            x.setUpdatedate(System.currentTimeMillis());
+            x.setCreateDate(System.currentTimeMillis());
+            x.setUpdateDate(System.currentTimeMillis());
 
         });
         return repository.saveAll(t);
@@ -33,7 +34,7 @@ public class ServiceManager <T extends BaseEntity,ID> implements IService<T,ID> 
 
     @Override
     public T update(T t) {
-        t.setUpdatedate(System.currentTimeMillis());
+        t.setUpdateDate(System.currentTimeMillis());
         return repository.save(t);
     }
 

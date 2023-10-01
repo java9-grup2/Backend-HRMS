@@ -414,4 +414,23 @@ public class UserService extends ServiceManager<User,Long> {
         return user.getUsername();
     }
 
+    public Boolean isDayOffRequestValid(AuthIdAndCompanyNameCheckerRequestDto dto) {
+        Optional<User> optionalUser = repository.findByAuthid(dto.getAuthid());
+        if (optionalUser.isEmpty()) {
+            return false;
+//            throw new UserManagerException(ErrorType.USER_NOT_FOUND);
+        }
+
+        if (!(optionalUser.get().getUserType().equals(EUserType.MANAGER) || optionalUser.get().getUserType().equals(EUserType.EMPLOYEE))) {
+            return false;
+//            throw new UserManagerException(ErrorType.USER_TYPE_MISMATCH);
+        }
+        if (!optionalUser.get().getCompanyName().equals(dto.getCompanyName())) {
+            return false;
+//            throw new UserManagerException(ErrorType.COMPANY_NAME_MISMATCH);
+        }
+
+        return true;
+
+    }
 }
