@@ -21,15 +21,16 @@ public class Permission extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     Long authid;
+
     @Enumerated(EnumType.STRING)
-    private EUserType userType;
-    TypeOfPermit typeOfPermit;
+    @Builder.Default
+    TypeOfPermit typeOfPermit = TypeOfPermit.ANNUAL;
     LocalDate startDate;
     LocalDate endDate;
+
+    private String companyName;
+
     @Builder.Default
     LocalDate dateOfRequest=LocalDate.now();
-    Integer numberOfDays; //kendim metotla yazmalıyım
-    ApprovalStatus approvalStatus;
-    LocalDate replyDate;
-    //name and surname
+    Long numberOfDays;
 }

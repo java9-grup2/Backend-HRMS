@@ -8,6 +8,7 @@ import java.util.Optional;
 @Repository
 public interface IPermissionRepository extends JpaRepository<Permission, Long> {
 
-    Optional<List<Permission>> findOptionalByAuthid(Long authid);
+    Optional<List<Permission>> findByAuthid(Long authid);
 
+    List<Permission> findByCompanyName(String companyName);
 }

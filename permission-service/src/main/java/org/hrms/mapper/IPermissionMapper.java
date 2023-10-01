@@ -1,18 +1,19 @@
 package org.hrms.mapper;
 
-
-import org.hrms.dto.request.CreatePermissionRequestDto;
-import org.hrms.dto.response.PersonelPermissionResponseDto;
+import org.hrms.dto.request.AuthIdAndCompanyNameCheckerRequestDto;
+import org.hrms.dto.request.CreateDayOffRequestDto;
 import org.hrms.repository.entity.Permission;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface IPermissionMapper {
-    IPermissionMapper INSTANCE= Mappers.getMapper(IPermissionMapper.class);
 
-    Permission toPermission(final CreatePermissionRequestDto dto);
+    IPermissionMapper INSTANCE = Mappers.getMapper(IPermissionMapper.class);
 
-    PersonelPermissionResponseDto toDto(final Permission entity);
+
+    AuthIdAndCompanyNameCheckerRequestDto toAuthIdAndCompanyNameCheckerRequestDto(final CreateDayOffRequestDto dto);
+
+    Permission toPermission(final CreateDayOffRequestDto dto);
 }

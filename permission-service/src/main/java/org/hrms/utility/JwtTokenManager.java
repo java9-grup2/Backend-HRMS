@@ -4,44 +4,168 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.hrms.exception.ErrorType;
+import org.hrms.exception.PermissionManagerException;
+import org.hrms.repository.enums.EUserType;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.stereotype.Service;
+
 import java.util.Date;
 import java.util.Optional;
 
-@ControllerAdvice
+@Service
 public class JwtTokenManager {
 
     @Value("${jwt.secretKey}")
-    private String passwordKey;
+    String secretKey;
+    @Value("${jwt.issuer}")
+    String issuer;
+    @Value("${jwt.audience}")
+    String audience;
 
-    private final Long exTime = 1000L*60*600;
-
-    public Optional<String> createToken(Long id){
-        String token ="";
+    public Optional<String> createToken(Long id) {
+        String token = null;
+        Date date = new Date(System.currentTimeMillis()+(1000*60*5));
         try {
-            token = JWT.create().withAudience()
-                    .withClaim("id",id)
-                    .withIssuer("bilgeadam")
+            token = JWT.create()
+                    .withAudience(audience)
+                    .withIssuer(issuer)
+                    .withClaim("id", id)
                     .withIssuedAt(new Date())
-                    .withExpiresAt(new Date(System.currentTimeMillis()+exTime))
-                    .sign(Algorithm.HMAC512(passwordKey));
-            return Optional.of(token);
-        }catch (Exception exception){
-            return Optional.empty();
+                    .withExpiresAt(date)
+                    .sign(Algorithm.HMAC512(secretKey));
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return Optional.ofNullable(token);
+    }
+
+  public Optional<String> createToken(Long id, EUserType userType) {
+        String token = null;
+        Date date = new Date(System.currentTimeMillis()+(1000*60*5));
+        try {
+            token = JWT.create()
+                    .withAudience(audience)
+                    .withIssuer(issuer)
+                    .withClaim("id", id)
+                    .withClaim("role",userType.toString())
+                    .withIssuedAt(new Date())
+                    .withExpiresAt(date)
+                    .sign(Algorithm.HMAC512(secretKey));
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return Optional.ofNullable(token);
+    }
+    public Optional<String> createToken(Long id,String activationCode) {
+        String token = null;
+        Date date = new Date(System.currentTimeMillis()+(1000*60*5));
+        try {
+            token = JWT.create()
+                    .withAudience(audience)
+                    .withIssuer(issuer)
+                    .withClaim("id", id)
+                    .withClaim("activationCode", activationCode)
+                    .withIssuedAt(new Date())
+                    .withExpiresAt(date)
+                    .sign(Algorithm.HMAC512(secretKey));
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return Optional.ofNullable(token);
+    }
+
+    public Optional<String> createToken(Long id, EUserType userType,String companyName) {
+        String token = null;
+        Date date = new Date(System.currentTimeMillis()+(1000*60*5));
+        try {
+            token = JWT.create()
+                    .withAudience(audience)
+                    .withIssuer(issuer)
+                    .withClaim("id", id)
+                    .withClaim("role",userType.toString())
+                    .withClaim("companyName",companyName)
+                    .withIssuedAt(new Date())
+                    .withExpiresAt(date)
+                    .sign(Algorithm.HMAC512(secretKey));
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return Optional.ofNullable(token);
+    }
+
+
+
+    public Optional<Long> getIdFromToken(String token) {
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT == null) {
+                throw new PermissionManagerException(ErrorType.INVALID_TOKEN);
+            }
+            Long id = decodedJWT.getClaim("id").asLong();
+            return Optional.of(id);
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new PermissionManagerException(ErrorType.INVALID_TOKEN);
         }
     }
 
-    public Optional<Long> getIdFromToken(String token){
+    public Optional<String> getRoleFromToken(String token) {
+
         try {
-            Algorithm algorithm = Algorithm.HMAC512(passwordKey);
-            JWTVerifier jwtVerifier = JWT.require(algorithm)
-                    .withIssuer("bilgeadam").build();
-            DecodedJWT decodedJWT = jwtVerifier.verify(token);
-            if (decodedJWT==null) return Optional.empty();
-            return  Optional.of(decodedJWT.getClaim("id").asLong());
-        }catch (Exception exception){
-            return Optional.empty();
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT == null) {
+                throw new PermissionManagerException(ErrorType.INVALID_TOKEN);
+            }
+            String role = decodedJWT.getClaim("role").asString();
+            return Optional.of(role);
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new PermissionManagerException(ErrorType.INVALID_TOKEN);
+        }
+    }
+
+    public Optional<String> getCompanyNameFromToken(String token) {
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT == null) {
+                throw new PermissionManagerException(ErrorType.INVALID_TOKEN);
+            }
+            String role = decodedJWT.getClaim("companyName").asString();
+            return Optional.of(role);
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new PermissionManagerException(ErrorType.INVALID_TOKEN);
+        }
+    }
+
+
+    public Optional<String> getActivationCodeFromToken(String token) {
+
+        try {
+            Algorithm algorithm = Algorithm.HMAC512(secretKey);
+            JWTVerifier verifier = JWT.require(algorithm).withIssuer(issuer).withAudience(audience).build();
+            DecodedJWT decodedJWT = verifier.verify(token);
+            if (decodedJWT == null) {
+                throw new PermissionManagerException(ErrorType.INVALID_TOKEN);
+            }
+            String activationCode = decodedJWT.getClaim("activationCode").asString();
+            return Optional.of(activationCode);
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new PermissionManagerException(ErrorType.INVALID_TOKEN);
         }
     }
 }
