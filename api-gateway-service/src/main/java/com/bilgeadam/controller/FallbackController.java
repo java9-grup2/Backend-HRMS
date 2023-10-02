@@ -48,4 +48,9 @@ public class FallbackController {
     public ResponseEntity<String> shiftsAndBreaksServiceFallback(){
         return  ResponseEntity.ok("Shifts and Breaks service suanda hizmet verememektedir!!!");
     }
+
+    @GetMapping("/expenceservice")
+    public ResponseEntity<String> expenseServiceFallback(){
+        return  ResponseEntity.ok("Expense service suanda hizmet verememektedir!!!");
+    }
 }

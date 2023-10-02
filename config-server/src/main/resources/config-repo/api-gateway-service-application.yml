@@ -104,6 +104,16 @@ spring:
               args:
                 enabled: true
                 fallbackUri: forward:/fallback/permissionservice
+        - id: expense-service
+          predicates:
+            - Path=/expense/**
+          uri: http://localhost:9012
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - name: CircuitBreaker
+              args:
+                enabled: true
+                fallbackUri: forward:/fallback/expenseservice
 
       default-filters:
         - RewritePath= /(?<segment>.*),/api/v1/$\{segment}
