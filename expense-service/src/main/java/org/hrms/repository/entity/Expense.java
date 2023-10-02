@@ -21,12 +21,13 @@ public class Expense extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long authid;
-    private Long amount;
+    private Double amount;
     @Enumerated(EnumType.STRING)
     private EExpenseType expenseType;
     private String file; // ilerde dosya tutmak için
     @Enumerated(EnumType.STRING)
-    private ApprovalStatus approvalStatus;
+    @Builder.Default
+    private ApprovalStatus approvalStatus=ApprovalStatus.PENDING;
     private String currency;
     @Builder.Default
     private LocalDate requestDate=LocalDate.now();
