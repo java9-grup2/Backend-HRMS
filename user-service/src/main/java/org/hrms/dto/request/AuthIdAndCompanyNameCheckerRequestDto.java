@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthIdAndCompanyNameCheckerRequestDto {
-    private Long authid;
+    private String token;
     private String companyName;
 }

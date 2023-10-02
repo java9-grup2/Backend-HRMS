@@ -13,6 +13,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class IsPermissionEligableRequestDto {
 
-    private Long authid;
+    private String token;
     private LocalDate startDate;
 }

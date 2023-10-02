@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class CreateDayOffRequestDto {
 
-    Long authid;
+    String token;
     //  bu metodu kullanarak izin olusturan kisinin kontrolu yapilmasi icin izin alanin tipi degil
     private EUserType userType;
     // sadece kendi sirketindeki calisanlara izin verebilmesi icin

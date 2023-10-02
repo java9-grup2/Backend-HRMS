@@ -33,4 +33,10 @@ public class Permission extends BaseEntity {
     @Builder.Default
     LocalDate dateOfRequest=LocalDate.now();
     Long numberOfDays;
+
+    LocalDate replyDate;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    ApprovalStatus approvalStatus = ApprovalStatus.PENDING;
 }

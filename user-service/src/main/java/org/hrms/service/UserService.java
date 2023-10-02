@@ -415,20 +415,30 @@ public class UserService extends ServiceManager<User,Long> {
     }
 
     public Boolean isDayOffRequestValid(AuthIdAndCompanyNameCheckerRequestDto dto) {
-        Optional<User> optionalUser = repository.findByAuthid(dto.getAuthid());
+        Optional<Long> optionalAuthId = jwtTokenManager.getIdFromToken(dto.getToken());
+        if (optionalAuthId.isEmpty()) {
+            throw new UserManagerException(ErrorType.INVALID_TOKEN);
+        }
+        System.out.println(optionalAuthId.get());
+        System.out.println("Id kontrolunden gecti");
+
+        Optional<User> optionalUser = repository.findByAuthid(optionalAuthId.get());
         if (optionalUser.isEmpty()) {
             return false;
 //            throw new UserManagerException(ErrorType.USER_NOT_FOUND);
         }
+        System.out.println("kullanici bulundu");
 
         if (!(optionalUser.get().getUserType().equals(EUserType.MANAGER) || optionalUser.get().getUserType().equals(EUserType.EMPLOYEE))) {
             return false;
 //            throw new UserManagerException(ErrorType.USER_TYPE_MISMATCH);
         }
+        System.out.println("manager veya employee testinden gecti");
         if (!optionalUser.get().getCompanyName().equals(dto.getCompanyName())) {
             return false;
 //            throw new UserManagerException(ErrorType.COMPANY_NAME_MISMATCH);
         }
+        System.out.println("sirket ismi kontrolunden gecti");
 
         return true;
 

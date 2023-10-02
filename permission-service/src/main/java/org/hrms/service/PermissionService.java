@@ -2,21 +2,22 @@ package org.hrms.service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.hrms.dto.request.StatusRequestDto;
 import org.hrms.dto.request.CreateDayOffRequestDto;
 import org.hrms.dto.request.IsPermissionEligableRequestDto;
 import org.hrms.dto.response.CreateDayOffResponseDto;
-import org.hrms.dto.response.PersonelPermissionResponseDto;
 import org.hrms.exception.ErrorType;
 import org.hrms.exception.PermissionManagerException;
 import org.hrms.manager.IUserManager;
 import org.hrms.mapper.IPermissionMapper;
 import org.hrms.repository.IPermissionRepository;
 import org.hrms.repository.entity.Permission;
+import org.hrms.repository.enums.ApprovalStatus;
 import org.hrms.repository.enums.EUserType;
+import org.hrms.utility.JwtTokenManager;
 import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +27,13 @@ public class PermissionService extends ServiceManager<Permission, Long> {
     private final IPermissionRepository repository;
 
     private final IUserManager userManager;
+    private final JwtTokenManager jwtTokenManager;
 
-    public PermissionService(IPermissionRepository repository, IUserManager userManager) {
+    public PermissionService(IPermissionRepository repository, IUserManager userManager, JwtTokenManager jwtTokenManager) {
         super(repository);
         this.repository = repository;
         this.userManager = userManager;
+        this.jwtTokenManager = jwtTokenManager;
     }
 
 //    public Boolean createPermission(CreatePermissionRequestDto dto) {
@@ -108,7 +111,7 @@ public class PermissionService extends ServiceManager<Permission, Long> {
 
 
     public CreateDayOffResponseDto createDayOff(CreateDayOffRequestDto dto) {
-        if (!dto.getUserType().equals(EUserType.MANAGER)) {
+        if (!(dto.getUserType().equals(EUserType.MANAGER) || dto.getUserType().equals(EUserType.EMPLOYEE))) {
             throw new PermissionManagerException(ErrorType.INSUFFICIENT_PERMISSION);
         }
         if (dto.getStartDate().isAfter(dto.getEndDate()) || dto.getStartDate().isEqual(dto.getEndDate())) {
@@ -119,20 +122,44 @@ public class PermissionService extends ServiceManager<Permission, Long> {
         if (!isUSerValid) {
             throw new PermissionManagerException(ErrorType.USER_NOT_VALID);
         }
-        Boolean permissionEligable = isPermissionEligable(IsPermissionEligableRequestDto.builder().authid(dto.getAuthid()).startDate(dto.getStartDate()).build());
+        Boolean permissionEligable = isPermissionEligable(IsPermissionEligableRequestDto.builder().token(dto.getToken()).startDate(dto.getStartDate()).build());
         if (!permissionEligable) {
             throw new PermissionManagerException(ErrorType.PERMISSION_CONFLICT);
         }
 
         Permission permission = IPermissionMapper.INSTANCE.toPermission(dto);
-
+        permission.setAuthid(jwtTokenManager.getIdFromToken(dto.getToken()).get());
         permission.setNumberOfDays(ChronoUnit.DAYS.between(permission.getStartDate(),permission.getEndDate()));
-        save(permission);
+        Permission permission1 = statusSetter(dto.getUserType(), permission);
+        save(permission1);
         return new CreateDayOffResponseDto("izin basariyla eklenmistir");
     }
 
+    private Permission statusSetter(EUserType userType, Permission permission) {
+        switch (userType) {
+            case MANAGER -> {
+                permission.setApprovalStatus(ApprovalStatus.APPROVED);
+                permission.setReplyDate(LocalDate.now());
+                return permission;
+            }
+            case EMPLOYEE -> {
+                permission.setApprovalStatus(ApprovalStatus.PENDING);
+                return permission;
+            }
+            default -> {
+                throw new PermissionManagerException(ErrorType.BAD_REQUEST);
+            }
+        }
+    }
+
     public Boolean isPermissionEligable(IsPermissionEligableRequestDto dto) {
-        Optional<List<Permission>> optionalPermissionList = repository.findByAuthid(dto.getAuthid());
+
+        Optional<Long> optionalAuthId = jwtTokenManager.getIdFromToken(dto.getToken());
+        if (optionalAuthId.isEmpty()) {
+            throw new PermissionManagerException(ErrorType.INVALID_TOKEN);
+        }
+
+        Optional<List<Permission>> optionalPermissionList = repository.findByAuthid(optionalAuthId.get());
         if (optionalPermissionList.isEmpty()) {
             throw new PermissionManagerException(ErrorType.PERMISSION_IS_NOT_EXIST);
         }
@@ -157,6 +184,36 @@ public class PermissionService extends ServiceManager<Permission, Long> {
             throw new PermissionManagerException(ErrorType.COMPANY_PERMISSION_NOT_EXISTS);
         }
         return permissionList;
+    }
+
+    public Boolean approveStatus(StatusRequestDto dto) {
+        if (!dto.getUserType().equals(EUserType.MANAGER)) {
+            throw new PermissionManagerException(ErrorType.INSUFFICIENT_PERMISSION);
+        }
+
+        Optional<Permission> optionalPermission = repository.findById(dto.getPermissionId());
+        if (optionalPermission.isEmpty()) {
+            throw new PermissionManagerException(ErrorType.BAD_REQUEST);
+        }
+        optionalPermission.get().setApprovalStatus(ApprovalStatus.APPROVED);
+        optionalPermission.get().setReplyDate(LocalDate.now());
+        update(optionalPermission.get());
+        return true;
+    }
+
+    public Boolean denyStatus(StatusRequestDto dto) {
+        if (!dto.getUserType().equals(EUserType.MANAGER)) {
+            throw new PermissionManagerException(ErrorType.INSUFFICIENT_PERMISSION);
+        }
+
+        Optional<Permission> optionalPermission = repository.findById(dto.getPermissionId());
+        if (optionalPermission.isEmpty()) {
+            throw new PermissionManagerException(ErrorType.BAD_REQUEST);
+        }
+        optionalPermission.get().setApprovalStatus(ApprovalStatus.REJECTED);
+        optionalPermission.get().setReplyDate(LocalDate.now());
+        update(optionalPermission.get());
+        return true;
     }
 }
 

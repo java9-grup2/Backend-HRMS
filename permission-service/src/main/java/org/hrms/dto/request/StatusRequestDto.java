@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hrms.repository.enums.EUserType;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthIdAndCompanyNameCheckerRequestDto {
-    private String token;
-    private String companyName;
+public class StatusRequestDto {
+
+    private EUserType userType;
+    private Long permissionId;
 }
