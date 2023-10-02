@@ -1,10 +1,9 @@
 package org.hrms.controller;
 import lombok.RequiredArgsConstructor;
+import org.hrms.dto.request.StatusRequestDto;
 import org.hrms.dto.request.CreateDayOffRequestDto;
-import org.hrms.dto.request.CreatePermissionRequestDto;
 import org.hrms.dto.request.IsPermissionEligableRequestDto;
 import org.hrms.dto.response.CreateDayOffResponseDto;
-import org.hrms.dto.response.PersonelPermissionResponseDto;
 import org.hrms.repository.entity.Permission;
 import org.hrms.service.PermissionService;
 import org.springframework.http.ResponseEntity;
@@ -39,23 +38,14 @@ public class PermissionController {
         return ResponseEntity.ok(service.findDayOffByCompany(companyName));
     }
 
+    @PutMapping(APPROVESTATUS)
+    public ResponseEntity<Boolean> approveStatus(@RequestBody StatusRequestDto dto) {
+        return ResponseEntity.ok(service.approveStatus(dto));
+    }
 
-//    @GetMapping("/get-permissionsAll")
-//    public ResponseEntity<List<PersonelPermissionResponseDto>> getPermissionsAll() {
-//        return ResponseEntity.ok(service.getPermissionsAll());
-//    }
-
-//    @GetMapping("/get-permissionsByPerson")
-//    public ResponseEntity<List<PersonelPermissionResponseDto>> getPermissionsByPerson(@RequestParam Long authid) {
-//        return ResponseEntity.ok(service.getPermissionByPerson(authid));
-//    }
-//
-//
-//    @PutMapping("/confirmPermission")
-//    public ResponseEntity<String> confirmPermission(@RequestBody Long authid,Boolean confirm){
-//        return ResponseEntity.ok(service.confirmPermission(authid,confirm));
-//    }
-
-
+    @PutMapping(DENYSTATUS)
+    public ResponseEntity<Boolean> denyStatus(@RequestBody StatusRequestDto dto) {
+        return ResponseEntity.ok(service.denyStatus(dto));
+    }
 }
 

@@ -11,6 +11,9 @@ public class EndPoints {
         public static final String FINDBYID = "/findbyid";
         public static final String FINDBYAUTHID = "/findbyauthid";
         public static final String FINDDAYOFFBYCOMPANY = "/finddayoffbycompany";
+        public static final String LISTPENDINGDAYOFFREQUESTS = "/listpendingdayoffrequests";
+        public static final String APPROVESTATUS = "/approveStatus";
+        public static final String DENYSTATUS = "/denyStatus";
 
         public static final String ISDAYOFFREQUESTVALID ="/isdayoffrequestvalid";
 
