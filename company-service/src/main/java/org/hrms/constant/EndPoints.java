@@ -23,5 +23,7 @@ public class EndPoints {
     public static final String ACTIVATION ="/activation";
     public static final String PUBLICHOLIDAY="/publicholiday";
     public static final String ACTIVATESTATUS="/activatestatus";
+    public static final String FINDALL2="/findall2";
+
 
 }

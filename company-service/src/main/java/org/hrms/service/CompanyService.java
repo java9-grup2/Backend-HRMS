@@ -231,4 +231,13 @@ public class CompanyService extends ServiceManager<Company, Long> {
         update(optionalCompany.get());
         return true;
     }
+
+    public List<Company> findAll2() {
+        List<Company> list = findAll();
+
+        if(list.isEmpty()){
+            throw  new CompanyManagerException(ErrorType.NO_DATA);
+        }
+        return list;
+    }
 }
