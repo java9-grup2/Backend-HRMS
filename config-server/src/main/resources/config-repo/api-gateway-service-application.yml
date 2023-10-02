@@ -107,7 +107,7 @@ spring:
         - id: expense-service
           predicates:
             - Path=/expense/**
-          uri: http://localhost:9012
+          uri: http://localhost:9097
           filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
             - name: CircuitBreaker
