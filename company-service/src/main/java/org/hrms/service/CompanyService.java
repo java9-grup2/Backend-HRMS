@@ -1,5 +1,6 @@
 package org.hrms.service;
 
+import org.hrms.dto.request.IsCompanyRequestValidDto;
 import org.hrms.dto.request.PublicHolidayCompanyRequestDto;
 import org.hrms.dto.request.UpdateCompanyRequestDto;
 import org.hrms.exception.CompanyManagerException;
@@ -239,5 +240,14 @@ public class CompanyService extends ServiceManager<Company, Long> {
             throw  new CompanyManagerException(ErrorType.NO_DATA);
         }
         return list;
+    }
+
+    public Boolean isCompanyRequestValid(IsCompanyRequestValidDto dto) {
+        boolean existsByTaxNo = repository.existsByTaxNo(dto.getTaxNo());
+        boolean existsByCompanyName = repository.existsByCompanyName(dto.getCompanyName());
+        if (existsByCompanyName || existsByTaxNo) {
+            return false;
+        }
+        return true;
     }
 }

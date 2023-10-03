@@ -1,6 +1,7 @@
 package org.hrms.mapper;
 
 
+import org.hrms.dto.request.AuthIdAndCompanyNameCheckerRequestDto;
 import org.hrms.dto.request.CreateExpenseRequestDto;
 import org.hrms.repository.entity.Expense;
 import org.mapstruct.Mapper;
@@ -13,4 +14,6 @@ public interface IExpenseMapper {
     IExpenseMapper INSTANCE = Mappers.getMapper(IExpenseMapper.class);
 
     Expense toExpense(final CreateExpenseRequestDto dto);
+
+    AuthIdAndCompanyNameCheckerRequestDto toAuthIdAndCompanyNameCheckerRequestDto(final CreateExpenseRequestDto dto);
 }

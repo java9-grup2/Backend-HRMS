@@ -23,7 +23,8 @@ public enum ErrorType {
     INSUFFICIENT_PERMISSION(4119, "Bu islemi yapmaya yetkiniz yok", HttpStatus.BAD_REQUEST),
     USER_TYPE_MISMATCH(12324,"Kullanicinin tipi bu istege uygun degildir.",HttpStatus.BAD_REQUEST),
     COULD_NOT_DELETE_ALL_USERS(12324,"Kullanicilarin hepsi silinemedi.",HttpStatus.BAD_REQUEST),
-    COULD_NOT_UPDATE_ALL_USERS(12324,"Kullanicilarin hepsi guncellenmedi.",HttpStatus.BAD_REQUEST);
+    COULD_NOT_UPDATE_ALL_USERS(12324,"Kullanicilarin hepsi guncellenmedi.",HttpStatus.BAD_REQUEST),
+    COMPANY_NAME_OR_TAX_NO_IS_NOT_VALID(12324,"Sirket adi veya vergi numarasi sistemde mevcut. Lutfen kendinize ait sirket ismi veya vergi numarasi giriniz",HttpStatus.BAD_REQUEST);
 
 
     private int code;

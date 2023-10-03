@@ -6,7 +6,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.hrms.exception.ErrorType;
 import org.hrms.exception.ExpenseManagerException;
-import org.hrms.exception.PermissionManagerException;
 import org.hrms.repository.enums.EUserType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

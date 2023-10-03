@@ -83,6 +83,12 @@ public class AuthService extends ServiceManager<Auth,Long> {
     public TokenResponseDto registerManager(RegisterManagerRequestDto dto) {
         existByPersonalEmailAndUsernameControl(dto.getPersonalEmail(), dto.getUsername());
 
+
+        Boolean isCompanyValid = companyManager.isCompanyRequestValid(IAuthMapper.INSTANCE.toIsCompanyRequestValidDto(dto)).getBody();
+        if (!isCompanyValid) {
+            throw new AuthManagerException(ErrorType.COMPANY_NAME_OR_TAX_NO_IS_NOT_VALID);
+        }
+
         Auth auth = IAuthMapper.INSTANCE.toAuth(dto);
         String companyEmail = "manager" + dto.getName() + "@" + dto.getCompanyName() + ".com";
         auth.setCompanyEmail(companyEmail.toLowerCase());

@@ -31,7 +31,8 @@ public enum ErrorType {
     NO_DATA_FOUND(12324,"Aradiginiz kriterlerde kullanici/kullanicilar bulunamadi.",HttpStatus.BAD_REQUEST),
     TOKEN_USER_OR_COMPANY_NAME_NOT_VALID(12325,"Alinan token, kullanici bilgileri mevcut degil, veya kendi calistiginiz sirket disinda bir sirket girmeye calisiyorusunuz.",HttpStatus.BAD_REQUEST),
     NO_PENDING_COMMENT(12325,"Onay bekleyen yorum yok.",HttpStatus.BAD_REQUEST),
-    COMMENT_NOT_FOUND(12325,"Boyle bir yorum bulunamadi.",HttpStatus.BAD_REQUEST);
+    COMMENT_NOT_FOUND(12325,"Boyle bir yorum bulunamadi.",HttpStatus.BAD_REQUEST),
+    USER_NOT_VALID(1100,"Boyle bir kullanici yok veya yanlis bir kullaniciyi sectiniz.",HttpStatus.BAD_REQUEST);
 
 
     private int code;

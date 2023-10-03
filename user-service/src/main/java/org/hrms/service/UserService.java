@@ -414,7 +414,7 @@ public class UserService extends ServiceManager<User,Long> {
         return user.getUsername();
     }
 
-    public Boolean isDayOffRequestValid(AuthIdAndCompanyNameCheckerRequestDto dto) {
+    public Boolean isRequestValid(AuthIdAndCompanyNameCheckerRequestDto dto) {
         Optional<Long> optionalAuthId = jwtTokenManager.getIdFromToken(dto.getToken());
         if (optionalAuthId.isEmpty()) {
             throw new UserManagerException(ErrorType.INVALID_TOKEN);

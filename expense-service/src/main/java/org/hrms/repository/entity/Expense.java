@@ -21,6 +21,7 @@ public class Expense extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long authid;
+    private String companyName;
     private Long amount;
     @Enumerated(EnumType.STRING)
     private EExpenseType expenseType;

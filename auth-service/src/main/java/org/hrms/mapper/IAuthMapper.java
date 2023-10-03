@@ -1,5 +1,6 @@
 package org.hrms.mapper;
 
+import org.hrms.dto.request.IsCompanyRequestValidDto;
 import org.hrms.dto.request.RegisterManagerRequestDto;
 import org.hrms.dto.request.RegisterVisitorRequestDto;
 import org.hrms.rabbitmq.model.*;
@@ -39,4 +40,6 @@ public interface IAuthMapper {
 
     @Mapping(target = "authid",source = "id")
     CreateAdminUserModel toCreateAdminUserModel(final Auth auth);
+
+    IsCompanyRequestValidDto toIsCompanyRequestValidDto(final RegisterManagerRequestDto dto);
 }

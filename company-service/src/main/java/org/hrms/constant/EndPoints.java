@@ -13,6 +13,7 @@ public class EndPoints {
     public static final String FINDALL ="/findall";
     public static final String FINDBYID ="/findbyid";
     public static final String FINDBYCOMPANYNAME ="/findbycompanyname";
+    public static final String COMPANYREQUESTCHECKER ="/companyrequestchecker";
 
     //Company
     public static final String ISCOMPANYEXISTS ="/iscompanyexists";
