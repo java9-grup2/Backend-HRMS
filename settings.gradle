@@ -11,4 +11,5 @@ include 'permission-service'
 include 'upcoming-payment-service'
 include 'shifts-and-breaks-service'
 include 'expense-service'
+include 'config-git-server'
 
