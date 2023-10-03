@@ -20,4 +20,5 @@ public class CreateExpenseRequestDto {
     Double amount;
     EExpenseType expenseType;
     String currency;
+    String file;
 }
