@@ -12,6 +12,8 @@ public class EndPoints {
     public static final String UPDATE ="/update";
     public static final String UPDATECOMPANYDETAILS ="/updatecompanydetails";
     public static final String FINDALL ="/findall";
+    public static final String COMPANYREQUESTCHECKER ="/companyrequestchecker";
+
 
     //Auth
     public static final String REGISTERVISITOR ="/registervisitor";
@@ -21,6 +23,7 @@ public class EndPoints {
     public static final String ACTIVATION ="/activation";
     public static final String ISCOMPANYEXISTS ="/iscompanyexists";
     public static final String FORGOTPASSWORD ="/forgotpassword";
+
 
 
 }

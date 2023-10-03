@@ -117,7 +117,12 @@ public class UserController {
 
     @PostMapping(ISDAYOFFREQUESTVALID)
     public ResponseEntity<Boolean> isDayOffRequestValid(@RequestBody AuthIdAndCompanyNameCheckerRequestDto dto) {
-        return ResponseEntity.ok(service.isDayOffRequestValid(dto));
+        return ResponseEntity.ok(service.isRequestValid(dto));
+    }
+
+    @PostMapping(ISEXPENSEREQUESTVALID)
+    public ResponseEntity<Boolean> isExpenseRequestValid(@RequestBody AuthIdAndCompanyNameCheckerRequestDto dto) {
+        return ResponseEntity.ok(service.isRequestValid(dto));
     }
 
 

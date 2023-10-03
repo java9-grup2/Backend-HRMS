@@ -1,6 +1,7 @@
 package org.hrms.Controller;
 
 import lombok.RequiredArgsConstructor;
+import org.hrms.dto.request.IsCompanyRequestValidDto;
 import org.hrms.dto.request.PublicHolidayCompanyRequestDto;
 import org.hrms.dto.request.UpdateCompanyRequestDto;
 import org.hrms.rabbitmq.model.ActivateCompanyStatusModel;
@@ -84,4 +85,8 @@ public class CompanyController {
         return ResponseEntity.ok(service.activateCompanyStatus(model));
     }
 
+    @PostMapping(COMPANYREQUESTCHECKER)
+    public ResponseEntity<Boolean> isCompanyRequestValid(@RequestBody IsCompanyRequestValidDto dto) {
+        return ResponseEntity.ok(service.isCompanyRequestValid(dto));
+    }
 }
