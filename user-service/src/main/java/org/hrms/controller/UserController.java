@@ -69,6 +69,11 @@ public class UserController {
         return ResponseEntity.ok(service.listWorkersAsManager(dto));
     }
 
+    @GetMapping(LISTWORKERSWITHOUTMANAGER)
+    public ResponseEntity<List<User>> listWorkersAsManagerWithoutManager(ListWorkersRequestDto dto) {
+        return ResponseEntity.ok(service.listWorkersAsManagerWithoutManager(dto));
+    }
+
     @PostMapping(ISCOMMENTMATCHES)
     public ResponseEntity<Boolean> isCommentDetailsValid(@RequestBody IsCommentMatchesRequestDto dto) {
         return ResponseEntity.ok(service.isCommentDetailsValid(dto));
