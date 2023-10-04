@@ -23,6 +23,9 @@ public interface IUserRepository extends JpaRepository<User,Long> {
     @Query("SELECT u FROM User u WHERE u.userType = 'EMPLOYEE' OR u.userType = 'MANAGER'")
     List<User> findAllWorkers();
 
+    @Query("SELECT u FROM User u WHERE u.userType = 'EMPLOYEE'")
+    List<User> findAllWorkersWithoutManager();
+
     @Query("Select u from User u where u.userType = 'MANAGER' AND  u.status = 'PENDING'")
     List<User> findAllPendingManagerApproval();
 

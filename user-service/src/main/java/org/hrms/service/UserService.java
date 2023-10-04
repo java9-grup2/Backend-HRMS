@@ -315,6 +315,20 @@ public class UserService extends ServiceManager<User,Long> {
         return list;
     }
 
+    public List<User> listWorkersAsManagerWithoutManager(ListWorkersRequestDto dto) {
+        List<User> allWorkers = repository.findAllWorkersWithoutManager();
+        if (allWorkers.isEmpty()) {
+            throw new UserManagerException(ErrorType.NO_DATA_FOUND);
+        }
+
+        List<User> list = allWorkers.stream().filter(user -> user.getCompanyName().equals(dto.getCompanyName())).toList();
+
+        if (list.isEmpty()) {
+            throw new UserManagerException(ErrorType.NO_DATA_FOUND);
+        }
+        return list;
+    }
+
     public Boolean isCommentDetailsValid(IsCommentMatchesRequestDto dto) {
         Optional<Long> optionalAuthId = jwtTokenManager.getIdFromToken(dto.getToken());
         if (optionalAuthId.isEmpty()) {
