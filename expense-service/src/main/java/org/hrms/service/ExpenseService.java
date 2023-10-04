@@ -57,6 +57,7 @@ public class ExpenseService extends ServiceManager<Expense,Long> {
             case MANAGER -> {
                 // Yönetici tarafından onaylandıysa onay durumunu "ONAYLANDI" olarak ayarlar.
                 expense.setApprovalStatus(ApprovalStatus.APPROVED);
+                expense.setReplyDate(LocalDate.now());
                 return expense;
             }
             case EMPLOYEE -> {
@@ -116,6 +117,4 @@ public class ExpenseService extends ServiceManager<Expense,Long> {
         }
         return expenseList;
     }
-
-
 }

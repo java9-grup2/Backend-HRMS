@@ -248,9 +248,11 @@ public class UserService extends ServiceManager<User,Long> {
     }
 
     public Boolean createAdminUser(CreateAdminUserModel model) {
-        User user = IUserMapper.INSTANCE.toUser(model);
-        System.out.println(user);
-        save(user);
+
+            User user = IUserMapper.INSTANCE.toUser(model);
+            System.out.println(user);
+            save(user);
+
         return true;
     }
 
