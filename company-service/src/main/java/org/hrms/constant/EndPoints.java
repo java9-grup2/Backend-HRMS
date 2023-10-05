@@ -14,6 +14,8 @@ public class EndPoints {
     public static final String FINDBYID ="/findbyid";
     public static final String FINDBYCOMPANYNAME ="/findbycompanyname";
     public static final String COMPANYREQUESTCHECKER ="/companyrequestchecker";
+    public static final String INCREASECOMPANYWORKER ="/increasecompanyworker";
+    public static final String CONTACTINFORMATION ="/contactinformation";
 
     //Company
     public static final String ISCOMPANYEXISTS ="/iscompanyexists";

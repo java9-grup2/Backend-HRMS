@@ -49,11 +49,19 @@ public class RabbitConfig {
     @Value("${rabbitmq.activate-company-status-queue}")
     private String activateCompanyStatusQueue;
 
+    @Value("${rabbitmq.increase-company-worker-queue}")
+    private String increaseCompanyWorkerQueue;
+
     @Bean
     DirectExchange exchangeCompany() {
         return new DirectExchange(exchangeCompany);
     }
 
+
+    @Bean
+    Queue increaseCompanyWorkerQueue() {
+        return new Queue(increaseCompanyWorkerQueue);
+    }
 
     @Bean
     Queue activateCompanyStatusQueue() {

@@ -16,8 +16,8 @@ import javax.persistence.*;
 public class Upcomingpayment extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private Long companyId;
+    Long id;
+
     private String companyName;
     private String paymentName;
     private String paymentAmount;

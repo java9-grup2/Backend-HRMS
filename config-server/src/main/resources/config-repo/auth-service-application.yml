@@ -49,3 +49,5 @@ rabbitmq:
   update-auth-companyName-details-Queue: updateAuthCompanyNameDetailsQueue
   forgot-password-mail-queue: forgotPasswordMailQueue
   forgot-password-mail-bindingKey: forgotPasswordMailBindingKey
+  increase-company-worker-queue: increaseCompanyWorkerQueue
+  increase-company-worker-bindingKey: increaseCompanyWorkerBindingKey

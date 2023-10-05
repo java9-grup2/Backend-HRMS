@@ -1,4 +1,4 @@
-package org.hrms.dto.request;
+package org.hrms.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateCompanyRequestDto {
-    private Long id;
-    private String companyName;
-    private String taxNo;
-    private Long numOfEmployees;
-    private String about;
+public class ContactInformationResponseDto {
+
     private String phone;
     private String address;
     private String companyEmail;

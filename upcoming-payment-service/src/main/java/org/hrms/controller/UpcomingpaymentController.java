@@ -32,7 +32,7 @@ public class UpcomingpaymentController {
 
     @PostMapping(CREATENEWUPCOMINGPAYMENT)
     public ResponseEntity<Upcomingpayment> createNewCompanyPayment(@RequestBody Upcomingpayment upcomingpayment) {
-        return ResponseEntity.ok((Upcomingpayment) this.service.save(upcomingpayment));
+        return ResponseEntity.ok(service.save(upcomingpayment));
     }
 
     @GetMapping(FINDALLWITHCOMPANY)

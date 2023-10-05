@@ -92,11 +92,27 @@ public class RabbitConfig {
     @Value("${rabbitmq.forgot-password-mail-bindingKey}")
     private String forgotPasswordMailBindingKey;
 
+    @Value("${rabbitmq.increase-company-worker-queue}")
+    private String increaseCompanyWorkerQueue;
+
+    @Value("${rabbitmq.increase-company-worker-bindingKey}")
+    private String increaseCompanyWorkerBindingKey;
+
     @Bean
     DirectExchange exchangeAuth() {
         return new DirectExchange(authExchange);
     }
 
+
+    @Bean
+    Queue increaseCompanyWorkerQueue() {
+        return new Queue(increaseCompanyWorkerQueue);
+    }
+
+    @Bean
+    public Binding increaseCompanyWorkerBindingKey(final DirectExchange exchangeAuth, final Queue increaseCompanyWorkerQueue) {
+        return BindingBuilder.bind(increaseCompanyWorkerQueue).to(exchangeAuth).with(increaseCompanyWorkerBindingKey);
+    }
 
     @Bean
     Queue forgotPasswordMailQueue() {
