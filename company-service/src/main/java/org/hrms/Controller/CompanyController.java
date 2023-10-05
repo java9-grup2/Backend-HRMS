@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.IsCompanyRequestValidDto;
 import org.hrms.dto.request.PublicHolidayCompanyRequestDto;
 import org.hrms.dto.request.UpdateCompanyRequestDto;
+import org.hrms.dto.response.ContactInformationResponseDto;
 import org.hrms.rabbitmq.model.ActivateCompanyStatusModel;
 import org.hrms.rabbitmq.model.CreateCompanyModel;
 import org.hrms.rabbitmq.model.DeleteCompanyByRegisterDenyModel;
+import org.hrms.rabbitmq.model.IncreaseCompanyWorkerModel;
 import org.hrms.repository.entity.Company;
 import org.hrms.service.CompanyService;
 import org.springframework.http.ResponseEntity;
@@ -88,5 +90,15 @@ public class CompanyController {
     @PostMapping(COMPANYREQUESTCHECKER)
     public ResponseEntity<Boolean> isCompanyRequestValid(@RequestBody IsCompanyRequestValidDto dto) {
         return ResponseEntity.ok(service.isCompanyRequestValid(dto));
+    }
+
+    @PutMapping(INCREASECOMPANYWORKER)
+    public ResponseEntity<Boolean> increaseCompanyWorker(@RequestBody IncreaseCompanyWorkerModel model) {
+        return ResponseEntity.ok(service.increaseCompanyWorker(model));
+    }
+
+    @GetMapping(CONTACTINFORMATION)
+    public ResponseEntity<ContactInformationResponseDto> getContactInformation(@RequestParam String companyName) {
+        return ResponseEntity.ok(service.getContactInformation(companyName));
     }
 }

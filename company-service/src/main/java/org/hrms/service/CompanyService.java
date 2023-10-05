@@ -3,6 +3,7 @@ package org.hrms.service;
 import org.hrms.dto.request.IsCompanyRequestValidDto;
 import org.hrms.dto.request.PublicHolidayCompanyRequestDto;
 import org.hrms.dto.request.UpdateCompanyRequestDto;
+import org.hrms.dto.response.ContactInformationResponseDto;
 import org.hrms.exception.CompanyManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.mapper.ICompanyMapper;
@@ -111,6 +112,10 @@ public class CompanyService extends ServiceManager<Company, Long> {
         optionalCompany.get().setAbout(dto.getAbout());
         optionalCompany.get().setNumOfEmployees(dto.getNumOfEmployees());
         optionalCompany.get().setTaxNo(dto.getTaxNo());
+        optionalCompany.get().setAddress(dto.getAddress());
+        optionalCompany.get().setFax(dto.getFax());
+        optionalCompany.get().setPhone(dto.getPhone());
+        optionalCompany.get().setCompanyEmail(dto.getCompanyEmail());
         update(optionalCompany.get());
         return true;
 
@@ -249,5 +254,25 @@ public class CompanyService extends ServiceManager<Company, Long> {
             return false;
         }
         return true;
+    }
+
+    public Boolean increaseCompanyWorker(IncreaseCompanyWorkerModel model) {
+
+        Optional<Company> optionalCompany = repository.findByCompanyName(model.getCompanyName());
+        if (optionalCompany.isEmpty()) {
+            throw new CompanyManagerException(ErrorType.COMPANY_NOT_FOUND);
+        }
+        optionalCompany.get().setNumOfEmployees(optionalCompany.get().getNumOfEmployees()+1L);
+        update(optionalCompany.get());
+        return true;
+    }
+
+    public ContactInformationResponseDto getContactInformation(String companyName) {
+        Optional<Company> optionalCompany = repository.findByCompanyName(companyName);
+        if (optionalCompany.isEmpty()) {
+            throw new CompanyManagerException(ErrorType.COMPANY_NOT_FOUND);
+        }
+
+        return ICompanyMapper.INSTANCE.toContactInformationResponseDto(optionalCompany.get());
     }
 }

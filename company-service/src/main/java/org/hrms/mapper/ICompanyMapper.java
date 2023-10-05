@@ -1,6 +1,7 @@
 package org.hrms.mapper;
 
 import org.hrms.dto.request.SaveCompanyRequestDto;
+import org.hrms.dto.response.ContactInformationResponseDto;
 import org.hrms.rabbitmq.model.CreateCompanyModel;
 import org.hrms.rabbitmq.model.DeleteUsersContainsCompanyNameModel;
 import org.hrms.repository.ICompanyRepository;
@@ -17,4 +18,6 @@ public interface ICompanyMapper {
     Company toCompany(final CreateCompanyModel model);
 
     DeleteUsersContainsCompanyNameModel toDeleteUsersContainsCompanyNameModel(final Company company);
+
+    ContactInformationResponseDto toContactInformationResponseDto(final Company company);
 }

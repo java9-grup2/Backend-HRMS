@@ -45,7 +45,9 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
     private final ForgotPasswordMailProducer forgotPasswordMailProducer;
 
-    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer, CreateCompanyProducer createCompanyProducer, ICompanyManager companyManager, CreateAdminUserProducer createAdminUserProducer, ForgotPasswordMailProducer forgotPasswordMailProducer) {
+    private final IncreaseCompanyWorkerProducer increaseCompanyWorkerProducer;
+
+    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer, CreateCompanyProducer createCompanyProducer, ICompanyManager companyManager, CreateAdminUserProducer createAdminUserProducer, ForgotPasswordMailProducer forgotPasswordMailProducer, IncreaseCompanyWorkerProducer increaseCompanyWorkerProducer) {
         super(repository);
         this.repository = repository;
         this.registerVisitorProducer = registerVisitorProducer;
@@ -59,6 +61,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         this.companyManager = companyManager;
         this.createAdminUserProducer = createAdminUserProducer;
         this.forgotPasswordMailProducer = forgotPasswordMailProducer;
+        this.increaseCompanyWorkerProducer = increaseCompanyWorkerProducer;
     }
 
     public TokenResponseDto registerVisitor(RegisterVisitorRequestDto dto) {
@@ -264,6 +267,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         registerEmployeeModel.setName(dto.getName());
         registerEmployeeModel.setSurname(dto.getSurname());
         registerEmployeeMailProducer.sendEmployeeDetails(registerEmployeeModel);
+        increaseCompanyWorkerProducer.increaseCompanyWorker(new IncreaseCompanyWorkerModel(auth.getCompanyName()));
         return true;
     }
 

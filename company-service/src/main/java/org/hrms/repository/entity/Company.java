@@ -26,10 +26,16 @@ public class Company extends BaseEntity{
 
     private Long numOfEmployees;
 
-    //ayni isimde sirket olmasi durumunda sirketin ne uzerine kurulduguna bakarak ayirt edebilmek icin yapilmistir
+
     private String about;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private EStatus status = EStatus.PENDING ;
+
+
+    private String phone;
+    private String address;
+    private String companyEmail;
+    private String fax;
 }
