@@ -3,6 +3,7 @@ package org.hrms.service;
 import org.hrms.dto.request.IsCompanyRequestValidDto;
 import org.hrms.dto.request.PublicHolidayCompanyRequestDto;
 import org.hrms.dto.request.UpdateCompanyRequestDto;
+import org.hrms.dto.response.CompanyUpdateResponseDto;
 import org.hrms.dto.response.ContactInformationResponseDto;
 import org.hrms.exception.CompanyManagerException;
 import org.hrms.exception.ErrorType;
@@ -76,7 +77,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
         return optionalCompany.get();
     }
 
-    public Boolean updateCompanyDetailsByManager(UpdateCompanyRequestDto dto) {
+    public CompanyUpdateResponseDto updateCompanyDetailsByManager(UpdateCompanyRequestDto dto) {
         Optional<Company> optionalCompany = findById(dto.getId());
 //        Optional<Company> optionalCompany = repository.findByCompanyName(dto.getCompanyName());
         if (optionalCompany.isEmpty()) {
@@ -117,7 +118,7 @@ public class CompanyService extends ServiceManager<Company, Long> {
         optionalCompany.get().setPhone(dto.getPhone());
         optionalCompany.get().setCompanyEmail(dto.getCompanyEmail());
         update(optionalCompany.get());
-        return true;
+        return new CompanyUpdateResponseDto("Guncelleme islemi basarili!");
 
     }
 
