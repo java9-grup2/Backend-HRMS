@@ -32,6 +32,7 @@ public class RegisterManagerRequestDto {
     private String personalEmail;
 
     @NotBlank(message = "TaxNo is a must")
+    @Size(min = 10,max = 15,message = "vergi no en az 10 en fazla 15 karakterden olusabilir")
     private String taxNo;
     @NotBlank(message = "companyName is a must")
     private String companyName;

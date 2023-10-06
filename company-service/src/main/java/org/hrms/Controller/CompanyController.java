@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.IsCompanyRequestValidDto;
 import org.hrms.dto.request.PublicHolidayCompanyRequestDto;
 import org.hrms.dto.request.UpdateCompanyRequestDto;
+import org.hrms.dto.response.CompanyUpdateResponseDto;
 import org.hrms.dto.response.ContactInformationResponseDto;
 import org.hrms.rabbitmq.model.ActivateCompanyStatusModel;
 import org.hrms.rabbitmq.model.CreateCompanyModel;
@@ -14,6 +15,7 @@ import org.hrms.service.CompanyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 import static org.hrms.constant.EndPoints.*;
@@ -62,7 +64,7 @@ public class CompanyController {
 
 
     @PutMapping(UPDATE)
-    public ResponseEntity<Boolean> updateCompanyDetails(@RequestBody UpdateCompanyRequestDto dto) {
+    public ResponseEntity<CompanyUpdateResponseDto> updateCompanyDetails(@Valid @RequestBody UpdateCompanyRequestDto dto) {
         return ResponseEntity.ok(service.updateCompanyDetailsByManager(dto));
     }
 
