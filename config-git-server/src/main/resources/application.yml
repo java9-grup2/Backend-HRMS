@@ -6,6 +6,7 @@ spring:
     config:
       server:
         git:
+#          uri: "https://github.com/cankinomad/HrmsConfig.git"
           uri: "https://github.com/java9-grup2/HRMS-GIT-CONFIG-REPO.git"
           default-label: main
           skip-ssl-validation: true
