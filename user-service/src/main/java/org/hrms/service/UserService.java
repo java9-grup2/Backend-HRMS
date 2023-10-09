@@ -459,4 +459,24 @@ public class UserService extends ServiceManager<User,Long> {
         return true;
 
     }
+
+    public Boolean isAdvanceRequestValid(AdvancePaymentUserControlDto dto) {
+        Optional<Long> optionalAuthId = jwtTokenManager.getIdFromToken(dto.getToken());
+
+        Optional<User> optionalUser = repository.findByAuthid(optionalAuthId.get());
+        if (optionalUser.isEmpty()) {
+            return false;
+        }
+        if (!optionalUser.get().getCompanyName().equals(dto.getCompanyName())) {
+            return false;
+        }
+
+        System.out.println(dto.getAmount());
+        System.out.println(optionalUser.get().getSalary());
+        if (dto.getAmount() > optionalUser.get().getSalary()) {
+            return false;
+        }
+
+        return true;
+    }
 }

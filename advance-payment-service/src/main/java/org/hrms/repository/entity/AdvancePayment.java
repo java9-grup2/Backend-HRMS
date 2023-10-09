@@ -28,4 +28,5 @@ public class AdvancePayment extends BaseEntity {
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private EStatus status = EStatus.PENDING;
+    private LocalDate replyDate;
 }

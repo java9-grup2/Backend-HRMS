@@ -1,22 +1,43 @@
 package org.hrms.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.hrms.constant.EndPoints;
+import org.hrms.dto.request.AdvanceStatusRequestDto;
+import org.hrms.dto.request.CreateAdvancePaymentRequestDto;
+import org.hrms.dto.response.CreateAdvancePaymentResponseDto;
+import org.hrms.service.AdvancePaymentService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import static org.hrms.constant.EndPoints.ADVANCEPAYMENT;
+import javax.validation.Valid;
+
+import static org.hrms.constant.EndPoints.*;
 
 @RestController
 @RequestMapping(ADVANCEPAYMENT)
 @RequiredArgsConstructor
 public class AdvancePaymentController {
 
+    private final AdvancePaymentService service;
+
+
     @GetMapping("apitest")
     public ResponseEntity<String> mesaj() {
         return ResponseEntity.ok("api calisiyor");
     }
+
+    @PostMapping(SAVE)
+    public ResponseEntity<CreateAdvancePaymentResponseDto> createAdvancePayment(@Valid @RequestBody CreateAdvancePaymentRequestDto dto) {
+        return ResponseEntity.ok(service.createAdvancePayment(dto));
+    }
+
+    @PutMapping(APPROVEADVANCEREQUEST)
+    public ResponseEntity<Boolean> approveAdvancePaymentRequest(@RequestBody AdvanceStatusRequestDto dto) {
+        return ResponseEntity.ok(service.approveAdvancePaymentRequest(dto));
+    }
+
+    @PutMapping(DENYADVANCEREQUEST)
+    public ResponseEntity<Boolean> denyAdvancePaymentRequest(@RequestBody AdvanceStatusRequestDto dto) {
+        return ResponseEntity.ok(service.denyAdvancePaymentRequest(dto));
+    }
+
 }
