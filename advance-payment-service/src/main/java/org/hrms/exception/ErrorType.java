@@ -29,8 +29,9 @@ public enum ErrorType {
     COULD_NOT_DELETE_ALL_USERS(12324,"Kullanicilarin hepsi silinemedi.",HttpStatus.BAD_REQUEST),
     COULD_NOT_UPDATE_ALL_USERS(12324,"Kullanicilarin hepsi guncellenmedi.",HttpStatus.BAD_REQUEST),
     NO_DATA_FOUND(12324,"Aradiginiz kriterlerde kullanici/kullanicilar bulunamadi.",HttpStatus.BAD_REQUEST),
-    ADVANCE_REQUEST_NOT_VALID(12325, "Avans istegi maasinizdan cok olamaz.", HttpStatus.BAD_REQUEST),
-    ADVANCE_REQUEST_NOT_FOUND(12325, "Boyle bir avans istegi bulunamamistir.", HttpStatus.BAD_REQUEST);
+    ADVANCE_REQUEST_NOT_VALID(12325, "Maas bilginizin sistemde kayitli oldugundan emin olun ve Maasinizdan yuksek avans miktari girmeyin!", HttpStatus.BAD_REQUEST),
+    ADVANCE_REQUEST_NOT_FOUND(12325, "Boyle bir avans istegi bulunamamistir.", HttpStatus.BAD_REQUEST),
+    COMPANY_ADVANCE_PAYMENT_REQUEST_NOT_FOUND(12325,"Sirketinize ait herhangi bir avans odeme istegi bulunmamistir",HttpStatus.BAD_REQUEST);
 
 
     private int code;

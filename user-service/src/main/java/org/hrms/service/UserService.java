@@ -471,8 +471,10 @@ public class UserService extends ServiceManager<User,Long> {
             return false;
         }
 
-        System.out.println(dto.getAmount());
-        System.out.println(optionalUser.get().getSalary());
+        if (optionalUser.get().getSalary() == null) {
+            return false;
+        }
+
         if (dto.getAmount() > optionalUser.get().getSalary()) {
             return false;
         }

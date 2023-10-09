@@ -18,13 +18,13 @@ public class RegisterEmployeeRequestDto {
 
     @NotBlank
     private String token;
-    @NotBlank
+    @NotBlank(message = "Ad bilgisi bos birakilamaz")
     private String name;
-    @NotBlank
+    @NotBlank(message = "Soyad bilgisi bos birakilamaz")
     private String surname;
-    @NotBlank
+    @NotBlank(message = "mail bilgisi bos birakilamaz")
     private String personalEmail;
-    @NotNull
+    @NotNull(message = "maas bilgisi bos birakialmaz")
     private Double salary;
 
 }

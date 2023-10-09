@@ -2,10 +2,7 @@ package org.hrms.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.hrms.dto.request.*;
-import org.hrms.dto.response.ForgotPasswordResponseDto;
-import org.hrms.dto.response.LoginResponseDto;
-import org.hrms.dto.response.MessageResponseDto;
-import org.hrms.dto.response.TokenResponseDto;
+import org.hrms.dto.response.*;
 import org.hrms.rabbitmq.model.DeleteAuthContainsCompanyNameModel;
 import org.hrms.rabbitmq.model.UpdateAuthCompanyNameDetailsModel;
 import org.hrms.rabbitmq.model.UpdateUserModel;
@@ -35,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping(REGISTEREMPLOYEE)
-    public ResponseEntity<Boolean> registerEmployee(@Valid @RequestBody RegisterEmployeeRequestDto dto) {
+    public ResponseEntity<RegisterEmployeeResponseDto> registerEmployee(@Valid @RequestBody RegisterEmployeeRequestDto dto) {
         return ResponseEntity.ok(service.registerEmployee(dto));
     }
 
