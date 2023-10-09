@@ -15,5 +15,6 @@ public class EndPoints {
     public static final String ISADVANCEREQUESTVALID ="/isadvancerequestvalid";
     public static final String APPROVEADVANCEREQUEST ="/approveadvancerequest";
     public static final String DENYADVANCEREQUEST ="/denyadvancerequest";
+    public static final String LISTADVANCEPAYMENTREQEUSTS ="/listsadvancepaymentrequests";
 
 }

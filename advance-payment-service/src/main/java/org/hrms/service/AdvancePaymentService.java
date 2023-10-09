@@ -16,6 +16,7 @@ import org.hrms.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -105,5 +106,13 @@ public class AdvancePaymentService extends ServiceManager<AdvancePayment,Long> {
         optionalAdvancePayment.get().setReplyDate(LocalDate.now());
         update(optionalAdvancePayment.get());
         return true;
+    }
+
+    public List<AdvancePayment> listAdvancePaymentRequests(String companyName) {
+        List<AdvancePayment> advancePaymentList = repository.listPendingAdvanceRequests(companyName);
+        if (advancePaymentList.size() < 1) {
+            throw new AdvancePaymentManagerException(ErrorType.COMPANY_ADVANCE_PAYMENT_REQUEST_NOT_FOUND);
+        }
+        return advancePaymentList;
     }
 }

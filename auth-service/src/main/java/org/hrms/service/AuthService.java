@@ -1,10 +1,7 @@
 package org.hrms.service;
 
 import org.hrms.dto.request.*;
-import org.hrms.dto.response.ForgotPasswordResponseDto;
-import org.hrms.dto.response.LoginResponseDto;
-import org.hrms.dto.response.TokenResponseDto;
-import org.hrms.dto.response.MessageResponseDto;
+import org.hrms.dto.response.*;
 import org.hrms.exception.AuthManagerException;
 import org.hrms.exception.ErrorType;
 import org.hrms.manager.ICompanyManager;
@@ -219,7 +216,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         createAdminUserProducer.createAdminUser(IAuthMapper.INSTANCE.toCreateAdminUserModel(auth));
     }
 
-    public Boolean  registerEmployee(RegisterEmployeeRequestDto dto) {
+    public RegisterEmployeeResponseDto registerEmployee(RegisterEmployeeRequestDto dto) {
         Optional<String> optionalRole = jwtTokenManager.getRoleFromToken(dto.getToken());
         Optional<String> companyNameFromToken = jwtTokenManager.getCompanyNameFromToken(dto.getToken());
 
@@ -268,7 +265,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         registerEmployeeModel.setSurname(dto.getSurname());
         registerEmployeeMailProducer.sendEmployeeDetails(registerEmployeeModel);
         increaseCompanyWorkerProducer.increaseCompanyWorker(new IncreaseCompanyWorkerModel(auth.getCompanyName()));
-        return true;
+        return new RegisterEmployeeResponseDto("Calisan Kaydi basarili");
     }
 
     /**
