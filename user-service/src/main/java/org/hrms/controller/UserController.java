@@ -130,6 +130,10 @@ public class UserController {
         return ResponseEntity.ok(service.isRequestValid(dto));
     }
 
+    @PostMapping(ISADVANCEREQUESTVALID)
+    public ResponseEntity<Boolean> isAdvanceRequestValid(@RequestBody AdvancePaymentUserControlDto dto) {
+        return ResponseEntity.ok(service.isAdvanceRequestValid(dto));
+    }
 
 }
 

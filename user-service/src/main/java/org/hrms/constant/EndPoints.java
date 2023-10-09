@@ -27,6 +27,7 @@ public class EndPoints {
     public static final String EMPLOYEEINFO ="/employeeinfo";
     public static final String ISDAYOFFREQUESTVALID ="/isdayoffrequestvalid";
     public static final String ISEXPENSEREQUESTVALID ="/isexpenserequestvalid";
+    public static final String ISADVANCEREQUESTVALID ="/isadvancerequestvalid";
 
     public static final String LISTWORKERSWITHOUTMANAGER = "/listworkerswithoutmanager";
 }
