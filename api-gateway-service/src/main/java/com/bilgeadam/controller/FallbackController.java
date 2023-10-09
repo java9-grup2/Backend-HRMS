@@ -53,4 +53,9 @@ public class FallbackController {
     public ResponseEntity<String> expenseServiceFallback(){
         return  ResponseEntity.ok("Expense service suanda hizmet verememektedir!!!");
     }
+
+    @GetMapping("advancepaymentservice")
+    public ResponseEntity<String> advancePaymentServiceFallback() {
+        return ResponseEntity.ok("Advance Payment Service suanda hizmet verememektedir!!!");
+    }
 }
