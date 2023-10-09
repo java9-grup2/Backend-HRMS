@@ -114,6 +114,16 @@ spring:
               args:
                 enabled: true
                 fallbackUri: forward:/fallback/expenseservice
+        - id: advance-payment-service
+          predicates:
+            - Path=/advancepayment/**
+          uri: http://localhost:9098
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+            - name: CircuitBreaker
+              args:
+                enabled: true
+                fallbackUri: forward:/fallback/advancepaymentservice
 
       default-filters:
         - RewritePath= /(?<segment>.*),/api/v1/$\{segment}
