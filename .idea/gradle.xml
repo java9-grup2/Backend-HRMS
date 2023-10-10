@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/expense-service" />
             <option value="$PROJECT_DIR$/financial-performance-service" />
             <option value="$PROJECT_DIR$/mail-service" />
+            <option value="$PROJECT_DIR$/package-service" />
             <option value="$PROJECT_DIR$/permission-service" />
             <option value="$PROJECT_DIR$/shifts-and-breaks-service" />
             <option value="$PROJECT_DIR$/upcoming-payment-service" />

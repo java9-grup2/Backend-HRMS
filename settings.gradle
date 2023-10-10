@@ -13,4 +13,5 @@ include 'shifts-and-breaks-service'
 include 'expense-service'
 include 'config-git-server'
 include 'advance-payment-service'
+include 'package-service'
 
