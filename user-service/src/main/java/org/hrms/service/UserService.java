@@ -170,10 +170,11 @@ public class UserService extends ServiceManager<User,Long> {
     public Boolean updateUser(UpdateRequestDto dto) {
         Optional<String> optionalRole = jwtTokenManager.getRoleFromToken(dto.getToken());
         Optional<Long> optionalId = jwtTokenManager.getIdFromToken(dto.getToken());
+        System.out.println(optionalRole.get());
         if(optionalRole.isEmpty()){
             throw new UserManagerException(ErrorType.INVALID_TOKEN);
         }
-
+        System.out.println(optionalId.get());
         if (optionalId.isEmpty()) {
             throw new UserManagerException(ErrorType.INVALID_TOKEN);
         }
