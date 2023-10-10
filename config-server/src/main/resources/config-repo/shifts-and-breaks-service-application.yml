@@ -25,3 +25,6 @@ jwt:
   secretKey: ${java9secretkey}
   issuer: ${java9issuer}
   audience: ${java9audience}
+
+feign:
+  company: http://localhost:9092/api/v1/company

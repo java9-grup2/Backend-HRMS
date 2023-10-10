@@ -20,3 +20,6 @@ jwt:
   secretKey: ${java9secretkey}
   issuer: ${java9issuer}
   audience: ${java9audience}
+
+feign:
+  user: http://localhost:9091/api/v1/user

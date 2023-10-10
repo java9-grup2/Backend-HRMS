@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import static org.hrms.constant.EndPoints.ISEXPENSEREQUESTVALID;
 
-@FeignClient(url = "http://localhost:9091/api/v1/user",decode404 = true,name = "expense-userservice")
+@FeignClient(url = "${feign.user}",decode404 = true,name = "expense-userservice")
 public interface IUserManager {
     @PostMapping(ISEXPENSEREQUESTVALID)
     ResponseEntity<Boolean> isExpenseRequestValid(@RequestBody AuthIdAndCompanyNameCheckerRequestDto dto);

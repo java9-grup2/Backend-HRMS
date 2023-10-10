@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import static org.hrms.constant.EndPoints.APPROVECOMMENT;
 import static org.hrms.constant.EndPoints.DELETECOMMENT;
 
-@FeignClient(url = "http://localhost:9094/api/v1/comment",decode404 = true,name = "user-commentservice")
+@FeignClient(url = "${feign.comment}",decode404 = true,name = "user-commentservice")
 public interface ICommentManager {
 
     @PutMapping(APPROVECOMMENT)

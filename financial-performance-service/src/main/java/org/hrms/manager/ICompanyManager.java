@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import static org.hrms.constant.EndPoints.ISCOMPANYEXISTS;
 
-@FeignClient(url = "http://localhost:9092/api/v1/company",decode404 = true,name = "financialPerformance-companyservice")
+@FeignClient(url = "${feign.company}",decode404 = true,name = "financialPerformance-companyservice")
 public interface ICompanyManager {
 
     @PostMapping(ISCOMPANYEXISTS)
