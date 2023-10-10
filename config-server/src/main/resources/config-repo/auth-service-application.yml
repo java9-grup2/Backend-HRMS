@@ -55,5 +55,5 @@ rabbitmq:
   increase-company-worker-queue: increaseCompanyWorkerQueue
   increase-company-worker-bindingKey: increaseCompanyWorkerBindingKey
 
-  feign:
-    company: http://localhost:9092/api/v1/company
+feign:
+  company: http://localhost:9092/api/v1/company
