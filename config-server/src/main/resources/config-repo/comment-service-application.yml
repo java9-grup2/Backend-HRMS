@@ -28,3 +28,6 @@ jwt:
 
 
 rabbitmq:
+
+feign:
+  user: http://localhost:9091/api/v1/user

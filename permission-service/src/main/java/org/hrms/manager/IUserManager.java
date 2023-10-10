@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import static org.hrms.constant.EndPoints.ISDAYOFFREQUESTVALID;
 
-@FeignClient(url = "http://localhost:9091/api/v1/user",decode404 = true,name = "permission-userservice")
+@FeignClient(url = "${feign.user}",decode404 = true,name = "permission-userservice")
 public interface IUserManager {
 
     @GetMapping("getUserType")

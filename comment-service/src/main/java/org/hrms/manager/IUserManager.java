@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import static org.hrms.constant.EndPoints.ISCOMMENTMATCHES;
 
-@FeignClient(url = "http://localhost:9091/api/v1/user",decode404 = true,name = "comment-userservice")
+@FeignClient(url = "${feign.user}",decode404 = true,name = "comment-userservice")
 public interface IUserManager {
     @PostMapping(ISCOMMENTMATCHES)
     ResponseEntity<Boolean> isCommentDetailsValid(@RequestBody IsCommentMatchesRequestDto dto);

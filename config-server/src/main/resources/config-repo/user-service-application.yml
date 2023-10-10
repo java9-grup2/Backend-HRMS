@@ -54,4 +54,5 @@ rabbitmq:
   activate-company-status-bindingKey: activateCompanyStatusBindingKey
   activate-company-status-queue: activateCompanyStatusQueue
 
-
+feign:
+  comment: http://localhost:9094/api/v1/comment
