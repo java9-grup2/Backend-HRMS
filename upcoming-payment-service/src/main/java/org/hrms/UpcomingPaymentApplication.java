@@ -13,11 +13,11 @@ public class UpcomingPaymentApplication {
     public static void main(String[] args) {
         SpringApplication.run(UpcomingPaymentApplication.class, args);
     }
-    @LoadBalanced
-    @Bean
-    public RestTemplate getRestTemplate(){
-        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        clientHttpRequestFactory.setConnectTimeout(500);
-        return new RestTemplate(clientHttpRequestFactory);
-    }
+//    @LoadBalanced
+//    @Bean
+//    public RestTemplate getRestTemplate(){
+//        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+//        clientHttpRequestFactory.setConnectTimeout(500);
+//        return new RestTemplate(clientHttpRequestFactory);
+//    }
 }
