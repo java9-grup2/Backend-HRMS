@@ -13,11 +13,11 @@ public class ApiGatewayServiceApplication {
         SpringApplication.run(ApiGatewayServiceApplication.class);
     }
 
-    @LoadBalanced
-    @Bean
-    public RestTemplate getRestTemplate(){
-        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        clientHttpRequestFactory.setConnectTimeout(500);
-        return new RestTemplate(clientHttpRequestFactory);
-    }
+//    @LoadBalanced
+//    @Bean
+//    public RestTemplate getRestTemplate(){
+//        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+//        clientHttpRequestFactory.setConnectTimeout(500);
+//        return new RestTemplate(clientHttpRequestFactory);
+//    }
 }

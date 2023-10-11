@@ -20,8 +20,8 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 #docker build --build-arg JAR_FILE=api-gateway-service/build/libs/api-gateway-service-v.0.0.1.jar -t aktasberk/hrmsapigateway:v.0.4 .
 
 #==========Mail Service==============
-#docker build --build-arg JAR_FILE=mail-service/build/libs/mail-service-v.0.0.1.jar -t aktasberk/hrmsmail:v.0.4 .
+#docker build --build-arg JAR_FILE=mail-service/build/libs/mail-service-v.0.0.1.jar -t aktasberk/hrmsmail:v.0.6 .
 
-#==========Mail Service==============
+#==========Comment Service==============
 #docker build --build-arg JAR_FILE=comment-service/build/libs/comment-service-v.0.0.1.jar -t aktasberk/hrmscomment:v.0.4 .
 

@@ -14,11 +14,11 @@ public class UserServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class);
     }
-    @LoadBalanced
-    @Bean
-    public RestTemplate getRestTemplate(){
-        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
-        clientHttpRequestFactory.setConnectTimeout(500);
-        return new RestTemplate(clientHttpRequestFactory);
-    }
+//    @LoadBalanced
+//    @Bean
+//    public RestTemplate getRestTemplate(){
+//        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+//        clientHttpRequestFactory.setConnectTimeout(500);
+//        return new RestTemplate(clientHttpRequestFactory);
+//    }
 }
