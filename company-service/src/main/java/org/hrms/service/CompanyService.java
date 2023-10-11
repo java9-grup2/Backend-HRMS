@@ -276,4 +276,12 @@ public class CompanyService extends ServiceManager<Company, Long> {
 
         return ICompanyMapper.INSTANCE.toContactInformationResponseDto(optionalCompany.get());
     }
+
+    public Company findCompanyById2(Long id) {
+        Optional<Company> optionalCompany = findById(id);
+        if (optionalCompany.isEmpty()) {
+            throw new CompanyManagerException(ErrorType.COMPANY_NOT_FOUND);
+        }
+        return optionalCompany.get();
+    }
 }

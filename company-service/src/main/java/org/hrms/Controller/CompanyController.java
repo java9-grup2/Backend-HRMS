@@ -56,6 +56,10 @@ public class CompanyController {
     public ResponseEntity<Company> findCompanyById(Long id) {
         return ResponseEntity.ok(service.findCompanyById(id));
     }
+    @GetMapping(FINDBYID2)
+    public ResponseEntity<Company> findCompanyById2(Long id) {
+        return ResponseEntity.ok(service.findCompanyById2(id));
+    }
 
     @GetMapping(FINDBYCOMPANYNAME)
     public ResponseEntity<Company> findCompanyByCompanyName(String companyName) {

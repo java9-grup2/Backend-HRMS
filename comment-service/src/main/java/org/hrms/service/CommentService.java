@@ -87,4 +87,13 @@ public class CommentService extends ServiceManager<Comment,Long> {
             return false;
         }
     }
+
+
+    public List<Comment> findByWithCompanyNameComment(String companyName) {
+        List<Comment> listComment =repository.findByWithCompanyNameComment(companyName);
+        if (listComment.isEmpty()){
+            throw new CommentManagerException(ErrorType.COMMENT_NOT_FOUND);
+        }
+        return listComment;
+    }
 }

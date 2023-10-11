@@ -44,4 +44,9 @@ public class UpcomingpaymentController {
     public ResponseEntity<Boolean> deletePaymentByid(@PathVariable Long id) {
         return ResponseEntity.ok(this.service.deletePaymentById(id));
     }
+
+    @PostMapping(SAVEUPCOMINGPAYMENT)
+    public ResponseEntity<String> saveUpcomingPayment(@RequestBody Upcomingpayment upcomingpayment ) {
+        return ResponseEntity.ok(service.saveUpcomingPayment(upcomingpayment));
+    }
 }

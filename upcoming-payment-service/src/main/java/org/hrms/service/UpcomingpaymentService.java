@@ -16,6 +16,7 @@ import java.util.List;
 public class UpcomingpaymentService extends ServiceManager<Upcomingpayment, Long> {
     private final IUpcomingpaymentRepository repository;
 
+
     public UpcomingpaymentService(IUpcomingpaymentRepository repository, IUpcomingPaymentMapper iUpcomingPaymentMapper) {
         super(repository);
         this.repository = repository;
@@ -52,5 +53,28 @@ public class UpcomingpaymentService extends ServiceManager<Upcomingpayment, Long
     public Boolean deletePaymentById(Long id) {
         this.deleteById(id);
         return true;
+    }
+
+    public String saveUpcomingPayment(Upcomingpayment upcomingpayment) {
+        System.out.println(upcomingpayment.getPaymentName());
+        if(upcomingpayment.getCompanyName() == null || (upcomingpayment.getCompanyName().equals("")))  {
+            throw  new UpcomingPaymentManagerException(ErrorType.COMPANY_NOT_CREATED);
+        }
+        if(upcomingpayment.getPaymentName() == null || (upcomingpayment.getPaymentName().equals(""))){
+            throw  new UpcomingPaymentManagerException(ErrorType.NOT_FOUND_PAYMENT_NAME);
+        }
+        if(upcomingpayment.getPaymentAmount() == null || (upcomingpayment.getPaymentAmount().equals(""))){
+
+        }
+        if (upcomingpayment.getPaymentDate() == null || (upcomingpayment.getPaymentDate().equals(""))){
+            throw  new UpcomingPaymentManagerException(ErrorType.NOT_FOUND_PAYMENT_DATE);
+        }
+       try {
+
+           save(upcomingpayment);
+       }catch (Exception e) {
+           throw new UpcomingPaymentManagerException(ErrorType.DATABASE_SAVE_PROBLEM);
+       }
+       return "Kayit islemi yapıldı";
     }
 }
