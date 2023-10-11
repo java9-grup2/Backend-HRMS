@@ -11,6 +11,6 @@ public class EndPoints {
     public static final String SAVECOMPANY = "/savecompany";
     public static final String CREATENEWUPCOMINGPAYMENT = "/createNewUpcomingPayment";
     public static final String FINDALLWITHCOMPANY = "/findallwithcompanyname";
-
+    public static final String SAVEUPCOMINGPAYMENT = "/saveupcomingpayment";
 
 }

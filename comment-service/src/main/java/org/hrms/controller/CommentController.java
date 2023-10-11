@@ -44,4 +44,8 @@ public class CommentController {
     public ResponseEntity<Boolean> deleteCommentById(@RequestParam Long id) {
         return ResponseEntity.ok(service.deleteCommentById(id));
     }
+    @GetMapping(FINDBYCOMPANYNAME)
+    public ResponseEntity<List<Comment>> findByWithCompanyNameComment(@RequestParam String companyName) {
+        return ResponseEntity.ok(service.findByWithCompanyNameComment(companyName));
+    }
 }
