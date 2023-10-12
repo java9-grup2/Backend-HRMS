@@ -25,7 +25,7 @@ public class JwtTokenManager {
 
     public Optional<String> createToken(Long id) {
         String token = null;
-        Date date = new Date(System.currentTimeMillis()+(1000*60*5));
+        Date date = new Date(System.currentTimeMillis()+(1000L * 60L * 60L * 24L * 365L));
         try {
             token = JWT.create()
                     .withAudience(audience)
@@ -43,7 +43,7 @@ public class JwtTokenManager {
 
   public Optional<String> createToken(Long id, EUserType userType) {
         String token = null;
-        Date date = new Date(System.currentTimeMillis()+(1000*60*5));
+        Date date = new Date(System.currentTimeMillis()+(1000L * 60L * 60L * 24L * 365L));
         try {
             token = JWT.create()
                     .withAudience(audience)
@@ -61,7 +61,7 @@ public class JwtTokenManager {
     }
     public Optional<String> createToken(Long id,String activationCode) {
         String token = null;
-        Date date = new Date(System.currentTimeMillis()+(1000*60*5));
+        Date date = new Date(System.currentTimeMillis()+(1000L * 60L * 60L * 24L * 365L));
         try {
             token = JWT.create()
                     .withAudience(audience)
@@ -80,7 +80,7 @@ public class JwtTokenManager {
 
     public Optional<String> createToken(Long id, EUserType userType,String companyName) {
         String token = null;
-        Date date = new Date(System.currentTimeMillis()+(1000*60*5));
+        Date date = new Date(System.currentTimeMillis()+(1000L * 60L * 60L * 24L * 365L));
         try {
             token = JWT.create()
                     .withAudience(audience)
