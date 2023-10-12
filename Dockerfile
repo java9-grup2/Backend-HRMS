@@ -8,10 +8,10 @@ ENTRYPOINT ["java","-jar","/app.jar"]
 #docker build --build-arg JAR_FILE=config-git-server/build/libs/config-git-server-v.0.0.1.jar -t aktasberk/hrmsconfigservergit:v.0.2 .
 
 #==========Auth Service==============
-#docker build --build-arg JAR_FILE=auth-service/build/libs/auth-service-v.0.0.1.jar -t aktasberk/hrmsauth:v.0.5 .
+#docker build --build-arg JAR_FILE=auth-service/build/libs/auth-service-v.0.0.1.jar -t aktasberk/hrmsauth:v.0.6 .
 
 #==========User Service==============
-#docker build --build-arg JAR_FILE=user-service/build/libs/user-service-v.0.0.1.jar -t aktasberk/hrmsuser:v.0.5 .
+#docker build --build-arg JAR_FILE=user-service/build/libs/user-service-v.0.0.1.jar -t aktasberk/hrmsuser:v.0.6 .
 
 #==========Company Service==============
 #docker build --build-arg JAR_FILE=company-service/build/libs/company-service-v.0.0.1.jar -t aktasberk/hrmscompany:v.0.5 .
