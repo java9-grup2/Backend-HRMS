@@ -27,8 +27,8 @@ public class MailService {
         String htmlContent = "<div style=\"background-color: #007bff; color: white; text-align: center; padding: 10px; border-radius: 15px\">" +
                 "<h2 style=\"margin: 0;\">Hesabınızı Aktive Edin</h2>" +
                 "<p style=\"font-size: 18px;\">Hesabınızı aktive etmek için aşağıdaki linke tıklayın:</p>" +
-                "<a href=\"http://localhost:9090/api/v1/auth/activation?token=" + model.getActivationCode() + "\"" +
-//                "<a href=\"http://34.123.15.45/auth/activation?token=" + model.getActivationCode() + "\"" +
+//                "<a href=\"http://localhost:9090/api/v1/auth/activation?token=" + model.getActivationCode() + "\"" +
+                "<a href=\"http://34.123.15.45/auth/activation?token=" + model.getActivationCode() + "\"" +
                 " style=\"display: inline-block; padding: 10px 20px; background-color: #ff9900; color: white; text-decoration: none; border-radius: 5px;\">Aktivasyon Linki</a>" +
                 "</div>";
 
