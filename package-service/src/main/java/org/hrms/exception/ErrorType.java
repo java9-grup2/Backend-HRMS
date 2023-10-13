@@ -30,8 +30,9 @@ public enum ErrorType {
     COULD_NOT_UPDATE_ALL_USERS(12324,"Kullanicilarin hepsi guncellenmedi.",HttpStatus.BAD_REQUEST),
     NO_DATA_FOUND(12324,"Aradiginiz kriterlerde kullanici/kullanicilar bulunamadi.",HttpStatus.BAD_REQUEST),
     ADVANCE_REQUEST_NOT_VALID(12325, "Maas bilginizin sistemde kayitli oldugundan emin olun ve Maasinizdan yuksek avans miktari girmeyin!", HttpStatus.BAD_REQUEST),
-    ADVANCE_REQUEST_NOT_FOUND(12325, "Boyle bir avans istegi bulunamamistir.", HttpStatus.BAD_REQUEST),
-    COMPANY_ADVANCE_PAYMENT_REQUEST_NOT_FOUND(12325,"Sirketinize ait herhangi bir avans odeme istegi bulunmamistir",HttpStatus.BAD_REQUEST);
+    PACKAGE_NOT_FOUND(12325, "Sirkete ait paket istegi veya herhangi bir paket bulunamamistir.", HttpStatus.BAD_REQUEST),
+    COMPANY_PACKAGE_ALREADY_EXIST(12325,"Sirkete ait aktif paket zaten tanimlanmis. Paketinizi guncellemek icin paket guncelle secenegini seciniz",HttpStatus.BAD_REQUEST),
+    COMPANY_PACKAGE_STATUS_PENDING(12325,"Sirketin onay bekleyen paketi bulunmakta. Lutfen sonuclanmasini bekleyin",HttpStatus.BAD_REQUEST);
 
 
     private int code;

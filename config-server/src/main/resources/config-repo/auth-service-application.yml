@@ -54,6 +54,8 @@ rabbitmq:
   forgot-password-mail-bindingKey: forgotPasswordMailBindingKey
   increase-company-worker-queue: increaseCompanyWorkerQueue
   increase-company-worker-bindingKey: increaseCompanyWorkerBindingKey
+  create-company-package-queue: createCompanyPackageQueue
+  create-company-package-bindingKey: createCompanyPackageBindingKey
 
 feign:
   company: http://localhost:9092/api/v1/company

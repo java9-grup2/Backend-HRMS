@@ -98,11 +98,27 @@ public class RabbitConfig {
     @Value("${rabbitmq.increase-company-worker-bindingKey}")
     private String increaseCompanyWorkerBindingKey;
 
+    @Value("${rabbitmq.create-company-package-queue}")
+    private String createCompanyPackageQueue;
+
+    @Value("${rabbitmq.create-company-package-bindingKey}")
+    private String createCompanyPackageBindingKey;
+
     @Bean
     DirectExchange exchangeAuth() {
         return new DirectExchange(authExchange);
     }
 
+
+    @Bean
+    Queue createCompanyPackageQueue() {
+        return new Queue(createCompanyPackageQueue);
+    }
+
+    @Bean
+    public Binding createCompanyPackageBindingKey(final DirectExchange exchangeAuth, final Queue createCompanyPackageQueue) {
+        return BindingBuilder.bind(createCompanyPackageQueue).to(exchangeAuth).with(createCompanyPackageBindingKey);
+    }
 
     @Bean
     Queue increaseCompanyWorkerQueue() {

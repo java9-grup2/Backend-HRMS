@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hrms.repository.enums.EPackageType;
+import org.hrms.repository.enums.EUserType;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -36,5 +38,11 @@ public class RegisterManagerRequestDto {
     private String taxNo;
     @NotBlank(message = "companyName is a must")
     private String companyName;
+
+
+    private EUserType userType;
+
+
+    private EPackageType packageType;
 
 }

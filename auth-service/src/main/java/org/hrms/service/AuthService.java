@@ -44,7 +44,9 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
     private final IncreaseCompanyWorkerProducer increaseCompanyWorkerProducer;
 
-    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer, CreateCompanyProducer createCompanyProducer, ICompanyManager companyManager, CreateAdminUserProducer createAdminUserProducer, ForgotPasswordMailProducer forgotPasswordMailProducer, IncreaseCompanyWorkerProducer increaseCompanyWorkerProducer) {
+    private final CreateCompanyPackageProducer createCompanyPackageProducer;
+
+    public AuthService(IAuthRepository repository, RegisterVisitorProducer registerVisitorProducer, RegisterManagerProducer registerManagerProducer, JwtTokenManager jwtTokenManager, ActivationMailProducer activationMailProducer, RegisterEmployeeMailProducer registerEmployeeMailProducer, SaveEmployeeProducer saveEmployeeProducer, ActivateStatusProducer activateStatusProducer, CreateCompanyProducer createCompanyProducer, ICompanyManager companyManager, CreateAdminUserProducer createAdminUserProducer, ForgotPasswordMailProducer forgotPasswordMailProducer, IncreaseCompanyWorkerProducer increaseCompanyWorkerProducer, CreateCompanyPackageProducer createCompanyPackageProducer) {
         super(repository);
         this.repository = repository;
         this.registerVisitorProducer = registerVisitorProducer;
@@ -59,6 +61,7 @@ public class AuthService extends ServiceManager<Auth,Long> {
         this.createAdminUserProducer = createAdminUserProducer;
         this.forgotPasswordMailProducer = forgotPasswordMailProducer;
         this.increaseCompanyWorkerProducer = increaseCompanyWorkerProducer;
+        this.createCompanyPackageProducer = createCompanyPackageProducer;
     }
 
     public TokenResponseDto registerVisitor(RegisterVisitorRequestDto dto) {
@@ -100,7 +103,10 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
         createCompanyProducer.createCompany(IAuthMapper.INSTANCE.toCreateCompanyModel(auth));
 
+        createCompanyPackageProducer.createCompanyPackage(IAuthMapper.INSTANCE.toCreateCompanyPackageModel(dto));
+
         Optional<String> optionalToken = jwtTokenManager.createToken(auth.getId(),auth.getUserType(),auth.getCompanyName());
+
 
         if (optionalToken.isEmpty()) {
             throw new AuthManagerException(ErrorType.TOKEN_NOT_CREATED);
@@ -218,20 +224,22 @@ public class AuthService extends ServiceManager<Auth,Long> {
 
     public RegisterEmployeeResponseDto registerEmployee(RegisterEmployeeRequestDto dto) {
         Optional<String> optionalRole = jwtTokenManager.getRoleFromToken(dto.getToken());
-        Optional<String> companyNameFromToken = jwtTokenManager.getCompanyNameFromToken(dto.getToken());
+        Optional<Long> optionalAuthId = jwtTokenManager.getIdFromToken(dto.getToken());
+        Optional<Auth> optionalAuth = findById(optionalAuthId.get());
+        if (optionalAuth.isEmpty()) {
+            throw new AuthManagerException(ErrorType.BAD_REQUEST);
+        }
+        String companyNameFromManager = optionalAuth.get().getCompanyName();
 
         System.out.println(optionalRole.get());
-        System.out.println(companyNameFromToken.get());
+        System.out.println(companyNameFromManager);
 
         if (optionalRole.isEmpty()) {
             System.out.println("Burasi rol");
             throw new AuthManagerException(ErrorType.INVALID_TOKEN);
         }
 
-        if (companyNameFromToken.isEmpty()) {
-            System.out.println("Burasi sirketIsim");
-            throw new AuthManagerException(ErrorType.INVALID_TOKEN);
-        }
+
 
         if (!optionalRole.get().equals(EUserType.MANAGER.toString())) {
             throw new AuthManagerException(ErrorType.INSUFFICIENT_PERMISSION);
@@ -249,8 +257,8 @@ public class AuthService extends ServiceManager<Auth,Long> {
                 .userType(EUserType.EMPLOYEE)
                 .status(EStatus.ACTIVE)
                 .password(CodeGenerator.generateCode())
-                .companyEmail(emailSetter(dto.getName(), dto.getSurname(), companyNameFromToken.get()))
-                .companyName(companyNameFromToken.get().toLowerCase())
+                .companyEmail(emailSetter(dto.getName(), dto.getSurname(), companyNameFromManager))
+                .companyName(companyNameFromManager.toLowerCase())
                 .salary(dto.getSalary())
                 .build();
 

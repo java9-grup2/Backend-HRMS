@@ -42,4 +42,6 @@ public interface IAuthMapper {
     CreateAdminUserModel toCreateAdminUserModel(final Auth auth);
 
     IsCompanyRequestValidDto toIsCompanyRequestValidDto(final RegisterManagerRequestDto dto);
+
+    CreateCompanyPackageModel toCreateCompanyPackageModel(final RegisterManagerRequestDto dto);
 }

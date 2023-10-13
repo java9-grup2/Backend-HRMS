@@ -21,22 +21,18 @@ public class Package extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long authid;
+    private String companyName;
 
     @Enumerated(EnumType.STRING)
-    private EPackageType packageType;
+    @Builder.Default
+    private EPackageType packageType=EPackageType.SILVER;
 
     private Double price;
-    private LocalDate publishDate;
-    private LocalDate takeDownDate;
-    private Long userCount;
+    private LocalDate activateDate;
+    private LocalDate endDate;
 
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private EStatus status = EStatus.PENDING;
-
-    @Enumerated(EnumType.STRING)
-    private ECurrencyType currencyType;
-
 
 }

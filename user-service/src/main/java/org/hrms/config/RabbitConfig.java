@@ -94,11 +94,46 @@ public class RabbitConfig {
     @Value("${rabbitmq.activate-company-status-bindingKey}")
     private String activateCompanyStatusBindingKey;
 
+    @Value("${rabbitmq.activate-company-package-queue}")
+    private String activateCompanyPackageQueue;
+
+
+    @Value("${rabbitmq.activate-company-package-bindingKey}")
+    private String activateCompanyPackageBindingKey;
+
+    @Value("${rabbitmq.deny-company-package-queue}")
+    private String denyCompanyPackageQueue;
+
+
+    @Value("${rabbitmq.deny-company-package-bindingKey}")
+    private String denyCompanyPackageBindingKey;
+
+
+
     @Bean
     DirectExchange exchangeUser() {
         return new DirectExchange(exchangeUser);
     }
 
+    @Bean
+    Queue denyCompanyPackageQueue() {
+        return new Queue(denyCompanyPackageQueue);
+    }
+
+    @Bean
+    public Binding denyCompanyPackageBindingKey(final DirectExchange exchangeUser, final Queue denyCompanyPackageQueue) {
+        return BindingBuilder.bind(denyCompanyPackageQueue).to(exchangeUser).with(denyCompanyPackageBindingKey);
+    }
+
+    @Bean
+    Queue activateCompanyPackageQueue() {
+        return new Queue(activateCompanyPackageQueue);
+    }
+
+    @Bean
+    public Binding activateCompanyPackageBindingKey(final DirectExchange exchangeUser, final Queue activateCompanyPackageQueue) {
+        return BindingBuilder.bind(activateCompanyPackageQueue).to(exchangeUser).with(activateCompanyPackageBindingKey);
+    }
 
     @Bean
     Queue activateCompanyStatusQueue() {
