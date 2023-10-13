@@ -1,5 +1,7 @@
 package org.hrms.mapper;
 
+import org.hrms.dto.request.ApproveManagerRequestDto;
+import org.hrms.dto.request.DenyManagerRequestDto;
 import org.hrms.dto.request.RegisterVisitorRequestDto;
 import org.hrms.rabbitmq.model.*;
 import org.hrms.repository.entity.User;
@@ -29,4 +31,8 @@ public interface IUserMapper {
     DeleteAuthContainsCompanyNameModel toDeleteAuthContainsCompanyNameModel(final DeleteUsersContainsCompanyNameModel model);
 
     ActivateCompanyStatusModel toActivateCompanyStatusModel(final User user);
+
+    ActivateCompanyPackageModel toActivateCompanyPackageModel(final ApproveManagerRequestDto dto);
+
+    DenyCompanyPackageModel toDenyCompanyPackageModel(final DenyManagerRequestDto dto);
 }

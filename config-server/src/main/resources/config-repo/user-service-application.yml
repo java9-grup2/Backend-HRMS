@@ -53,6 +53,10 @@ rabbitmq:
   manager-deny-mail-queue: managerDenyMailQueue
   activate-company-status-bindingKey: activateCompanyStatusBindingKey
   activate-company-status-queue: activateCompanyStatusQueue
+  activate-company-package-queue: activateCompanyPackageQueue
+  activate-company-package-bindingKey: activateCompanyPackageBindingKey
+  deny-company-package-queue: denyCompanyPackageQueue
+  deny-company-package-bindingKey: denyCompanyPackageBindingKey
 
 feign:
   comment: http://localhost:9094/api/v1/comment

@@ -25,3 +25,6 @@ jwt:
 
 
 rabbitmq:
+  create-company-package-queue: createCompanyPackageQueue
+  activate-company-package-queue: activateCompanyPackageQueue
+  deny-company-package-queue: denyCompanyPackageQueue

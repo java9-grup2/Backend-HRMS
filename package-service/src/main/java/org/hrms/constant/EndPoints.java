@@ -8,6 +8,7 @@ public class EndPoints {
     //genel
     public static final String SAVE ="/save";
     public static final String ACTIVATESTATUS ="/activatestatus";
+    public static final String DENYSTATUS ="/denystatus";
     public static final String APPROVECOMMENT ="/approvecomment";
     public static final String UPDATE ="/update";
     public static final String FINDALL ="/findall";

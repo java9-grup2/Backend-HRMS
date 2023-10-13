@@ -43,7 +43,11 @@ public class UserService extends ServiceManager<User,Long> {
 
     private final ActivateCompanyStatusProducer activateCompanyStatusProducer;
 
-    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer, DeleteUserByAuthIdProducer deleteUserByAuthIdProducer, ApproveManagerMailProducer approveManagerMailProducer, ActivateManagerStatusProducer activateManagerStatusProducer, DeleteAuthContainsCompanyNameProducer deleteAuthContainsCompanyNameProducer, ICommentManager commentManager, DeleteCompanyByRegisterDenyProducer deleteCompanyByRegisterDenyProducer, ManagerDenyMailProducer managerDenyMailProducer, ActivateCompanyStatusProducer activateCompanyStatusProducer) {
+    private final ActivateCompanyPackageProducer activateCompanyPackageProducer;
+
+    private final DenyCompanyPackageProducer denyCompanyPackageProducer;
+
+    public UserService(IUserRepository repository, JwtTokenManager jwtTokenManager, UpdateUserProducer updateUserProducer, DeleteUserByAuthIdProducer deleteUserByAuthIdProducer, ApproveManagerMailProducer approveManagerMailProducer, ActivateManagerStatusProducer activateManagerStatusProducer, DeleteAuthContainsCompanyNameProducer deleteAuthContainsCompanyNameProducer, ICommentManager commentManager, DeleteCompanyByRegisterDenyProducer deleteCompanyByRegisterDenyProducer, ManagerDenyMailProducer managerDenyMailProducer, ActivateCompanyStatusProducer activateCompanyStatusProducer, ActivateCompanyPackageProducer activateCompanyPackageProducer, DenyCompanyPackageProducer denyCompanyPackageProducer) {
         super(repository);
         this.repository = repository;
         this.jwtTokenManager = jwtTokenManager;
@@ -56,6 +60,8 @@ public class UserService extends ServiceManager<User,Long> {
         this.deleteCompanyByRegisterDenyProducer = deleteCompanyByRegisterDenyProducer;
         this.managerDenyMailProducer = managerDenyMailProducer;
         this.activateCompanyStatusProducer = activateCompanyStatusProducer;
+        this.activateCompanyPackageProducer = activateCompanyPackageProducer;
+        this.denyCompanyPackageProducer = denyCompanyPackageProducer;
     }
     /*
         admin onayı icin user service kısmına bi metod yazıldı,
@@ -93,6 +99,7 @@ public class UserService extends ServiceManager<User,Long> {
         activateCompanyStatusProducer.activateCompanyStatus(IUserMapper.INSTANCE.toActivateCompanyStatusModel(optionalManager.get()));
         approveManagerMailProducer.sendApproveManagerMail(IUserMapper.INSTANCE.toApproveManagerMailModel(optionalManager.get()));
         activateManagerStatusProducer.activateManagerStatus(optionalManager.get().getAuthid());
+        activateCompanyPackageProducer.activateCompanyPackage(IUserMapper.INSTANCE.toActivateCompanyPackageModel(dto));
         return true;
     }
 
@@ -402,6 +409,7 @@ public class UserService extends ServiceManager<User,Long> {
             deleteUserByAuthId(dto.getAuthId());
             deleteCompanyByRegisterDenyProducer.deleteCompanyByName(new DeleteCompanyByRegisterDenyModel(optionalManager.get().getCompanyName()));
             managerDenyMailProducer.sendDenyMailToManager(new ManagerDenyMailModel(optionalManager.get().getPersonalEmail()));
+            denyCompanyPackageProducer.denyCompanyPackage(IUserMapper.INSTANCE.toDenyCompanyPackageModel(dto));
             return true;
         } catch (Exception e) {
             return false;
